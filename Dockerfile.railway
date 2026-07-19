@@ -1,0 +1,28 @@
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    HERMES_HOME=/app/.hermes \
+    NODE_ENV=production \
+    PORT=3006 \
+    HOST=0.0.0.0 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_CACHE_DIR=1
+
+WORKDIR /app
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends build-essential curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install the runtime package if present; otherwise fall back to source
+COPY pyproject.toml setup.py setup.cfg README.md ./
+RUN pip install -e . || pip install .
+
+# Copy application code
+COPY . .
+
+# Railway will use the default start command from railway.toml / service config.
+# Suggest setting start command to: python -m hermes_cli.main gateway run
+
+EXPOSE 3006
