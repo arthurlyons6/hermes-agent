@@ -45,7 +45,14 @@ def _normalize_skills(single_skill=None, skills: Optional[Iterable[str]] = None)
 def _cron_api(**kwargs):
     from tools.cronjob_tools import cronjob as cronjob_tool
 
-    return json.loads(cronjob_tool(**kwargs))
+    payload = cronjob_tool(**kwargs)
+    try:
+        data = json.loads(payload)
+    except (TypeError, ValueError):
+        data = {"raw": payload}
+    if not isinstance(data, dict):
+        data = {"raw": data}
+    return data
 
 
 def _active_cron_provider_name() -> str:

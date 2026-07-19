@@ -818,11 +818,7 @@ def resolve_multiple_toolsets(toolset_names: List[str]) -> List[str]:
 
 
 def _get_plugin_toolset_names() -> Set[str]:
-    """Return toolset names registered by plugins (from the tool registry).
-
-    These are toolsets that exist in the registry but not in the static
-    ``TOOLSETS`` dict — i.e. they were added by plugins at load time.
-    """
+    """Return toolset names provided by plugins/registry (excluding built-in toolsets)."""
     try:
         from tools.registry import registry
         return {
@@ -888,6 +884,15 @@ def get_toolset_names() -> List[str]:
             names.add(ts_name)
     return sorted(names)
 
+
+
+def bundle_non_core_tools(toolset_name: str) -> Set[str]:
+    core = set(_HERMES_CORE_TOOLS)
+    ts_def = get_toolset(toolset_name)
+    if not (ts_def and "tools" in ts_def):
+        return set()
+    all_tools = set(ts_def["tools"])
+    return {t for t in all_tools if t not in core}
 
 
 def validate_toolset(name: str) -> bool:
