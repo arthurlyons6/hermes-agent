@@ -1,0 +1,34 @@
+name: Railway Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  railway-deploy:
+    if: github.repository == 'arthurlyons6/hermes-agent'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+
+      - name: Trigger Railway Deploy
+        if: env.RAILWAY_DEPLOY_WEBHOOK != ''
+        env:
+          RAILWAY_DEPLOY_WEBHOOK: ${{ secrets.RAILWAY_DEPLOY_WEBHOOK }}
+        run: |
+          set -euo pipefail
+          if [ -z "${RAILWAY_DEPLOY_WEBHOOK}" ]; then
+            echo "No RAILWAY_DEPLOY_WEBHOOK secret; skipping Railway deploy."
+            exit 0
+          fi
+          curl -fsS --retry 5 --retry-delay 10 -X POST "${RAILWAY_DEPLOY_WEBHOOK}" || {
+            echo "Railway deploy trigger failed"
+            exit 1
+          }
+
+      - name: Skip notice
+        if: env.RAILWAY_DEPLOY_WEBHOOK == ''
+        run: echo "No Railway deploy configured; this is expected until Railway secrets are set."
