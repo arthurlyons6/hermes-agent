@@ -3506,8 +3506,13 @@ class TelegramAdapter(BasePlatformAdapter):
                 return kwargs
 
             disable_fallback = (os.getenv("HERMES_TELEGRAM_DISABLE_FALLBACK_IPS", "").strip().lower() in {"1", "true", "yes", "on"})
+            logger.info(
+                "[%s] Telegram fallback-IP disable flag: %s",
+                self.name,
+                disable_fallback,
+            )
             fallback_ips = self._fallback_ips()
-            if not fallback_ips:
+            if not fallback_ips and not disable_fallback:
                 logger.warning("[%s] Discovering Telegram API fallback IPs via DNS-over-HTTPS…", self.name)
                 fallback_ips = await discover_fallback_ips()
                 logger.info(
