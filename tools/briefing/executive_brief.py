@@ -337,12 +337,14 @@ def classify_failure(error: Exception) -> str:
 
 
 def duplicate_delivery_key(brief: Dict[str, Any]) -> str:
+    # Execution ID is intentionally excluded so repeated reruns of the same
+    # scheduled brief resolve to one stable key and are blocked by the
+    # delivery_blocklist instead of always being treated as new sends.
     scheduled = brief.get("scheduled_date", "")
-    eid = brief.get("execution_id", "")
     delivery = brief.get("delivery", {})
     ts = delivery.get("telegram_delivery_timestamp", "")
     msg = delivery.get("message_id", "")
-    return f"brief:{scheduled}:{eid}:{msg}:{ts}"
+    return f"brief:{scheduled}:{msg}:{ts}"
 
 
 def store_delivery_blocklist(idempotency_key: str, db_path: str = "/app/.hermes/executions.db") -> Dict[str, Any]:
