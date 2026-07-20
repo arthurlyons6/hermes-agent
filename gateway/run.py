@@ -3831,13 +3831,31 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
         timeout = self._platform_connect_timeout_secs()
         if timeout <= 0:
             return await adapter.connect(is_reconnect=is_reconnect)
+
+        # Some adapters can block the gateway's event loop inside their
+        # connect path — especially PTB-based Telegram init on restricted
+        # cloud networks.  Run the connect coroutine in an isolated helper
+        # event loop so the parent loop stays regains control if the adapter
+        # hangs.  We do not attempt to cancel the helper thread/loop; the
+        # caller's disconnect path cleans up partial state after timeout.
+        connect_task = asyncio.get_running_loop().run_in_executor(
+            None,
+            lambda: asyncio.run(
+                asyncio.wait_for(
+                    adapter.connect(is_reconnect=is_reconnect),
+                    timeout=timeout,
+                )
+            ),
+        )
         try:
-            return await asyncio.wait_for(
-                adapter.connect(is_reconnect=is_reconnect), timeout=timeout
-            )
+            return await asyncio.wait_for(connect_task, timeout=timeout + 0.5)
         except asyncio.TimeoutError as exc:
             raise TimeoutError(
                 f"{platform.value} connect timed out after {timeout:g}s"
+            ) from exc
+        except Exception as exc:
+            raise TimeoutError(
+                f"{platform.value} connect did not complete after {timeout:g}s"
             ) from exc
 
     @property
