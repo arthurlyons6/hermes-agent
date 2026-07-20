@@ -48,9 +48,14 @@ def _call_send_message(payload: Dict[str, Any]) -> Dict[str, Any]:
         raise TelegramDeliveryError(f"send runtime error: {exc}") from exc
     if isinstance(result, str):
         try:
-            return json.loads(result)
+            parsed = json.loads(result)
         except json.JSONDecodeError:
-            return {"raw": result}
+            parsed = {"raw": result}
+        if isinstance(parsed, dict) and not parsed.get("success") and parsed.get("error"):
+            raise TelegramDeliveryError(str(parsed.get("error")))
+        return parsed if isinstance(parsed, dict) else {"raw": result}
+    if isinstance(result, dict) and not result.get("success") and result.get("error"):
+        raise TelegramDeliveryError(str(result.get("error")))
     return result if isinstance(result, dict) else {"raw": str(result)}
 
 
