@@ -246,7 +246,7 @@ RUN mkdir -p /opt/hermes/bin && \
 # omits the file, and the runtime falls back to live-git lookup.  CI
 # (.github/workflows/docker.yml) passes ${{ github.sha }} so
 # every published image has it.
-ARG HERMES_GIT_SHA=
+ARG HERMES_GIT_SHA=f7836f861
 RUN if [ -n "${HERMES_GIT_SHA}" ]; then \
         printf '%s\n' "${HERMES_GIT_SHA}" > /opt/hermes/.hermes_build_sha; \
     fi
