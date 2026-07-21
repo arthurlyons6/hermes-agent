@@ -404,7 +404,52 @@ seed_one() {
     fi
 }
 seed_one ".env" ".env.example"
+
+# config.yaml is seeded from cli-config.yaml.example, which is a CLIENT
+# config (model/terminal/tool settings) and has NO `platforms:` section.
+# Remember whether config.yaml already existed BEFORE seeding so we can
+# tell, right after seed_one runs, whether this is a genuine first boot
+# that just created it from the example (as opposed to a restart where a
+# pre-existing/hand-edited config.yaml — which may itself lack a
+# `platforms:` block intentionally — must be left untouched).
+config_preexisting=false
+[ -f "$HERMES_HOME/config.yaml" ] && config_preexisting=true
+
 seed_one "config.yaml" "cli-config.yaml.example"
+
+# --- Seed a minimal gateway `platforms:` block on first boot ---
+# Without this, GatewayConfig() at gateway startup sees zero configured
+# platforms on a fresh volume, and `python -m hermes_cli.main gateway run`
+# fails with "No adapter could be created for any of the N configured
+# platform(s)" even when TELEGRAM_BOT_TOKEN (or another platform token) is
+# set — the env-var bridge in gateway/config.py only flips a platform's
+# `enabled` flag on an EXISTING PlatformConfig entry; it does not, by
+# itself, fix the underlying example config's total lack of a `platforms:`
+# section on some code paths. Appending this block only runs the very
+# first time config.yaml is created from the example (guarded by
+# $config_preexisting, itself downstream of seed_one's own `[ ! -f ]`
+# check), so container restarts and hand-edited configs are never touched.
+if [ "$config_preexisting" = false ] && [ -f "$HERMES_HOME/config.yaml" ]; then
+    if ! grep -q '^platforms:' "$HERMES_HOME/config.yaml" 2>/dev/null; then
+        if refuse_symlinked_path "seed" "$HERMES_HOME/config.yaml"; then
+            :
+        else
+            cat >> "$HERMES_HOME/config.yaml" <<'EOF'
+
+# --- Added by docker/stage2-hook.sh on first boot ---
+# The client config example this file was seeded from has no gateway
+# platform declarations. Declare Telegram here so the gateway adapter
+# registers at startup when TELEGRAM_BOT_TOKEN is provided via env.
+# Safe to edit or remove — this block is only ever written once, on the
+# very first boot that creates config.yaml.
+platforms:
+  telegram:
+    enabled: true
+EOF
+        fi
+    fi
+fi
+
 seed_one "SOUL.md" "docker/SOUL.md"
 
 # .env holds API keys and secrets — restrict to owner-only access. Applied
