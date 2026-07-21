@@ -1,0 +1,35 @@
+---
+title: "Black Gold Equity Partners Business Plan"
+author: "Lyons Command Center"
+date: "INSERT_DATE"
+lang: "en"
+output: pdf_document
+fontsize: 11pt
+geometry: margin=2.5cm
+header-includes:
+  - \usepackage{hyperref}
+  - \hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue}
+  - \renewcommand{\familydefault}{\sfdefault}
+---
+
+# Executive Summary
+
+INSERT_EXECUTIVE_SUMMARY_HERE
+
+# Evidence Ledger
+
+```{=latex}
+\begin{table}[ht]
+\centering
+\begin{tabular}{p{2.5cm} p{4cm} p{2.5cm} p{2cm} p{2cm}}
+\hline
+Evidence ID & Source & Class & Confidence & Owner \\
+\hline
+INSERT_LEDGER_ROWS_HERE
+\hline
+\end{tabular}
+\caption{Evidence ledger for this document.}
+\end{table}
+```
+
+> Confidentiality notice: this document is governed by the Lyons Command Center approval chain. Do not distribute without explicit release.
