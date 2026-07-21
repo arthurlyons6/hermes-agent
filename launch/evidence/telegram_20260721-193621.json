@@ -1,0 +1,7 @@
+{
+  "timestamp": "2026-07-21T19:36:21.387515+00:00",
+  "status": "skipped",
+  "command": "telegram getMe",
+  "evidence": "TELEGRAM_BOT_TOKEN not set",
+  "result": "failed"
+}
