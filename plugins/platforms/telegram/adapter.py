@@ -3665,6 +3665,16 @@ class TelegramAdapter(BasePlatformAdapter):
             # Decide between webhook and polling mode
             webhook_url = os.getenv("TELEGRAM_WEBHOOK_URL", "").strip()
 
+            # Escape hatch: force polling even when TELEGRAM_WEBHOOK_URL is set.
+            # Useful when Railway ingress does not route the webhook path into
+            # the container, so the inbound Telegram path is dead (#46298).
+            if os.getenv("HERMES_FORCE_TELEGRAM_POLLING", "").strip().lower() in {"1", "true", "yes"}:
+                webhook_url = ""
+                logger.warning(
+                    "[%s] Forcing Telegram polling mode via HERMES_FORCE_TELEGRAM_POLLING; webhook config ignored.",
+                    self.name,
+                )
+
             if webhook_url:
                 # ── Webhook mode ─────────────────────────────────────
                 # Telegram pushes updates to our HTTP endpoint.  This
