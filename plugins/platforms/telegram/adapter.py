@@ -169,40 +169,6 @@ async def _run_abandon_cleanup(on_abandon) -> None:
         logger.debug("Abandoned Telegram init cleanup failed", exc_info=True)
 
 
-async def _run_initialize_off_event_loop(app, *, timeout: float) -> None:
-    """Run PTB ``Application.initialize()`` outside the caller asyncio loop.
-
-    Some PTB bootstrap paths can enter a C-level blocking state that freezes
-    the event loop long enough to defeat loop-based timers and timeouts.
-    This helper owns a dedicated thread + event loop solely for initialization,
-    and sleeps the caller loop only on ``threading.Event`` so the main loop
-    keeps running while Telegram initializes.
-    """
-    init_event = threading.Event()
-
-    def _runner() -> None:
-        try:
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            loop.run_until_complete(app.initialize())
-        except Exception:
-            logger.debug("Dedicated-thread Telegram initialize failed", exc_info=True)
-        finally:
-            try:
-                loop.close()
-            except Exception:
-                pass
-            init_event.set()
-
-    thread = threading.Thread(target=_runner, daemon=True)
-    thread.start()
-
-    loop = asyncio.get_running_loop()
-    await loop.run_in_executor(None, init_event.wait, max(timeout, 0.0) if timeout is not None else None)
-    if not init_event.is_set():
-        raise asyncio.TimeoutError()
-
-
 async def _shutdown_abandoned_app(app) -> None:
     """Release a half-built PTB app's httpx transports after init was abandoned.
 
@@ -3646,7 +3612,17 @@ class TelegramAdapter(BasePlatformAdapter):
                         "[%s] Connecting to Telegram (attempt %d/%d)…",
                         self.name, _attempt + 1, _max_connect,
                     )
-                    await _run_initialize_off_event_loop(self._app, timeout=_init_timeout)
+                    await _await_with_thread_deadline(
+                        self._app.initialize(),
+                        timeout=_init_timeout,
+                        # On timeout the initialize() task is abandoned without
+                        # awaiting its cancellation (it may be wedged in a
+                        # shielded scope). Best-effort release the half-built
+                        # app's httpx client/connection pool so it isn't leaked
+                        # across the retry ladder (mirrors the client-close-on-
+                        # timeout pattern in agent/auxiliary_client.py).
+                        on_abandon=lambda app=self._app: _shutdown_abandoned_app(app),
+                    )
                     break
                 except asyncio.TimeoutError:
                     if _attempt < _max_connect - 1:
