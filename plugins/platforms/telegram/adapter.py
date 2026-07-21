@@ -8137,6 +8137,14 @@ class TelegramAdapter(BasePlatformAdapter):
         msg = self._effective_update_message(update)
         if not msg or not msg.text:
             return
+        logger.info(
+            "[Telegram] received text update user=%s chat=%s chat_type=%s"
+            " update_id=%s",
+            getattr(getattr(msg, "from_user", None), "id", None),
+            getattr(getattr(msg, "chat", None), "id", None),
+            getattr(getattr(msg, "chat", None), "type", None),
+            getattr(update, "update_id", None),
+        )
         # Early user-level auth check: reject unauthorized users before any
         # text batching, observe-buffer persistence, event building, or response
         # generation. This prevents removed/blocked users from injecting prompts
@@ -8167,6 +8175,14 @@ class TelegramAdapter(BasePlatformAdapter):
             return
         if not self._should_process_message(msg, is_command=True):
             return
+        logger.info(
+            "[Telegram] received command update user=%s chat=%s chat_type=%s"
+            " update_id=%s",
+            getattr(getattr(msg, "from_user", None), "id", None),
+            getattr(getattr(msg, "chat", None), "id", None),
+            getattr(getattr(msg, "chat", None), "type", None),
+            getattr(update, "update_id", None),
+        )
         if not self._is_user_authorized_from_message(msg):
             logger.warning(
                 "[Telegram] Blocked unauthorized user %s in chat %s",
