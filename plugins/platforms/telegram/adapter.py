@@ -187,7 +187,6 @@ def _run_initialize_off_event_loop(app, *, timeout: float) -> None:
             loop.run_until_complete(app.initialize())
         except Exception:
             logger.debug("Dedicated-thread Telegram initialize failed", exc_info=True)
-            init_event.set()
         finally:
             try:
                 loop.close()
