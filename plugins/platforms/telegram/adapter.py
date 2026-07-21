@@ -198,7 +198,7 @@ async def _run_initialize_off_event_loop(app, *, timeout: float) -> None:
     thread.start()
 
     loop = asyncio.get_running_loop()
-    await loop.run_in_executor(None, init_event.wait, timeout=max(timeout, 0.0) if timeout is not None else None)
+    await loop.run_in_executor(None, init_event.wait, max(timeout, 0.0) if timeout is not None else None)
     if not init_event.is_set():
         raise asyncio.TimeoutError()
 
