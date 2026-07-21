@@ -7714,6 +7714,26 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
                 error_message=None,
             )
             try:
+                from gateway.config import Platform as _Platform
+                
+                if _Platform(platform.value) is _Platform.TELEGRAM:
+                    logger.info(
+                        "Deferring %s connection to background reconnect watcher "
+                        "so /health can bind before Telegram init.",
+                        platform.value,
+                    )
+                    self._update_platform_runtime_status(
+                        platform.value,
+                        platform_state="retrying",
+                        error_code=None,
+                        error_message="deferred at startup",
+                    )
+                    self._failed_platforms[platform] = {
+                        "config": platform_config,
+                        "attempts": 0,
+                        "next_retry": time.monotonic() + 0,
+                    }
+                    continue
                 success = await self._connect_adapter_with_timeout(adapter, platform)
                 if await self._abort_startup_if_shutdown_requested(adapter, platform):
                     return True
