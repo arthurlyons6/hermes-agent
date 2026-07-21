@@ -1,0 +1,184 @@
+
+[
+  {
+    "name": "hermes-agent",
+    "url": "https://github.com/arthurlyons6/hermes-agent",
+    "type": "core runtime library/framework",
+    "language": "Python",
+    "owner": "Miles/Naomi",
+    "recommendation": "Adopt",
+    "windows": "compatible",
+    "railway": "compatible",
+    "resources": "moderate"
+  },
+  {
+    "name": "skills",
+    "url": "https://github.com/arthurlyons6/skills",
+    "type": "skills collection",
+    "language": "Markdown/Python",
+    "owner": "Naomi/Miles",
+    "recommendation": "Adopt",
+    "windows": "compatible",
+    "railway": "compatible",
+    "resources": "varies"
+  },
+  {
+    "name": "hermes-council",
+    "url": "https://github.com/arthurlyons6/hermes-council",
+    "type": "plugin/skills collection",
+    "language": "Python",
+    "owner": "Marcus",
+    "recommendation": "Adopt",
+    "windows": "compatible",
+    "railway": "compatible",
+    "resources": "low",
+    "note": "foundation only"
+  },
+  {
+    "name": "hatchet",
+    "url": "https://github.com/arthurlyons6/hatchet",
+    "type": "workflow orchestration service/framework",
+    "language": "Go",
+    "owner": "Marcus/Olivia",
+    "recommendation": "Stage",
+    "windows": "incompatible/native",
+    "railway": "conditional",
+    "resources": "high"
+  },
+  {
+    "name": "hermes-acp-plugin",
+    "url": "https://github.com/arthurlyons6/hermes-acp-plugin",
+    "type": "plugin",
+    "language": "Python",
+    "owner": "Naomi/Victor",
+    "recommendation": "Adopt",
+    "windows": "compatible",
+    "railway": "compatible",
+    "resources": "low",
+    "note": "opt-in only"
+  },
+  {
+    "name": "odysseus",
+    "url": "https://github.com/arthurlyons6/odysseus",
+    "type": "application/framework",
+    "language": "Python/TypeScript",
+    "owner": "Miles",
+    "recommendation": "Reject",
+    "windows": "partial",
+    "railway": "incompatible",
+    "resources": "very high",
+    "note": "keep dormant unless explicitly reactivated"
+  },
+  {
+    "name": "paperclip",
+    "url": "https://github.com/arthurlyons6/paperclip",
+    "type": "orchestration platform/dashboard",
+    "language": "TypeScript",
+    "owner": "Marcus",
+    "recommendation": "Stage",
+    "windows": "compatible",
+    "railway": "conditional",
+    "resources": "high"
+  },
+  {
+    "name": "gci-n8n",
+    "url": "https://github.com/arthurlyons6/gci-n8n",
+    "type": "workflow automation service",
+    "language": "TypeScript",
+    "owner": "Olivia/Marcus",
+    "recommendation": "Stage",
+    "windows": "compatible",
+    "railway": "compatible",
+    "resources": "moderate"
+  },
+  {
+    "name": "gci-dify",
+    "url": "https://github.com/arthurlyons6/gci-dify",
+    "type": "application/framework",
+    "language": "TypeScript",
+    "owner": "Julian/Grace",
+    "recommendation": "Stage",
+    "windows": "compatible",
+    "railway": "compatible",
+    "resources": "high"
+  },
+  {
+    "name": "gci-appsmith",
+    "url": "https://github.com/arthurlyons6/gci-appsmith",
+    "type": "dashboard/internal tools",
+    "language": "TypeScript",
+    "owner": "Sophia/Olivia",
+    "recommendation": "Stage",
+    "windows": "compatible",
+    "railway": "compatible",
+    "resources": "moderate-high"
+  },
+  {
+    "name": "gci-nocodb",
+    "url": "https://github.com/arthurlyons6/gci-nocodb",
+    "type": "data/application platform",
+    "language": "TypeScript",
+    "owner": "Malcolm/Olivia",
+    "recommendation": "Stage",
+    "windows": "compatible",
+    "railway": "compatible",
+    "resources": "moderate-high"
+  },
+  {
+    "name": "gci-windmill",
+    "url": "https://github.com/arthurlyons6/gci-windmill",
+    "type": "workflow/automation service",
+    "language": "Rust",
+    "owner": "Marcus/Olivia",
+    "recommendation": "Stage",
+    "windows": "compatible",
+    "railway": "compatible",
+    "resources": "moderate-high"
+  },
+  {
+    "name": "blackgold-equity-partners",
+    "url": "https://github.com/arthurlyons6/blackgold-equity-partners",
+    "type": "website/dashboard",
+    "language": "HTML",
+    "owner": "Sophia",
+    "recommendation": "Adopt",
+    "windows": "compatible",
+    "railway": "compatible",
+    "resources": "low",
+    "note": "external only"
+  },
+  {
+    "name": "peg-fullstack-app",
+    "url": "https://github.com/arthurlyons6/peg-fullstack-app",
+    "type": "application",
+    "language": "HTML",
+    "owner": "n/a",
+    "recommendation": "Reject",
+    "windows": "unknown",
+    "railway": "unknown",
+    "resources": "unknown"
+  },
+  {
+    "name": "hermes-agent-railway",
+    "url": "https://github.com/arthurlyons6/hermes-agent-railway",
+    "type": "manifest/deployment",
+    "language": "Python",
+    "owner": "Marcus/Olivia",
+    "recommendation": "Reject",
+    "windows": "n/a",
+    "railway": "historical only",
+    "resources": "low"
+  },
+  {
+    "name": "nexabaas-platform",
+    "url": "https://github.com/arthurlyons6/nexabaas-platform",
+    "type": "service/platform",
+    "language": "JavaScript",
+    "owner": "Julian",
+    "recommendation": "Reject",
+    "windows": "unknown",
+    "railway": "conditional",
+    "resources": "high",
+    "note": "domain-isolated governance"
+  }
+]

@@ -1,0 +1,92 @@
+{
+  "generated_at": "2026-07-21T18:43:17.844380+00:00",
+  "procedure": "No active changes were made to the Hermes runtime. Rollback is not required unless validated skills are later activated.",
+  "rollback_steps": [
+    "1. Review activation_manifest.json validated_pending_activation list",
+    "2. Before any activation, snapshot current active skills directory",
+    "3. If activation is performed and must be undone, remove activated skill copies",
+    "4. Restore skills registry entries to activated=false",
+    "5. Re-run priority validation script to confirm restored state",
+    "6. Notify assigned specialist owner",
+    "7. Document rollback timestamp and reason"
+  ],
+  "rollback_skills": [
+    {
+      "name": "superpowers-systematic-debugging",
+      "slot": "systematic-debugging",
+      "specialist": "Miles/Naomi",
+      "category": "software-development",
+      "status": "validated_pending_activation"
+    },
+    {
+      "name": "superpowers-verification-before-completion",
+      "slot": "verification-before-completion",
+      "specialist": "Miles/Naomi",
+      "category": "software-development",
+      "status": "validated_pending_activation"
+    },
+    {
+      "name": "superpowers-test-driven-development",
+      "slot": "test-driven-development",
+      "specialist": "Miles/Naomi",
+      "category": "software-development",
+      "status": "validated_pending_activation"
+    },
+    {
+      "name": "defensive-programming",
+      "slot": "service-integration-testing",
+      "specialist": "Miles/Naomi",
+      "category": "software-development",
+      "status": "validated_pending_activation"
+    },
+    {
+      "name": "docker-auto-deploy",
+      "slot": "docker-deployment-validation",
+      "specialist": "Marcus/Olivia",
+      "category": "devops",
+      "status": "validated_pending_activation"
+    },
+    {
+      "name": "hardening-docker-containers-for-production",
+      "slot": "railway-container-reliability",
+      "specialist": "Marcus/Olivia",
+      "category": "cybersecurity",
+      "status": "validated_pending_activation"
+    },
+    {
+      "name": "gateway-adapter-development",
+      "slot": "gateway-and-telegram-troubleshooting",
+      "specialist": "Miles/Naomi",
+      "category": "devops",
+      "status": "validated_pending_activation"
+    },
+    {
+      "name": "cron-job-management",
+      "slot": "cron-scheduled-job-management",
+      "specialist": "Olivia",
+      "category": "devops",
+      "status": "validated_pending_activation"
+    },
+    {
+      "name": "implementing-log-forwarding-with-fluentd",
+      "slot": "logging-and-observability",
+      "specialist": "Victor",
+      "category": "cybersecurity",
+      "status": "validated_pending_activation"
+    },
+    {
+      "name": "integrating-sast-into-github-actions-pipeline",
+      "slot": "github-change-management-and-code-review",
+      "specialist": "Marcus/Olivia",
+      "category": "cybersecurity",
+      "status": "validated_pending_activation"
+    },
+    {
+      "name": "building-detection-rules-with-sigma",
+      "slot": "environment-validation-and-health",
+      "specialist": "Naomi",
+      "category": "cybersecurity",
+      "status": "validated_pending_activation"
+    }
+  ]
+}
