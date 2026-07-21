@@ -169,6 +169,38 @@ async def _run_abandon_cleanup(on_abandon) -> None:
         logger.debug("Abandoned Telegram init cleanup failed", exc_info=True)
 
 
+def _run_initialize_off_event_loop(app, *, timeout: float) -> None:
+    """Run PTB ``Application.initialize()`` outside the caller asyncio loop.
+
+    Some PTB bootstrap paths can enter a C-level blocking state that freezes
+    the event loop long enough to defeat loop-based timers and timeouts.
+    This helper owns a dedicated thread + event loop solely for initialization,
+    and waits with ``threading.Event`` so the main loop keeps running while
+    Telegram initializes.
+    """
+    init_event = threading.Event()
+
+    def _runner() -> None:
+        try:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            loop.run_until_complete(app.initialize())
+        except Exception:
+            logger.debug("Dedicated-thread Telegram initialize failed", exc_info=True)
+            init_event.set()
+        finally:
+            try:
+                loop.close()
+            except Exception:
+                pass
+            init_event.set()
+
+    thread = threading.Thread(target=_runner, daemon=True)
+    thread.start()
+    if not init_event.wait(timeout=max(timeout, 0.0) if timeout is not None else None):
+        raise asyncio.TimeoutError()
+
+
 async def _shutdown_abandoned_app(app) -> None:
     """Release a half-built PTB app's httpx transports after init was abandoned.
 
