@@ -9935,6 +9935,22 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
                 return None
             return YuanbaoAdapter(config)
 
+        elif platform == Platform.TELEGRAM:
+            try:
+                from plugins.platforms.telegram.adapter import (
+                    TelegramAdapter,
+                    check_telegram_requirements,
+                )
+            except Exception as e:
+                logger.debug("Telegram adapter import failed: %s", e)
+                return None
+            if not check_telegram_requirements():
+                logger.warning("Telegram: runtime requirements not met")
+                return None
+            adapter = TelegramAdapter(config)
+            adapter.gateway_runner = self  # For cross-platform delivery / routing
+            return adapter
+
         return None
 
     def _make_adapter_auth_check(
