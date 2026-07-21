@@ -53,7 +53,6 @@ def _default_cmd() -> list[str]:
         "gateway",
         "run",
         "--no-supervise",
-        "--railway-ready",
     ]
 
 
