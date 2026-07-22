@@ -1617,6 +1617,18 @@ def _validate_gateway_config(config: "GatewayConfig") -> None:
                 pconfig.enabled = False
 
 
+def _ensure_telegram_railway_platform(config: GatewayConfig) -> None:
+    if Platform.TELEGRAM not in getattr(config, "platforms", {}):
+        try:
+            config.platforms[Platform.TELEGRAM] = PlatformConfig(enabled=True)
+        except Exception:
+            pass
+    platform_config = config.platforms.get(Platform.TELEGRAM)
+    if platform_config is None:
+        return
+    if not platform_config.enabled:
+        platform_config.enabled = True
+
 def _apply_env_overrides(config: GatewayConfig) -> None:
     """Apply environment variable overrides to config."""
     getenv = _getenv_str
@@ -1644,7 +1656,18 @@ def _apply_env_overrides(config: GatewayConfig) -> None:
     if telegram_token:
         telegram_config = _enable_from_env(Platform.TELEGRAM)
         telegram_config.token = telegram_token
-    
+
+    # Railway/docker first-boot hardening: when the runtime is clearly a
+    # Railway deployment and Telegram env vars are present, ensure the
+    # platform section exists even if the loaded config.yaml was seeded
+    # from a client-only example with no `platforms:` entry.
+    _railway_env = (
+        getenv("RAILWAY_ENVIRONMENT", "").strip().lower()
+        or getenv("HERMES_ENV", "").strip().lower()
+    )
+    if _railway_env == "railway" and telegram_token:
+        _ensure_telegram_railway_platform(config)
+
     # Reply threading mode for Telegram (off/first/all)
     telegram_reply_mode = getenv("TELEGRAM_REPLY_TO_MODE", "").lower()
     if telegram_reply_mode in {"off", "first", "all"}:

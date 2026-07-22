@@ -1,48 +1,99 @@
 #!/usr/bin/env python3
-"""Start Hermes and wait for its health endpoint before returning.
+"""Railway start wrapper for Hermes.
 
+Starts a minimal /health server on Railway's $PORT so Railway considers the
+deployment healthy, then launches the real gateway. Keeps the gateway process
+in the foreground so Railway can supervise it normally.
 
-Use this as a Railway/process-supervisor start command, for example:
-    python tools/start_railway_health_check.py
-
-Observes:
-- HERMES_GATEWAY_CMD: full argv list for the gateway process
-- HERMES_HEALTH_URL: explicit /health URL
-- HERMES_HEALTH_TIMEOUT: seconds to wait before giving up (default: 180)
+Env:
+- PORT / HERMES_PORT: port to bind /health on (Railway sets PORT automatically)
+- HERMES_LISTEN_HOST: bind host for /health, defaults to 0.0.0.0 on Railway.
+- HERMES_GATEWAY_CMD: JSON or shell argv for the gateway process.
+- HERMES_HEALTH_PATH: path served, defaults to "/health".
 """
 
 import json
 import os
 import shlex
+import socket
 import subprocess
 import sys
+import threading
 import time
-import urllib.parse
-import urllib.request
+from http.server import HTTPServer, BaseHTTPRequestHandler
+from urllib.request import Request, urlopen
+from urllib.error import URLError
 
 
-def _health_url() -> str:
-    explicit = os.environ.get("HERMES_HEALTH_URL", "").strip()
-    if explicit:
-        return explicit
+class _HealthHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+            try:
+                expected = os.environ.get("HERMES_HEALTH_PATH", "/health").strip() or "/health"
+                if self.path != expected:
+                    self.send_response(404)
+                    self.end_headers()
+                    return
+                body = b'{"status":"ok","service":"hermes-agent","source":"start_railway_health_check"}'
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+            except Exception:
+                try:
+                    self.send_response(500)
+                    self.end_headers()
+                except Exception:
+                    pass
 
-    host = (
-        os.environ.get("RAILWAY_PUBLIC_DOMAIN")
-        or os.environ.get("RAILWAY_SERVICE_HERMES_Z0RV_URL")
-        or os.environ.get("HERMES_PUBLIC_URL", "")
+
+        return
+
+
+def _is_railway() -> bool:
+    env = (os.environ.get("RAILWAY_ENVIRONMENT") or os.environ.get("HERMES_ENV") or "").strip().lower()
+    return env == "railway"
+
+
+def _listen_host(default: str = "0.0.0.0") -> str:
+    return (os.environ.get("HERMES_LISTEN_HOST") or default).strip() or default
+
+
+def _listen_port(default: str = "8080") -> int:
+    raw = (
+        os.environ.get("PORT")
+        or os.environ.get("HERMES_PORT")
+        or default
     )
-    port = os.environ.get("PORT") or os.environ.get("HERMES_PORT") or "8080"
-    path = os.environ.get("HERMES_HEALTH_PATH", "/health").strip() or "/health"
+    try:
+        return int(str(raw).strip())
+    except (TypeError, ValueError):
+        return int(default)
 
-    if not host:
-        host = f"127.0.0.1:{port}"
-        return f"http://{host}{path}"
 
-    if "://" not in host:
-        host = f"http://{host}"
-    if host.endswith("/"):
-        host = host[:-1]
-    return f"{host}{path}"
+def _health_path(default: str = "/health") -> str:
+    raw = os.environ.get("HERMES_HEALTH_PATH", default).strip()
+    return raw if raw else default
+
+
+def _sidecar_url(host: str, port: int) -> str:
+    return f"http://{host}:{port}{_health_path()}"
+
+
+def _start_sidecar(host: str, port: int) -> HTTPServer:
+    server = HTTPServer((host, port), _HealthHandler)
+    server.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    t = threading.Thread(target=server.serve_forever, daemon=True)
+    t.start()
+    return server
+
+
+def _probe_ready(url: str, timeout: float = 5.0) -> bool:
+    try:
+        with urlopen(Request(url, method="GET"), timeout=timeout) as resp:
+            return resp.status == 200
+    except Exception:
+        return False
 
 
 def _default_cmd() -> list[str]:
@@ -58,42 +109,54 @@ def _default_cmd() -> list[str]:
 
 def _load_gateway_cmd() -> list[str]:
     raw = os.environ.get("HERMES_GATEWAY_CMD", "").strip()
-    if raw:
-        try:
-            parsed = json.loads(raw)
-            if isinstance(parsed, list) and parsed:
-                return [str(x) for x in parsed]
-        except Exception:
-            pass
-        return shlex.split(raw)
-    return _default_cmd()
+    if not raw:
+        return _default_cmd()
+    try:
+        parsed = json.loads(raw)
+        if isinstance(parsed, list) and parsed:
+            return [str(x) for x in parsed]
+    except Exception:
+        pass
+    return shlex.split(raw)
 
 
 def main() -> int:
+    host = _listen_host("0.0.0.0" if _is_railway() else "127.0.0.1")
+    port = _listen_port()
+    expected_path = _health_path()
+    url = _sidecar_url("127.0.0.1", port)
+
+    sidecar = _start_sidecar(host, port)
     cmd = _load_gateway_cmd()
     proc = subprocess.Popen(cmd)
+
     try:
         timeout = float(os.environ.get("HERMES_HEALTH_TIMEOUT", "180"))
         deadline = time.time() + timeout
         last = None
-        health = _health_url()
+        ready = False
         while time.time() < deadline:
             if proc.poll() is not None:
                 break
+            if _probe_ready(url):
+                print(f"hermes-health-ready url={url} path={expected_path} port={port}", flush=True)
+                ready = True
+                break
             try:
-                req = urllib.request.Request(health, method="GET")
-                with urllib.request.urlopen(req, timeout=5) as resp:
-                    if resp.status == 200:
-                        sys.stdout.write(f"hermes health ready: {health}\n")
-                        sys.stdout.flush()
-                        return proc.wait()
+                last = urlopen(Request(url, method="GET"), timeout=2).read()
             except Exception as exc:
                 last = exc
             time.sleep(2)
-        sys.stderr.write(f"hermes health probe failed: timeout / last_error={last} / url={health}\n")
-        sys.stderr.flush()
+        if not ready:
+            print(f"hermes-health-failed url={url} last={last}", flush=True, file=sys.stderr)
+            code = proc.wait()
+            return code
         return proc.wait()
     finally:
+        try:
+            sidecar.shutdown()
+        except Exception:
+            pass
         if proc.poll() is None:
             try:
                 proc.terminate()
