@@ -1,0 +1,7 @@
+{
+  "timestamp": "2026-07-21T19:36:21.396074+00:00",
+  "status": "ok",
+  "command": "write/read \\opt\\data\\launch_runtime\\healthprobe.txt",
+  "evidence": "base_exists=True",
+  "result": "passed"
+}

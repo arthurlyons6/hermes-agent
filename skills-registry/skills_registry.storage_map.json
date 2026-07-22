@@ -1,0 +1,8 @@
+{
+  "approved_storage": "C:\\Users\\13464\\AppData\\Local\\hermes\\hermes-agent\\skills-registry\\skills_registry.approved.json",
+  "rejected_storage": "C:\\Users\\13464\\AppData\\Local\\hermes\\hermes-agent\\skills-registry\\skills_registry.rejected.json",
+  "restricted_storage": "C:\\Users\\13464\\AppData\\Local\\hermes\\hermes-agent\\skills-registry\\skills_registry.restricted.json",
+  "duplicate_families_storage": "C:\\Users\\13464\\AppData\\Local\\hermes\\hermes-agent\\skills-registry\\skills_registry.duplicate_families.json",
+  "priority_storage": "C:\\Users\\13464\\AppData\\Local\\hermes\\hermes-agent\\skills-registry\\skills_registry.priority.json",
+  "note": "Compliance: keep metadata in main registry, detailed lists sharded here."
+}

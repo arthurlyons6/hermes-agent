@@ -1,0 +1,194 @@
+{
+  "generated_at": "2026-07-21T18:43:17.844380+00:00",
+  "package": [
+    {
+      "slot": "systematic-debugging",
+      "id": "skill-approved-000547",
+      "name": "superpowers-systematic-debugging",
+      "category": "software-development",
+      "specialist": "Miles/Naomi",
+      "purpose": "Use when encountering any bug, test failure, or unexpected behavior — find root cause before proposing fixes",
+      "selected_reason": "direct match for operational domain"
+    },
+    {
+      "slot": "verification-before-completion",
+      "id": "skill-approved-000549",
+      "name": "superpowers-verification-before-completion",
+      "category": "software-development",
+      "specialist": "Miles/Naomi",
+      "purpose": "Use before declaring any task done — verify against spec, check edge cases, confirm tests pass, ensure no regressions",
+      "selected_reason": "direct match for operational domain"
+    },
+    {
+      "slot": "test-driven-development",
+      "id": "skill-approved-000548",
+      "name": "superpowers-test-driven-development",
+      "category": "software-development",
+      "specialist": "Miles/Naomi",
+      "purpose": "Use when implementing any feature or bugfix — write the test first, watch it fail, write minimal code to pass",
+      "selected_reason": "direct match for operational domain"
+    },
+    {
+      "slot": "service-integration-testing",
+      "id": "skill-approved-000206",
+      "name": "defensive-programming",
+      "category": "software-development",
+      "specialist": "Miles/Naomi",
+      "purpose": "Defensive programming practices to prevent bugs and increase code resilience",
+      "selected_reason": "direct match for operational domain"
+    },
+    {
+      "slot": "docker-deployment-validation",
+      "id": "skill-approved-000129",
+      "name": "docker-auto-deploy",
+      "category": "devops",
+      "specialist": "Marcus/Olivia",
+      "purpose": "Deploy Docker web apps with cron-triggered git auto-update, zero-downtime restarts, and 502 troubleshooting. Covers the git-poll + docker-compose rebuild pattern for self-hosted apps.",
+      "selected_reason": "direct match for operational domain"
+    },
+    {
+      "slot": "railway-container-reliability",
+      "id": "skill-approved-000304",
+      "name": "hardening-docker-containers-for-production",
+      "category": "cybersecurity",
+      "specialist": "Marcus/Olivia",
+      "purpose": "Hardening Docker containers for production involves applying security best practices aligned with CIS Docker Benchmark v1.8.0 to minimize attack surface, prevent privilege escalation, and enforce leas",
+      "selected_reason": "direct match for operational domain"
+    },
+    {
+      "slot": "gateway-and-telegram-troubleshooting",
+      "id": "skill-approved-000293",
+      "name": "gateway-adapter-development",
+      "category": "devops",
+      "specialist": "Miles/Naomi",
+      "purpose": "Develop, debug, and maintain Hermes gateway platform adapters (Telegram, Discord, Slack, Raft, etc.)",
+      "selected_reason": "direct match for operational domain"
+    },
+    {
+      "slot": "cron-scheduled-job-management",
+      "id": "skill-approved-000191",
+      "name": "cron-job-management",
+      "category": "devops",
+      "specialist": "Olivia",
+      "purpose": "Manage Hermes cron jobs — create, inspect, recreate from backup, and maintain supporting scripts",
+      "selected_reason": "direct match for operational domain"
+    },
+    {
+      "slot": "logging-and-observability",
+      "id": "skill-approved-000373",
+      "name": "implementing-log-forwarding-with-fluentd",
+      "category": "cybersecurity",
+      "specialist": "Victor",
+      "purpose": "Configure Fluentd and Fluent Bit for centralized log aggregation, routing, filtering, and enrichment across distributed infrastructure",
+      "selected_reason": "direct match for operational domain"
+    },
+    {
+      "slot": "github-change-management-and-code-review",
+      "id": "skill-approved-000353",
+      "name": "integrating-sast-into-github-actions-pipeline",
+      "category": "cybersecurity",
+      "specialist": "Marcus/Olivia",
+      "purpose": "This skill covers integrating Static Application Security Testing (SAST) tools—CodeQL and Semgrep—into GitHub Actions CI/CD pipelines. It addresses configuring automated code scanning on pull requests and pushes, tuning rules to reduce false positives, uploading SARIF results to GitHub Advanced Secu",
+      "selected_reason": "direct match for operational domain"
+    },
+    {
+      "slot": "rollback-recovery-operational-continuity",
+      "id": null,
+      "name": null,
+      "category": null,
+      "specialist": "Marcus",
+      "purpose": "No suitable match in current priority set.",
+      "selected_reason": "gap — mark for separate evaluation"
+    },
+    {
+      "slot": "environment-validation-and-health",
+      "id": "skill-approved-000214",
+      "name": "building-detection-rules-with-sigma",
+      "category": "cybersecurity",
+      "specialist": "Naomi",
+      "purpose": "Builds vendor-agnostic detection rules using the Sigma rule format for threat detection across SIEM platforms including Splunk, Elastic, and Microsoft Sentinel. Use when creating portable detection logic from threat intelligence, mapping rules to MITRE ATT&CK techniques, or converting community Sigm",
+      "selected_reason": "direct match for operational domain"
+    }
+  ],
+  "validated_pending_activation": [
+    {
+      "name": "superpowers-systematic-debugging",
+      "slot": "systematic-debugging",
+      "specialist": "Miles/Naomi",
+      "category": "software-development",
+      "status": "validated_pending_activation"
+    },
+    {
+      "name": "superpowers-verification-before-completion",
+      "slot": "verification-before-completion",
+      "specialist": "Miles/Naomi",
+      "category": "software-development",
+      "status": "validated_pending_activation"
+    },
+    {
+      "name": "superpowers-test-driven-development",
+      "slot": "test-driven-development",
+      "specialist": "Miles/Naomi",
+      "category": "software-development",
+      "status": "validated_pending_activation"
+    },
+    {
+      "name": "defensive-programming",
+      "slot": "service-integration-testing",
+      "specialist": "Miles/Naomi",
+      "category": "software-development",
+      "status": "validated_pending_activation"
+    },
+    {
+      "name": "docker-auto-deploy",
+      "slot": "docker-deployment-validation",
+      "specialist": "Marcus/Olivia",
+      "category": "devops",
+      "status": "validated_pending_activation"
+    },
+    {
+      "name": "hardening-docker-containers-for-production",
+      "slot": "railway-container-reliability",
+      "specialist": "Marcus/Olivia",
+      "category": "cybersecurity",
+      "status": "validated_pending_activation"
+    },
+    {
+      "name": "gateway-adapter-development",
+      "slot": "gateway-and-telegram-troubleshooting",
+      "specialist": "Miles/Naomi",
+      "category": "devops",
+      "status": "validated_pending_activation"
+    },
+    {
+      "name": "cron-job-management",
+      "slot": "cron-scheduled-job-management",
+      "specialist": "Olivia",
+      "category": "devops",
+      "status": "validated_pending_activation"
+    },
+    {
+      "name": "implementing-log-forwarding-with-fluentd",
+      "slot": "logging-and-observability",
+      "specialist": "Victor",
+      "category": "cybersecurity",
+      "status": "validated_pending_activation"
+    },
+    {
+      "name": "integrating-sast-into-github-actions-pipeline",
+      "slot": "github-change-management-and-code-review",
+      "specialist": "Marcus/Olivia",
+      "category": "cybersecurity",
+      "status": "validated_pending_activation"
+    },
+    {
+      "name": "building-detection-rules-with-sigma",
+      "slot": "environment-validation-and-health",
+      "specialist": "Naomi",
+      "category": "cybersecurity",
+      "status": "validated_pending_activation"
+    }
+  ],
+  "held": [],
+  "note": "No skills have been installed into the active Hermes runtime. Validated skills are approved for controlled activation only."
+}

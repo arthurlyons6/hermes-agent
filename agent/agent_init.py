@@ -430,6 +430,44 @@ def init_agent(
     agent.pass_session_id = pass_session_id
     agent.log_prefix_chars = log_prefix_chars
     agent.log_prefix = f"{log_prefix} " if log_prefix else ""
+    # Lyons model routing preferences when the caller does not explicitly choose
+    # provider/model. Local fallback remains first-class.
+    try:
+        from hermes_cli.config import load_config as _load_hermes_config
+        _cfg = _load_hermes_config() or {}
+        _routing = _cfg.get("model_routing", {}) if isinstance(_cfg, dict) else {}
+        _explicit_model = bool(str(model or "").strip())
+        _explicit_provider = bool(str(provider or "").strip()) and str(provider or "").strip().lower() != "auto"
+        if not _explicit_provider and _routing.get("default_provider"):
+            agent.provider = _routing["default_provider"]
+            agent.model = _routing.get("default_model", agent.model)
+        if not _explicit_model:
+            if str(agent.base_url or "").endswith("/inference.poolside.ai/v1") or str(agent.provider or "") == "poolside":
+                agent.model = agent.model or _routing.get("engineering_models", ["poolside/laguna-m.1"])[0]
+            elif str(agent.provider or "") == "openrouter":
+                agent.model = agent.model or _routing.get("default_model", agent.model)
+        _fallback_providers = _routing.get("fallback_providers") or ([_routing["local_fallback_provider"]] if _routing.get("local_fallback_provider") else None)
+        if _fallback_providers:
+            agent.fallback_providers = list(_fallback_providers)
+        else:
+            agent.fallback_providers = list(agent.fallback_providers) if hasattr(agent, "fallback_providers") and agent.fallback_providers else ["nous"]
+        if not getattr(agent, "fallback_model", None):
+            _fb = {}
+            if _routing.get("local_fallback_provider"):
+                _fb["provider"] = _routing["local_fallback_provider"]
+                _fb["model"] = _routing.get("local_fallback_model", agent.fallback_model.get("model") if isinstance(agent.fallback_model, dict) else "")
+            agent.fallback_model = _fb or None
+        agent._model_routing = {
+            "default_provider": _routing.get("default_provider"),
+            "default_model": _routing.get("default_model"),
+            "engineering_provider": _routing.get("engineering_provider"),
+            "local_fallback_provider": _routing.get("local_fallback_provider"),
+            "local_fallback_model": _routing.get("local_fallback_model"),
+        }
+    except Exception:
+        agent.fallback_providers = agent.fallback_providers or ["nous"]
+        agent.fallback_model = agent.fallback_model or None
+        agent._model_routing = {}
     # Store effective base URL for feature detection (prompt caching, reasoning, etc.)
     agent.base_url = base_url or ""
     provider_name = provider.strip().lower() if isinstance(provider, str) and provider.strip() else None

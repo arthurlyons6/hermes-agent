@@ -1,0 +1,26 @@
+# Quarto template manifest
+
+templates:
+  - name: "black-gold-business-plan"
+    description: "Institutional business plan template for Black Gold Equity Partners."
+    output_format: "pdf"
+    cover: "templates/quarto/black-gold/cover.qmd"
+    sections:
+      - "templates/quarto/black-gold/01-executive-summary.qmd"
+      - "templates/quarto/black-gold/02-market-analysis.qmd"
+      - "templates/quarto/black-gold/03-operating-plan.qmd"
+      - "templates/quarto/black-gold/04-financial-model.qmd"
+      - "templates/quarto/black-gold/05-legal-review.qmd"
+      - "templates/quarto/black-gold/06-editorial-review.qmd"
+      - "templates/quarto/black-gold/07-evidence-ledger.qmd"
+      - "templates/quarto/black-gold/08-confidentiality.qmd"
+    metadata:
+      title: "Black Gold Equity Partners Business Plan"
+      author: "Lyons Command Center"
+      date: "INSERT_DATE"
+      lang: "en"
+      branding:
+        primary_color: "#0B1D51"
+        secondary_color: "#B59A60"
+        font_family: "Open Sans"
+      validate_sections: true

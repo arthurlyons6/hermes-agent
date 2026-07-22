@@ -1,0 +1,7 @@
+{
+  "timestamp": "2026-07-21T19:36:21.396074+00:00",
+  "status": "skipped",
+  "command": "psql $DATABASE_URL",
+  "evidence": "DATABASE_URL/POSTGRES_URL not set",
+  "result": "failed"
+}

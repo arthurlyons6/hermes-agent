@@ -1,0 +1,36 @@
+---
+title: "Black Gold Equity Partners Business Plan"
+author: "Lyons Command Center"
+date: "INSERT_DATE"
+lang: "en"
+format:
+  pdf:
+    documentclass: article
+    colorlinks: true
+    geometry:
+      - left=2.5cm
+      - right=2.5cm
+      - top=2.5cm
+      - bottom=2.5cm
+    fontsize: 11pt
+    mainfont: "Open Sans"
+execute:
+  echo: false
+  warning: false
+---
+
+# Executive Summary
+
+Evidence class: verified_fact
+Source: file://APPROVED_SOURCE_URI
+
+- INSERT_SUMMARY_POINTS_HERE
+
+# Evidence Ledger
+
+| Evidence ID | Source | Class | Confidence | Owner |
+| --- | --- | --- | --- | --- |
+| EVIDENCE_001 | SOURCE_URI | verified_fact | 0.95 | Miles |
+| EVIDENCE_002 | SOURCE_URI | estimate | 0.7 | Malcolm |
+
+> Confidentiality notice: this document is governed by the Lyons Command Center approval chain. Do not distribute without explicit release.

@@ -1,0 +1,27 @@
+{
+  "generated_at": "2026-07-21T18:23:40Z",
+  "validation_method": "code-based inventory scan + controlled staging required before activation",
+  "approved_count": 622,
+  "rejected_count": 264,
+  "restricted_count": 0,
+  "duplicate_count": 32,
+  "pending_validation_count": 622,
+  "priority_package_count": 113,
+  "recommended_testing": [
+    "Phase 1: isolated staging HERMES_HOME per skill, parse syntax only.",
+    "Phase 2: smoke-test canonical priority skills in actual session.",
+    "Phase 3: gateway/telegram separate gating; only run one poller per bot token.",
+    "Railway: validate /health, docker startup, env vars, volumes before activating gateway skills.",
+    "Local 8GB: exclude gpu-intensive/multi-node from auto-activation."
+  ],
+  "rejected_categories": [
+    "Offensive/war-category skills remain disabled and uninstalled per LCC doctrine."
+  ],
+  "next_gates": [
+    "Approve priority package",
+    "Stage candidates under skills-registry/stage/approved/",
+    "Run syntax + dependency review",
+    "Activate only after controlled validation"
+  ],
+  "final_validation_required": true
+}

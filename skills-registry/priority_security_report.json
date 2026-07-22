@@ -1,0 +1,104 @@
+{
+  "generated_at": "2026-07-21T18:43:17.739118+00:00",
+  "skills": [
+    {
+      "id": "skill-approved-000547",
+      "name": "superpowers-systematic-debugging",
+      "secret_hits": [],
+      "destructive_hits": [],
+      "network_hits": [],
+      "security_risk": "low",
+      "approval_required": false
+    },
+    {
+      "id": "skill-approved-000549",
+      "name": "superpowers-verification-before-completion",
+      "secret_hits": [],
+      "destructive_hits": [],
+      "network_hits": [],
+      "security_risk": "low",
+      "approval_required": false
+    },
+    {
+      "id": "skill-approved-000548",
+      "name": "superpowers-test-driven-development",
+      "secret_hits": [],
+      "destructive_hits": [],
+      "network_hits": [],
+      "security_risk": "low",
+      "approval_required": false
+    },
+    {
+      "id": "skill-approved-000206",
+      "name": "defensive-programming",
+      "secret_hits": [],
+      "destructive_hits": [],
+      "network_hits": [],
+      "security_risk": "low",
+      "approval_required": false
+    },
+    {
+      "id": "skill-approved-000129",
+      "name": "docker-auto-deploy",
+      "secret_hits": [],
+      "destructive_hits": [],
+      "network_hits": [],
+      "security_risk": "low",
+      "approval_required": false
+    },
+    {
+      "id": "skill-approved-000304",
+      "name": "hardening-docker-containers-for-production",
+      "secret_hits": [],
+      "destructive_hits": [],
+      "network_hits": [],
+      "security_risk": "low",
+      "approval_required": false
+    },
+    {
+      "id": "skill-approved-000293",
+      "name": "gateway-adapter-development",
+      "secret_hits": [],
+      "destructive_hits": [],
+      "network_hits": [],
+      "security_risk": "low",
+      "approval_required": false
+    },
+    {
+      "id": "skill-approved-000191",
+      "name": "cron-job-management",
+      "secret_hits": [],
+      "destructive_hits": [],
+      "network_hits": [],
+      "security_risk": "low",
+      "approval_required": false
+    },
+    {
+      "id": "skill-approved-000373",
+      "name": "implementing-log-forwarding-with-fluentd",
+      "secret_hits": [],
+      "destructive_hits": [],
+      "network_hits": [],
+      "security_risk": "low",
+      "approval_required": false
+    },
+    {
+      "id": "skill-approved-000353",
+      "name": "integrating-sast-into-github-actions-pipeline",
+      "secret_hits": [],
+      "destructive_hits": [],
+      "network_hits": [],
+      "security_risk": "low",
+      "approval_required": false
+    },
+    {
+      "id": "skill-approved-000214",
+      "name": "building-detection-rules-with-sigma",
+      "secret_hits": [],
+      "destructive_hits": [],
+      "network_hits": [],
+      "security_risk": "low",
+      "approval_required": false
+    }
+  ]
+}
