@@ -47,9 +47,6 @@ class _HealthHandler(BaseHTTPRequestHandler):
                     pass
 
 
-        return
-
-
 def _is_railway() -> bool:
     env = (os.environ.get("RAILWAY_ENVIRONMENT") or os.environ.get("HERMES_ENV") or "").strip().lower()
     return env == "railway"
