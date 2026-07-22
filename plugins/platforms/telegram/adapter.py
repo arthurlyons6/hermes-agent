@@ -8168,6 +8168,179 @@ class TelegramAdapter(BasePlatformAdapter):
         event = self._apply_telegram_group_observe_attribution(event)
         self._enqueue_text_event(event)
 
+    async def _try_ops_command_shortcut(self, msg: Message, command_text: str) -> str | None:
+        """Handle read-only ops shortcuts from Telegram slash commands.
+
+        Covered shortcuts: /status, /logs, /platforms, /sessions, /doctor,
+        /fix, /deploy, /health.
+        Returns a reply string when a shortcut is handled, or None.
+        """
+        if not command_text or not command_text.startswith("/"):
+            return None
+        cmd_name = command_text.split(" ", 1)[0].split("@", 1)[0].lower()
+        args_text = command_text[len(cmd_name):].strip()
+
+        command_handlers = {
+            "/status": self._ops_handle_status,
+            "/logs": self._ops_handle_logs,
+            "/platforms": self._ops_handle_platforms,
+            "/sessions": self._ops_handle_sessions,
+            "/doctor": self._ops_handle_doctor,
+            "/fix": self._ops_handle_fix,
+            "/deploy": self._ops_handle_deploy,
+            "/health": self._ops_handle_health,
+        }
+        handler = command_handlers.get(cmd_name)
+        if handler is None:
+            return None
+        try:
+            return await asyncio.wait_for(handler(args_text), timeout=45)
+        except asyncio.TimeoutError:
+            return "Ops shortcut timed out."
+        except Exception as exc:  # pragma: no cover - safeguard against adapter crash
+            logger.debug("[Telegram] ops shortcut failed for %s: %s", cmd_name, exc)
+            return "Ops shortcut failed: %s" % _redact_telegram_error_text(exc)
+
+    @staticmethod
+    def _ops_redact(text: str) -> str:
+        try:
+            from hermes_cli.plugins import invoke_hook as _invoke_hook  # type: ignore[import]
+            redacted = _invoke_hook("redact_sensitive", text=text)
+            if isinstance(redacted, str) and redacted != text:
+                return redacted
+        except Exception:
+            pass
+        return text
+
+    async def _run_cli_capture(self, args: list[str]) -> str:
+        loop = asyncio.get_running_loop()
+        return await asyncio.to_thread(
+            lambda: _HermesCliRunner().dispatch(args=args, raw=False)
+        )
+
+    async def _ops_handle_status(self, args: str) -> str:  # pragma: no cover - runtime adapter path
+        if args:
+            return _TELEGRAM_OPS_USAGE["status"]
+        out = await self._run_cli_capture(["status"])
+        lines = out.splitlines()[-20:]
+        out = "\n".join(lines)
+        return self._ops_limit_output(self._ops_redact(out))
+
+    async def _ops_handle_logs(self, args: str) -> str:  # pragma: no cover - runtime adapter path
+        tokens = args.split() if args else []
+        log_name = "agent"
+        lines = 80
+        additional: list[str] = []
+        while tokens:
+            token = tokens.pop(0)
+            if token == "-n" and tokens:
+                try:
+                    lines = max(1, min(500, int(tokens.pop(0))))
+                except ValueError:
+                    additional.append(token)
+            elif token.startswith("-"):
+                additional.append(token)
+            elif not log_name or log_name == "list":
+                log_name = token
+            else:
+                additional.append(token)
+        if args == "list":
+            out = await self._run_cli_capture(["logs", "list"])
+        else:
+            out = await self._run_cli_capture(["logs", log_name, "-n", str(lines), *additional])
+        out = "\n".join(out.splitlines()[-80:])
+        return self._ops_limit_output(self._ops_redact(out))
+
+    async def _ops_handle_platforms(self, args: str) -> str:  # pragma: no cover - runtime adapter path
+        if args:
+            return _TELEGRAM_OPS_USAGE["platforms"]
+        out = self._ops_summarize_platforms()
+        return self._ops_redact(out)
+
+    async def _ops_handle_sessions(self, args: str) -> str:  # pragma: no cover - runtime adapter path
+        if not args:
+            out = await self._run_cli_capture(["sessions", "stats"])
+            return self._ops_limit_output(self._ops_redact(out), limit=20)
+        if args in {"list", "recent"}:
+            out = await self._run_cli_capture(["sessions", "list", "--limit", "25"])
+            return self._ops_limit_output(self._ops_redact(out), limit=40)
+        return self._ops_limit_output(
+            self._ops_redact(await self._run_cli_capture(["sessions", "stats"])),
+            limit=20,
+        )
+
+    async def _ops_handle_doctor(self, args: str) -> str:  # pragma: no cover - runtime adapter path
+        if args:
+            return _TELEGRAM_OPS_USAGE["doctor"]
+        out = await self._run_cli_capture(["doctor"])
+        out = "\n".join(out.splitlines()[-60:])
+        return self._ops_limit_output(self._ops_redact(out))
+
+    async def _ops_handle_fix(self, args: str) -> str:  # pragma: no cover - runtime adapter path
+        out = await self._run_cli_capture(["doctor"])
+        lines = out.splitlines()
+        findings = self._ops_findings(lines)
+        if not findings:
+            return "Doctor report: no fixable issues detected."
+        summary = self._ops_fix_recommendations(findings)
+        return self._ops_limit_output(self._ops_redact(summary), limit=40)
+
+    async def _ops_handle_deploy(self, args: str) -> str:  # pragma: no cover - runtime adapter path
+        return (
+            "Railway deploy is manual right now.\n"
+            "Run in this project: railway redploy flags for hermes-z0Rv.\n"
+            "Expected startCommand: python -m hermes_cli.main gateway run --replace"
+        )
+
+    async def _ops_handle_health(self, args: str) -> str:  # pragma: no cover - runtime adapter path
+        out = await self._run_cli_capture(["sessions", "stats"])
+        lines = [line for line in out.splitlines() if not self._ops_maybe_secret(line)]
+        health_lines = ["Health snapshot:"] + lines[:20]
+        return self._ops_limit_output("\n".join(health_lines), limit=30)
+
+    @staticmethod
+    def _ops_maybe_secret(line: str) -> bool:
+        secret_keys = {"OPENROUTER_API_KEY", "RAILWAY_TOKEN", "TELEGRAM_BOT_TOKEN", "GITHUB_TOKEN", "HERMES_TOKEN"}
+        upper = line.upper()
+        return any(token in upper and "=" in line for token in secret_keys)
+
+    @staticmethod
+    def _ops_limit_output(output: str, *, limit: int = 35) -> str:
+        lines = output.splitlines()[:limit]
+        trimmed = len(output.splitlines()) > len(lines)
+        summarized = "\n".join(lines)
+        if trimmed:
+            summarized += "\n\n... trimmed ..."
+        return summarized
+
+    @staticmethod
+    def _ops_findings(lines: list[str]) -> list[str]:
+        return [line for line in lines if "fix:" in line.lower() or "repair:" in line.lower() or "warn:" in line.lower()][:20]
+
+    @staticmethod
+    def _ops_fix_recommendations(findings: list[str]) -> str:
+        return "Opus recommendations:\n" + "\n".join("- " + line for line in findings[:10])
+
+    @staticmethod
+    def _ops_summarize_platforms() -> str:  # pragma: no cover - minimal summary path
+        try:
+            from gateway.run import GatewayRunner  # type: ignore[import]
+            runner = getattr(GatewayRunner, "_instance", None)
+        except Exception:
+            runner = None
+        if runner is None:
+            return "Platforms: unknown until gateway runtime is active."
+        adapters = getattr(runner, "adapters", {}) or {}
+        if not adapters:
+            return "Platforms: no active adapters."
+        lines = ["Platforms:"]
+        for platform, adapter in adapters.items():
+            name = getattr(adapter, "name", str(platform))
+            connected = getattr(adapter, "_send_path_degraded", False) is False
+            status = "connected" if connected else "degraded"
+            lines.append("- %s: %s" % (name, status))
+        return "\n".join(lines)
+
     async def _handle_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         """Handle incoming command messages."""
         msg = self._effective_update_message(update)
@@ -8192,6 +8365,15 @@ class TelegramAdapter(BasePlatformAdapter):
             return
         await self._ensure_forum_commands(msg)
 
+        command_text = (msg.text or "").strip()
+        ops_reply = await self._try_ops_command_shortcut(msg, command_text)
+        if ops_reply is not None:
+            await self._bot.send_message(
+                chat_id=msg.chat_id,
+                text=ops_reply,
+                parse_mode=ParseMode.MARKDOWN_V2,
+            )
+            return
         event = self._build_message_event(msg, MessageType.COMMAND, update_id=update.update_id)
         event.text = self._clean_bot_trigger_text(event.text)
         await self._cache_replied_media(msg, event)
