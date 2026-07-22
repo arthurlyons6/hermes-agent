@@ -1,0 +1,5 @@
+name: poolside
+kind: model-provider
+version: 1.0.0
+description: Poolside OpenAI-compatible model API
+author: Hermes Agent + Poolside
