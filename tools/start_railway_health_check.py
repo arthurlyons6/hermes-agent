@@ -1,15 +1,8 @@
 #!/usr/bin/env python3
 """Railway start wrapper for Hermes.
 
-Starts a minimal /health server on Railway's $PORT so Railway considers the
-deployment healthy, then launches the real gateway. Keeps the gateway process
-in the foreground so Railway can supervise it normally.
-
-Env:
-- PORT / HERMES_PORT: port to bind /health on (Railway sets PORT automatically)
-- HERMES_LISTEN_HOST: bind host for /health, defaults to 0.0.0.0 on Railway.
-- HERMES_GATEWAY_CMD: JSON or shell argv for the gateway process.
-- HERMES_HEALTH_PATH: path served, defaults to "/health".
+Serves Railway health checks on the target port and simultaneously
+starts the real gateway process so Railway can supervise it normally.
 """
 
 import json
@@ -22,31 +15,30 @@ import threading
 import time
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.request import Request, urlopen
-from urllib.error import URLError
 
 
 class _HealthHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-            try:
-                expected = os.environ.get("HERMES_HEALTH_PATH", "/health").strip() or "/health"
-                if self.path != expected:
-                    self.send_response(404)
-                    self.end_headers()
-                    return
-                body = b'{"status":"ok","service":"hermes-agent","source":"start_railway_health_check"}'
-                self.send_response(200)
-                self.send_header("Content-Type", "application/json")
-                self.send_header("Content-Length", str(len(body)))
+        try:
+            expected = os.environ.get("HERMES_HEALTH_PATH", "/health").strip() or "/health"
+            if self.path != expected:
+                self.send_response(404)
                 self.end_headers()
-                self.wfile.write(body)
+                return
+            body = b'{"status":"ok","service":"hermes-agent","source":"start_railway_health_check"}'
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+        except Exception:
+            try:
+                self.send_response(500)
+                self.end_headers()
             except Exception:
-                try:
-                    self.send_response(500)
-                    self.end_headers()
-                except Exception:
-                    pass
+                pass
 
-
+    def log_message(self, format, *args):
         return
 
 
@@ -59,7 +51,7 @@ def _listen_host(default: str = "0.0.0.0") -> str:
     return (os.environ.get("HERMES_LISTEN_HOST") or default).strip() or default
 
 
-def _listen_port(default: str = "8080") -> int:
+def _listen_port(default: str = "3006" if _is_railway() else "8080") -> int:
     raw = (
         os.environ.get("PORT")
         or os.environ.get("HERMES_PORT")
