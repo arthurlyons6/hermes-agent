@@ -1,0 +1,76 @@
+{
+  "captured_at": "2026-07-18T15:57:16.645536",
+  "hermes_home": "C:\\Users\\13464\\AppData\\Local\\hermes",
+  "agent_dir": "C:\\Users\\13464\\AppData\\Local\\hermes\\hermes-agent",
+  "git": {
+    "branch": "--abbrev-ref HEAD",
+    "head": "1415558acae44c455769de10d1f7e2029dbd62ad",
+    "status": "## main...origin/main [ahead 1]\n M toolsets.py\n?? \"C\\357\\200\\272Users13464AppDataLocalTemppytest-of-13464pytest-73test_approved_command_genuine_0cmd_started_c\"\n?? \"C\\357\\200\\272Users13464AppDataLocalTemppytest-of-13464pytest-73test_approved_note_enriched_no0cmd_started_d\"\n?? toolsets.py.bak-20260718-command-center-restoration",
+    "diff_stat": "cli.py                                             |  17 +\n flake.lock                                         | 141 ------\n hermes_cli/cron.py                                 |  13 +-\n plugins/platforms/telegram/adapter.py              |   4 -\n scripts/kill_chrome_loop.ps1                       |   4 +\n scripts/kill_ids.ps1                               |   4 +\n scripts/kill_nonessential.ps1                      |  17 +\n skills/autonomous-ai-agents/hermes-agent/SKILL.md  |   2 +-\n skills/productivity/google-workspace/SKILL.md      |  30 ++\n .../productivity/google-workspace/scripts/setup.py |   7 +-\n tests/tools/test_config_validator_tool.py          | 167 ++++++++\n tests/tools/test_cron_health_tool.py               | 327 ++++++++++++++\n tests/tools/test_dependency_health_tool.py         | 244 +++++++++++\n tests/tools/test_docker_health_tool.py             | 179 ++++++++\n tests/tools/test_local_graph.py                    | 204 +++++++++\n tests/tools/test_log_analyzer_tool.py              | 296 +++++++++++++\n tests/tools/test_platform_connectivity_tool.py     | 176 ++++++++\n tests/tools/test_registry_doctor_tool.py           | 155 +++++++\n tests/tools/test_repo_health_tool.py               | 263 ++++++++++++\n tests/tools/test_test_health_tool.py               | 177 ++++++++\n tests/tools/test_ux_launcher_tool.py               | 123 ++++++\n tests/tools/test_validation_helper.py              | 160 +++++++\n tools/config_validator_tool.py                     | 296 +++++++++++++\n tools/cron_health_tool.py                          | 184 ++++++++\n tools/dependency_health_tool.py                    | 388 +++++++++++++++++\n tools/docker_health_tool.py                        | 237 +++++++++++\n tools/local_graph.py                               | 473 +++++++++++++++++++++\n tools/log_analyzer_tool.py                         | 207 +++++++++\n tools/platform_connectivity_tool.py                | 336 +++++++++++++++\n tools/registry_doctor_tool.py                      |  89 ++++\n tools/repo_health_tool.py                          | 186 ++++++++\n tools/test_health_tool.py                          | 183 ++++++++\n tools/todo_tool.py                                 |  38 +-\n tools/ux_launcher_tool.py                          | 155 +++++++\n tools/validated_todo_tool.py                       | 148 +++++++\n tools/validation_helper.py                         | 117 +++++\n toolsets.py                                        | 124 ++++--\n website/docs/reference/tools-reference.md          |  19 +\n website/docs/reference/toolsets-reference.md       |  11 +-\n website/docs/user-guide/cli.md                     |  30 ++\n website/docs/user-guide/configuration.md           |  88 ++++\n .../user-guide/features/output-ux-release-kit.md   | 108 +++++\n .../user-guide/features/tool-progress-grouping.md  |  56 +++\n website/docs/user-guide/features/tools.md          |   5 +-\n website/docs/user-guide/messaging/index.md         |   3 +\n website/docs/user-guide/messaging/telegram.md      |   2 +\n website/docs/user-guide/tui.md                     |  19 +\n 47 files changed, 6008 insertions(+), 204 deletions(-)"
+  },
+  "python": {
+    "version": "3.11.3 (tags/v3.11.3:f3909b8, Apr  4 2023, 23:49:59) [MSC v.1934 64 bit (AMD64)]"
+  },
+  "provider_config": {
+    "default_model": "stepfun/step-3.7-flash:free",
+    "provider": "nous",
+    "base_url": "https://inference-api.nousresearch.com/v1",
+    "fallback": "ollama/qwen2.5:3b-instruct"
+  },
+  "gateway_health": {
+    "http": "200 OK",
+    "port": 3006
+  },
+  "telegram": {
+    "configured": true,
+    "allowed_users": [
+      8897743493
+    ],
+    "allowed_chats": [
+      "-1004233134120",
+      "-1005488739957"
+    ],
+    "status": "connected"
+  },
+  "cron": {
+    "count": 4,
+    "jobs": [
+      {
+        "id": "b043387384da",
+        "name": "Global AI/Open-Source Research",
+        "schedule_display": "0 9 * * *",
+        "next_run_at": "2026-07-19T09:00:00-05:00",
+        "last_run_at": null,
+        "state": "scheduled"
+      },
+      {
+        "id": "0e77fd645735",
+        "name": "AI Skills Upgrade",
+        "schedule_display": "0 11 * * *",
+        "next_run_at": "2026-07-19T11:00:00-05:00",
+        "last_run_at": null,
+        "state": "scheduled"
+      },
+      {
+        "id": "64fce1abb3de",
+        "name": "PE PR Pulse \u2014 BlackGold",
+        "schedule_display": "0 7 * * *",
+        "next_run_at": "2026-07-19T07:00:00-05:00",
+        "last_run_at": null,
+        "state": "scheduled"
+      },
+      {
+        "id": "dac5a2f40582",
+        "name": "Lyons Security Audit",
+        "schedule_display": "0 6 * * 1",
+        "next_run_at": "2026-07-20T06:00:00-05:00",
+        "last_run_at": null,
+        "state": "scheduled"
+      }
+    ]
+  },
+  "toolsets": {
+    "file": "C:\\Users\\13464\\AppData\\Local\\hermes\\hermes-agent\\toolsets.py",
+    "has_bundle_non_core_tools": true
+  }
+}

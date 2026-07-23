@@ -1,0 +1,11 @@
+{
+  "name": "@blackgold/cockpit",
+  "version": "0.1.0",
+  "private": true,
+  "description": "BlackGold Equity Partners executive cockpit — static branded shell",
+  "scripts": {
+    "start": "python -m http.server 8537 --directory static",
+    "test": "bash tests/test_cockpit.sh",
+    "screenshot": "python ../../../../AppData/Local/hermes/cache/scripts/screenshot_cockpit.py"
+  }
+}

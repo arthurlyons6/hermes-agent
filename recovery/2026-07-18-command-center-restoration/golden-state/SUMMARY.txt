@@ -1,0 +1,15 @@
+Lyons Command Center Golden State Package
+Generated: 2026-07-18
+Contents:
+- CURRENT_STATE_SNAPSHOT.json
+- CURRENT_STATE_BEFORE_REPAIR.md
+- toolsets.py.restoration-backup
+- CRON_STATE.json
+- SUMMARY.txt
+Validation Points Passed:
+- repo_health
+- test coverage targeted health batteries: 46 passed
+- docker/local-stack inventory captured
+- cron observability: job 64f1abb3de validated end to end
+- external cron trigger auth path verified
+- gateway restart-survival verified via canonical launcher/task path

@@ -1,0 +1,23 @@
+[
+  {
+    "deal": "Apex Industrial",
+    "stage": "LOI Submitted",
+    "risk": "Conditional",
+    "owner": "Grant",
+    "updated_at": "2026-07-17T19:00:00Z"
+  },
+  {
+    "deal": "Meridian Services",
+    "stage": "Due Diligence",
+    "risk": "Watch",
+    "owner": "Julian",
+    "updated_at": "2026-07-17T18:30:00Z"
+  },
+  {
+    "deal": "Pinnacle Mfg",
+    "stage": "Teaser In Market",
+    "risk": "Hard Stop",
+    "owner": "Malcolm",
+    "updated_at": "2026-07-17T17:15:00Z"
+  }
+]

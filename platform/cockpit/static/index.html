@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BlackGold Platform Cockpit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sidebar-brand">
+        <span class="logo-mark">B</span>
+        <span>BlackGold</span>
+      </div>
+      <div class="nav">
+        <a href="#" class="active" data-page="framework">Framework</a>
+        <a href="#" data-page="deals">Deals</a>
+        <a href="#" data-page="briefs">Briefs</a>
+      </div>
+    </div>
+    <div class="main">
+      <div class="topbar">
+        <div></div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <button>Deploy</button>
+          <button class="topbar-menu" aria-label="Menu">&#x22EE;</button>
+        </div>
+      </div>
+
+      <div class="header">
+        <h1 class="page-title" id="page-title">BlackGold Platform Framework</h1>
+        <p class="page-subtitle" id="page-subtitle">Institutional-grade ownership discipline for middle-market operating companies.</p>
+      </div>
+
+      <div id="page-content">
+        <div class="metrics">
+          <div class="metric-card">
+            <div class="metric-label">Target EBITDA</div>
+            <div class="metric-value">$5M–$30M</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Geography</div>
+            <div class="metric-value">South Region</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Structures</div>
+            <div class="metric-value">Control / Significant Minority</div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Investment Focus</h2>
+          <ul class="list">
+            <li>Industrial and business services</li>
+            <li>Technology-enabled, asset-light manufacturing</li>
+            <li>Cash-flow-generative middle-market platforms</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Value Creation Levers</h2>
+          <ol class="list">
+            <li>Margin expansion</li>
+            <li>Revenue durability</li>
+            <li>Integration rationalization</li>
+            <li>Systems and controls</li>
+          </ol>
+        </div>
+      </div>
+
+      <div id="page-deals" class="page" hidden>
+        <div class="metrics" id="deal-metrics"></div>
+        <div class="section">
+          <h2>Deal Desk Signal</h2>
+          <div id="deal-table-wrap"></div>
+        </div>
+      </div>
+
+      <div id="page-briefs" class="page" hidden>
+        <div class="metrics" id="brief-metrics"></div>
+        <div class="section" id="brief-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DATA_BASE = 'static/data';
+
+    async function loadJSON(path) {
+      const res = await fetch(path);
+      if (!res.ok) throw new Error('Failed: ' + path);
+      return res.json();
+    }
+
+    function el(tag, cls, text) {
+      const e = document.createElement(tag);
+      if (cls) e.className = cls;
+      if (text !== undefined && text !== null) e.textContent = text;
+      return e;
+    }
+
+    function clear(parentId) {
+      const parent = document.getElementById(parentId);
+      if (!parent) return;
+      Array.from(parent.children).forEach(c => c.remove());
+    }
+
+    function showPage(name) {
+      ['page-content','page-deals','page-briefs'].forEach(id => document.getElementById(id).hidden = true);
+      document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('active', a.dataset.page === name));
+
+      const titles = {
+        framework: ['BlackGold Platform Framework', 'Institutional-grade ownership discipline for middle-market operating companies.'],
+        deals: ['Deal Desk Signal', 'Live diligence pipeline and action tracking.'],
+        briefs: ['Briefs & Research', 'Technology leverage and private equity implementation intelligence.']
+      };
+      document.getElementById('page-title').textContent = titles[name][0];
+      document.getElementById('page-subtitle').textContent = titles[name][1];
+
+      const map = { framework: 'page-content', deals: 'page-deals', briefs: 'page-briefs' };
+      document.getElementById(map[name]).hidden = false;
+    }
+
+    async function renderDeals() {
+      const data = await loadJSON(DATA_BASE + '/deals.json');
+      const metrics = document.getElementById('deal-metrics');
+      metrics.innerHTML = '';
+      const total = el('div','metric-card');
+      total.appendChild(el('div','metric-label','Deals Tracked'));
+      total.appendChild(el('div','metric-value', String(data.length)));
+      metrics.appendChild(total);
+
+      const wrap = document.getElementById('deal-table-wrap');
+      wrap.innerHTML = '';
+      const table = el('table','dataframe');
+      table.style.width = '100%';
+      table.style.borderCollapse = 'collapse';
+      const thead = table.createTHead();
+      const tr = thead.insertRow();
+      ['Deal','Stage','Risk','Owner','Updated'].forEach(h => {
+        const th = document.createElement('th');
+        th.textContent = h;
+        th.style.textAlign = 'left';
+        th.style.padding = '10px 8px';
+        th.style.color = 'var(--text-secondary)';
+        th.style.borderBottom = '1px solid var(--border)';
+        tr.appendChild(th);
+      });
+      const tbody = table.createTBody();
+      data.forEach(row => {
+        const tr = tbody.insertRow();
+        [row.deal, row.stage, row.risk, row.owner, row.updated_at].forEach(val => {
+          const td = tr.insertCell();
+          td.textContent = val;
+          td.style.padding = '10px 8px';
+          td.style.borderBottom = '1px solid var(--border)';
+        });
+      });
+      wrap.appendChild(table);
+    }
+
+    async function renderBriefs() {
+      const data = await loadJSON(DATA_BASE + '/briefs.json');
+      const metrics = document.getElementById('brief-metrics');
+      metrics.innerHTML = '';
+      const total = el('div','metric-card');
+      total.appendChild(el('div','metric-label','Briefs'));
+      total.appendChild(el('div','metric-value', String(data.length)));
+      metrics.appendChild(total);
+
+      const list = document.getElementById('brief-list');
+      list.innerHTML = '';
+      const heading = el('h2','', 'Latest Briefs & Research');
+      list.appendChild(heading);
+      data.forEach(item => {
+        const card = el('div','metric-card');
+        const title = el('div','metric-value', item.title);
+        title.style.fontSize = '18px';
+        const meta = document.createElement('div');
+        meta.className = 'metric-delta';
+        meta.textContent = item.source + ' · ' + item.published_at;
+        card.appendChild(title);
+        card.appendChild(meta);
+        list.appendChild(card);
+      });
+    }
+
+    document.querySelectorAll('.nav a').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const page = link.dataset.page;
+        showPage(page);
+        if (page === 'deals') renderDeals();
+        if (page === 'briefs') renderBriefs();
+      });
+    });
+
+    showPage('framework');
+  </script>
+</body>
+</html>

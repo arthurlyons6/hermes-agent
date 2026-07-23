@@ -1,0 +1,30 @@
+﻿
+
+ProcessId       : 24796
+ParentProcessId : 28912
+Name            : pythonw.exe
+CreationDate    : 7/18/2026 3:42:58 PM
+CommandLine     : C:\Users\13464\AppData\Local\hermes\hermes-agent\.venv\Scripts\pythonw.exe -m hermes_cli.main 
+                  gateway run
+
+ProcessId       : 19932
+ParentProcessId : 24796
+Name            : pythonw.exe
+CreationDate    : 7/18/2026 3:42:58 PM
+CommandLine     : "C:\Users\13464\AppData\Local\Programs\Python\Python311\pythonw.exe" -m hermes_cli.main gateway run
+
+ProcessId       : 22556
+ParentProcessId : 28688
+Name            : pythonw.exe
+CreationDate    : 7/18/2026 3:51:54 PM
+CommandLine     : "C:\Users\13464\AppData\Local\hermes\hermes-agent\.venv\Scripts\pythonw.exe"  -m hermes_cli.main 
+                  gateway run
+
+ProcessId       : 14080
+ParentProcessId : 22556
+Name            : pythonw.exe
+CreationDate    : 7/18/2026 3:51:54 PM
+CommandLine     : "C:\Users\13464\AppData\Local\Programs\Python\Python311\pythonw.exe" -m hermes_cli.main gateway run
+
+
+

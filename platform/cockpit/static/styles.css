@@ -1,0 +1,196 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --gold: #EEC050;
+  --navy: #04060E;
+  --cream: #F2E8D0;
+  --green: #3DDB78;
+  --red: #F07070;
+  --violet: #A78BFA;
+  --bg: #0A0B10;
+  --bg-raised: #12141C;
+  --bg-card: #181B24;
+  --border: rgba(238,192,80,0.18);
+  --text: #EDEAE4;
+  --text-secondary: #9A9893;
+  --text-tertiary: #63605B;
+  --accent: #EEC050;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+h1, h2, h3 {
+  font-family: Fraunces, ui-serif, Georgia, serif;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.mono {
+  font-family: JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+}
+.sidebar {
+  background: var(--bg-raised);
+  border-right: 1px solid var(--border);
+  padding: 18px 14px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: auto;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 6px 14px 6px;
+  font-weight: 700;
+  font-size: 18px;
+  font-family: Fraunces, ui-serif, Georgia, serif;
+}
+.logo-mark {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--gold);
+  color: var(--navy);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-family: Fraunces, ui-serif, Georgia, serif;
+}
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.nav a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  font-weight: 600;
+  transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+.nav a:hover {
+  background: var(--bg-card);
+  color: var(--text);
+}
+.nav a.active {
+  background: var(--bg-card);
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  box-shadow: 0 0 0 1px rgba(238,192,80,0.25);
+}
+
+.main {
+  padding: 28px 32px;
+  max-width: 1200px;
+}
+.header {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+}
+.page-title {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 0;
+}
+.page-subtitle {
+  color: var(--text-secondary);
+  margin: 6px 0 0 0;
+  font-size: 14px;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 16px 0 22px 0;
+}
+.metric-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+}
+.metric-label {
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+.metric-value {
+  color: var(--text);
+  font-weight: 700;
+  font-size: 24px;
+  word-break: keep-all;
+}
+.metric-delta {
+  color: var(--green);
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+.section {
+  margin: 6px 0 22px 0;
+}
+.section h2 {
+  font-size: 18px;
+  margin: 0 0 10px 0;
+}
+.list {
+  color: var(--text-secondary);
+  padding-left: 18px;
+  line-height: 1.6;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+.topbar button {
+  background: var(--gold);
+  color: var(--navy);
+  border: none;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 10px 14px;
+  border-radius: 10px;
+  min-height: 44px;
+  cursor: pointer;
+}
+.topbar-menu {
+  background: var(--bg-card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+@media (max-width: 860px) {
+  .metrics { grid-template-columns: 1fr; }
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .main { padding: 20px; }
+}

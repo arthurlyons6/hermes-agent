@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0.0",
+  "updated_at": "2026-07-17T19:15:00Z",
+  "cockpit": {
+    "shell": "platform/cockpit/static/index.html",
+    "style": "platform/cockpit/static/styles.css",
+    "live_data": [
+      "cockpit/static/data/deals.json",
+      "cockpit/static/data/briefs.json"
+    ]
+  },
+  "baseline_screenshots": [
+    {
+      "name": "cockpit_desktop.png",
+      "drive_id": "1jF6QhZIs0jWgA2KyIxbWsGrZSpnO_G52",
+      "view_link": "https://drive.google.com/file/d/1jF6QhZIs0jWgA2KyIxbWsGrZSpnO_G52/view?usp=drivesdk",
+      "viewport": {"width": 1280, "height": 900},
+      "captured_at": "2026-07-17T19:15:00Z"
+    },
+    {
+      "name": "cockpit_mobile.png",
+      "drive_id": "1kjm000DRQd_SXj8-qjHywVPEgA74y8kG",
+      "view_link": "https://drive.google.com/file/d/1kjm000DRQd_SXj8-qjHywVPEgA74y8kG/view?usp=drivesdk",
+      "viewport": {"width": 390, "height": 844},
+      "captured_at": "2026-07-17T19:15:00Z"
+    }
+  ],
+  "telegram_commands": [
+    {
+      "command": "/cockpit",
+      "action": "open_shell",
+      "response": "Sends cockpit screenshot and local URL"
+    },
+    {
+      "command": "/deals",
+      "action": "send_deals_summary",
+      "response": "Formatted deal desk signal summary"
+    },
+    {
+      "command": "/briefs",
+      "action": "send_briefs_summary",
+      "response": "Latest briefs and research summary"
+    },
+    {
+      "command": "/marcus",
+      "action": "send_marcus_orders",
+      "response": "Marcus matched and pending order matching status"
+    },
+    {
+      "command": "/orders",
+      "action": "send_orders_feed",
+      "response": "Full tracked orders feed"
+    }
+  ],
+  "baseline_notes": "Initial production baseline after UI/UX polish pass. No truncation, brand chrome active, live JSON feeds wired."
+}

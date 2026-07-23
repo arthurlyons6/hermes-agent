@@ -1,0 +1,38 @@
+[
+  {
+    "id": "ORD-2401",
+    "target": "Apex Industrial",
+    "stage": "LOI Submitted",
+    "risk": "Conditional",
+    "owner": "Grant",
+    "match": "pending",
+    "updated_at": "2026-07-17T19:00:00Z"
+  },
+  {
+    "id": "ORD-2402",
+    "target": "Meridian Services",
+    "stage": "Due Diligence",
+    "risk": "Watch",
+    "owner": "Julian",
+    "match": "matched",
+    "updated_at": "2026-07-17T18:30:00Z"
+  },
+  {
+    "id": "ORD-2403",
+    "target": "Pinnacle Mfg",
+    "stage": "Teaser In Market",
+    "risk": "Hard Stop",
+    "owner": "Malcolm",
+    "match": "hold",
+    "updated_at": "2026-07-17T17:15:00Z"
+  },
+  {
+    "id": "ORD-2404",
+    "target": "BlackGold Flagship",
+    "stage": "IC Review",
+    "risk": "Low",
+    "owner": "Arthur",
+    "match": "clear",
+    "updated_at": "2026-07-17T19:15:00Z"
+  }
+]

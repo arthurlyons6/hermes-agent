@@ -1,0 +1,38 @@
+{
+  "generated": "2026-07-18",
+  "golden": true,
+  "jobs": [
+    {
+      "id": "b043387384da",
+      "name": "Global AI/Open-Source Research",
+      "state": "scheduled",
+      "next_run_at": "2026-07-19T09:00:00-05:00",
+      "last_run_at": null,
+      "last_status": null
+    },
+    {
+      "id": "0e77fd645735",
+      "name": "AI Skills Upgrade",
+      "state": "scheduled",
+      "next_run_at": "2026-07-19T11:00:00-05:00",
+      "last_run_at": null,
+      "last_status": null
+    },
+    {
+      "id": "64fce1abb3de",
+      "name": "PE PR Pulse \u2014 BlackGold",
+      "state": "scheduled",
+      "next_run_at": "2026-07-19T07:00:00-05:00",
+      "last_run_at": null,
+      "last_status": null
+    },
+    {
+      "id": "dac5a2f40582",
+      "name": "Lyons Security Audit",
+      "state": "scheduled",
+      "next_run_at": "2026-07-20T06:00:00-05:00",
+      "last_run_at": null,
+      "last_status": null
+    }
+  ]
+}
