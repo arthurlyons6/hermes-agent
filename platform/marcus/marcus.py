@@ -598,7 +598,7 @@ class ProviderChain:
             import requests as req_lib
             resp = req_lib.post(
                 "https://inference-api.nousresearch.com/v1/models",
-                json={"model": model, "max_tokens": 1},
+                params={"model": model},
                 timeout=HEALTH_CHECK_TIMEOUT_SEC,
             )
             elapsed = round((time.monotonic() - start) * 1000, 2)
@@ -622,7 +622,7 @@ class ProviderChain:
         try:
             import requests as req_lib
             resp = req_lib.get(
-                f"https://openrouter.ai/api/v1/models/{model}",
+                f"https://openrouter.ai/api/v1/model/{model}",
                 timeout=HEALTH_CHECK_TIMEOUT_SEC,
             )
             elapsed = round((time.monotonic() - start) * 1000, 2)
