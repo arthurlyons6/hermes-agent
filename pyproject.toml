@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hermes-gateway"
+version = "0.19.1"
+description = "Hermes messaging gateway with Railway startup health probe support"
+requires-python = ">=3.11"
+
+[project.optional-dependencies]
+gateway = ["aiohttp"]
+
+[tool.setuptools.packages.find]
+include = ["gateway*"]
