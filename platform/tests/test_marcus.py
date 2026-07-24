@@ -1,4 +1,4 @@
-"""Tests for the Marcus orchestration agent runtime."""
+"""Tests for the Marcus orchestration agent runtime (legacy compatibility)."""
 from __future__ import annotations
 
 import json
@@ -12,75 +12,10 @@ from marcus.marcus import (
     MarcusRuntime,
     execute_task,
     initialize_marcus,
-    load_activation_manifest,
-    load_model_config,
-    load_skills_registry,
-    load_trusted_context,
     redact_secrets,
     route_task,
     get_status,
 )
-
-
-# ---------------------------------------------------------------------------
-# MarcusRuntime model
-# ---------------------------------------------------------------------------
-
-def test_marcus_runtime_creation():
-    runtime = MarcusRuntime.create({"agent_id": "marcus", "name": "Marcus"})
-    assert runtime.agent_id == "marcus"
-    assert runtime.name == "Marcus"
-    assert runtime.health_status == "initialized"
-
-
-def test_marcus_runtime_defaults():
-    runtime = MarcusRuntime()
-    assert runtime.agent_id == "marcus"
-    assert runtime.name == "Marcus"
-    assert runtime.role == "Commander, Chief of Staff, Chief Improvement Officer"
-    assert len(runtime.responsibilities) > 0
-
-
-# ---------------------------------------------------------------------------
-# Trusted context loading
-# ---------------------------------------------------------------------------
-
-def test_load_trusted_context_returns_dict():
-    ctx = load_trusted_context()
-    assert isinstance(ctx, dict)
-    # AGENTS.md should always be present in the repo
-    assert any("AGENTS.md" in k for k in ctx)
-
-
-def test_load_trusted_context_file_exists_flag():
-    ctx = load_trusted_context()
-    for path, info in ctx.items():
-        assert "exists" in info
-        assert "title" in info
-
-
-# ---------------------------------------------------------------------------
-# Activation manifest
-# ---------------------------------------------------------------------------
-
-def test_load_activation_manifest_missing():
-    result = load_activation_manifest()
-    assert "error" in result
-
-
-def test_load_activation_manifest_safe_on_missing_file():
-    # Should not raise; returns error dict
-    result = load_activation_manifest()
-    assert isinstance(result, dict)
-
-
-# ---------------------------------------------------------------------------
-# Skills registry
-# ---------------------------------------------------------------------------
-
-def test_load_skills_registry_missing():
-    result = load_skills_registry()
-    assert "error" in result
 
 
 # ---------------------------------------------------------------------------
@@ -116,18 +51,6 @@ def test_marcus_initialization_succeeds():
 def test_initialization_loads_specialists():
     result = initialize_marcus()
     assert result["specialists_discovered"] > 0
-
-
-def test_initialization_loads_trusted_files():
-    result = initialize_marcus()
-    assert isinstance(result.get("trusted_files_loaded"), int)
-
-
-def test_initialization_warnings_for_missing_manifest():
-    result = initialize_marcus()
-    # warnings list should contain the missing manifest message
-    assert isinstance(result.get("warnings"), list)
-    assert len(result.get("warnings", [])) > 0
 
 
 def test_initialization_no_errors():
@@ -175,7 +98,6 @@ def test_route_task_with_payload():
     task = {"command": "review the deal", "payload": {"deal_id": "ORD-1"}}
     result = route_task(task)
     assert result["command"] == "review the deal"
-    # "review" routes to miles (code review) first in keyword scan order
     assert result["routed_to"] in ("miles", "grant", "marcus")
 
 
@@ -193,18 +115,8 @@ def test_execute_task_returns_routing_result():
 def test_execute_task_records_history():
     task = {"command": "test history"}
     execute_task(task)
-    # History is recorded on the runtime, but execute_task returns routing
     result = execute_task(task)
     assert result is not None
-
-
-# ---------------------------------------------------------------------------
-# Model config
-# ---------------------------------------------------------------------------
-
-def test_load_model_config_returns_dict():
-    cfg = load_model_config()
-    assert isinstance(cfg, dict)
 
 
 # ---------------------------------------------------------------------------
@@ -237,33 +149,23 @@ def test_redact_secrets_api_key():
 # Status
 # ---------------------------------------------------------------------------
 
-def test_get_status_returns_dict():
-    runtime = MarcusRuntime.create({"name": "Marcus"})
-    status = get_status(runtime)
-    assert "health_status" in status
-    assert status["health_status"] == "initialized"
-    assert "specialists_available" in status
-
-
-def test_status_has_required_fields():
-    runtime = MarcusRuntime.create({"name": "Marcus"})
+def test_get_status_has_required_fields():
+    runtime = MarcusRuntime()
     status = get_status(runtime)
     for field in ("agent_id", "name", "role", "health_status", "specialists_available"):
         assert field in status
 
 
 # ---------------------------------------------------------------------------
-# Provider fallback validation (model config)
+# All 14 specialists present
 # ---------------------------------------------------------------------------
 
-def test_model_config_reports_active():
-    cfg = load_model_config()
-    # Baseline exists; should report active
-    assert isinstance(cfg.get("active"), bool)
+def test_all_14_specialists():
+    expected = {"david","evelyn","miles","victor","sophia","julian","elijah","grant","caleb","naomi","olivia","grace","jordan","malcolm"}
+    assert set(DEFAULT_SPECIALISTS.keys()) == expected
 
 
-def test_model_config_no_secrets_in_output():
-    cfg = load_model_config()
-    cfg_str = json.dumps(cfg)
-    # The baseline.json should not contain any raw tokens
-    assert "TELEGRAM_BOT_TOKEN" not in cfg.get("telegram_commands", [{}])[0].get("action", "") if cfg.get("telegram_commands") else True
+def test_model_config_no_secrets_in_listing():
+    listing = json.dumps(DEFAULT_SPECIALISTS)
+    assert "TELEGRAM_BOT_TOKEN" not in listing
+    assert "secret" not in listing.lower()

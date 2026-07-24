@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0.0",
+  "updated_at": "2026-07-23T23:00:00Z",
+  "_comment": "Validated machine-readable skills registry based on repository definitions. Roles without executable code are marked implemented:false, enabled:false.",
+  "skills": {
+    "marcus_orchestration": {
+      "skill_id": "marcus_orchestration",
+      "name": "Marcus Orchestration",
+      "owner": "marcus",
+      "implemented": true,
+      "enabled": true,
+      "description": "Commander, Chief of Staff, Chief Improvement Officer — routes tasks, coordinates workforce, maintains state",
+      "entry_point": "platform.marcus.marcus:initialize_marcus",
+      "permissions": ["full"],
+      "dependencies": ["platform.marcus.marcus"],
+      "health_check_method": "cli: python -m marcus.marcus health"
+    },
+    "telegram_bridge": {
+      "skill_id": "telegram_bridge",
+      "name": "Telegram Bridge",
+      "owner": "victor",
+      "implemented": true,
+      "enabled": true,
+      "description": "Telegram bot bridge for cockpit commands and messaging",
+      "entry_point": "platform.automation.telegram_bridge:handle",
+      "permissions": ["telegram:send"],
+      "dependencies": ["requests"],
+      "health_check_method": "cli: python -m automation.telegram_bridge cockpit"
+    },
+    "daily_brief": {
+      "skill_id": "daily_brief",
+      "name": "Daily Brief Research",
+      "owner": "evelyn",
+      "implemented": true,
+      "enabled": true,
+      "description": "Research brief generation and delivery automation",
+      "entry_point": "daily_brief_research.py",
+      "permissions": ["research:read", "research:write"],
+      "dependencies": [],
+      "health_check_method": "cli: python daily_brief_research.py --dry-run"
+    },
+    "cockpit": {
+      "skill_id": "cockpit",
+      "name": "Cockpit Dashboard",
+      "owner": "victor",
+      "implemented": true,
+      "enabled": true,
+      "description": "Web dashboard for Lyons Command Center operational data",
+      "entry_point": "platform/cockpit/static/index.html",
+      "permissions": ["serve:http"],
+      "dependencies": [],
+      "health_check_method": "curl http://localhost:8537/"
+    },
+    "audit": {
+      "skill_id": "audit",
+      "name": "Security Audit Automation",
+      "owner": "naomi",
+      "implemented": true,
+      "enabled": true,
+      "description": "Automated security audit scanning for the Command Center",
+      "entry_point": "platform/core/audit.py",
+      "permissions": ["audit:read"],
+      "dependencies": [],
+      "health_check_method": "cli: python platform/core/audit.py"
+    },
+    "vault": {
+      "skill_id": "vault",
+      "name": "Secrets Vault",
+      "owner": "naomi",
+      "implemented": true,
+      "enabled": true,
+      "description": "Centralized secrets interface with environment backend",
+      "entry_point": "platform/core/vault.py",
+      "permissions": ["secrets:read"],
+      "dependencies": [],
+      "health_check_method": "none: does not expose secrets in logs"
+    }
+  },
+  "unimplemented_roles": {
+    "david": {"implemented": false, "enabled": false, "reason": "strategy role documented but no runtime agent yet"},
+    "evelyn": {"implemented": false, "enabled": false, "reason": "research role documented but no runtime agent yet"},
+    "miles": {"implemented": false, "enabled": false, "reason": "engineering role documented but no runtime agent yet"},
+    "victor": {"implemented": false, "enabled": false, "reason": "systems role documented but no runtime agent yet"},
+    "sophia": {"implemented": false, "enabled": false, "reason": "design role documented but no runtime agent yet"},
+    "julian": {"implemented": false, "enabled": false, "reason": "banking role documented but no runtime agent yet"},
+    "elijah": {"implemented": false, "enabled": false, "reason": "legal role documented but no runtime agent yet"},
+    "grant": {"implemented": false, "enabled": false, "reason": "PE role documented but no runtime agent yet"},
+    "caleb": {"implemented": false, "enabled": false, "reason": "automation role documented but no runtime agent yet"},
+    "olivia": {"implemented": false, "enabled": false, "reason": "ops role documented but no runtime agent yet"},
+    "grace": {"implemented": false, "enabled": false, "reason": "church tech role documented but no runtime agent yet"},
+    "jordan": {"implemented": false, "enabled": false, "reason": "sales role documented but no runtime agent yet"},
+    "malcolm": {"implemented": false, "enabled": false, "reason": "finance role documented but no runtime agent yet"},
+    "naomi": {"implemented": false, "enabled": false, "reason": "security role documented but no runtime agent yet"}
+  }
+}

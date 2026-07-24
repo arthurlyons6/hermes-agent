@@ -1,0 +1,111 @@
+{
+  "schema_version": "1.0.0",
+  "updated_at": "2026-07-23T23:00:00Z",
+  "_comment": "Validated machine-readable activation manifest based on repository workforce definitions",
+  "slots": {
+    "marcus": {
+      "agent": "Marcus",
+      "role": "Commander, Chief of Staff, Chief Improvement Officer",
+      "skills": ["marcus_orchestration"],
+      "status": "active"
+    },
+    "david": {
+      "agent": "David",
+      "role": "Strategy and Executive Planning",
+      "skills": ["strategy", "executive-planning", "analysis"],
+      "status": "available",
+      "implemented": false
+    },
+    "evelyn": {
+      "agent": "Evelyn",
+      "role": "Research and Intelligence",
+      "skills": ["research", "intelligence", "briefing"],
+      "status": "available",
+      "implemented": false
+    },
+    "miles": {
+      "agent": "Miles",
+      "role": "Software Engineering and Development",
+      "skills": ["development", "engineering", "code-review"],
+      "status": "available",
+      "implemented": false
+    },
+    "victor": {
+      "agent": "Victor",
+      "role": "Systems, Infrastructure, and Reliability",
+      "skills": ["infrastructure", "reliability", "ops"],
+      "status": "available",
+      "implemented": false
+    },
+    "sophia": {
+      "agent": "Sophia",
+      "role": "Product Design, UX/UI, and Brand Experience",
+      "skills": ["design", "ux", "ui", "brand"],
+      "status": "available",
+      "implemented": false
+    },
+    "julian": {
+      "agent": "Julian",
+      "role": "Banking, Fintech, and Financial Infrastructure",
+      "skills": ["banking", "fintech", "infrastructure"],
+      "status": "available",
+      "implemented": false
+    },
+    "elijah": {
+      "agent": "Elijah",
+      "role": "Legal, Contracts, Compliance, and Risk",
+      "skills": ["legal", "compliance", "risk"],
+      "status": "available",
+      "implemented": false
+    },
+    "grant": {
+      "agent": "Grant",
+      "role": "Private Equity, Acquisitions, and Deal Analysis",
+      "skills": ["private-equity", "acquisitions", "deals"],
+      "status": "available",
+      "implemented": false
+    },
+    "caleb": {
+      "agent": "Caleb",
+      "role": "Industrial Operations and Automation",
+      "skills": ["automation", "operations", "industrial"],
+      "status": "available",
+      "implemented": false
+    },
+    "naomi": {
+      "agent": "Naomi",
+      "role": "Cybersecurity and Information Protection",
+      "skills": ["cybersecurity", "infosec", "protection"],
+      "status": "available",
+      "implemented": false
+    },
+    "olivia": {
+      "agent": "Olivia",
+      "role": "Operations and Execution Management",
+      "skills": ["operations", "execution", "management"],
+      "status": "available",
+      "implemented": false
+    },
+    "grace": {
+      "agent": "Grace",
+      "role": "Church Technology and Community Platforms",
+      "skills": ["church-tech", "community"],
+      "status": "available",
+      "implemented": false
+    },
+    "jordan": {
+      "agent": "Jordan",
+      "role": "Sales, Partnerships, and Business Development",
+      "skills": ["sales", "partnerships", "bizdev"],
+      "status": "available",
+      "implemented": false
+    },
+    "malcolm": {
+      "agent": "Malcolm",
+      "role": "Finance, Modeling, and Performance Analysis",
+      "skills": ["finance", "modeling", "analysis"],
+      "status": "available",
+      "implemented": false
+    }
+  }
+}
