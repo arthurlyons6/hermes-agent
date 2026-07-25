@@ -15,4 +15,4 @@ RUN pip install --no-cache-dir -e .
 EXPOSE 3006
 
 # Start Hermes gateway
-CMD ["python", "-m", "hermes_cli.main", "gateway", "run", "--replace"]
+CMD ["python", "-m", "gateway.run"]

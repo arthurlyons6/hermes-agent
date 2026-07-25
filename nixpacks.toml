@@ -3,6 +3,6 @@
   buildCommand = "uv sync --frozen --extra all --extra messaging --extra anthropic --extra bedrock --extra azure-identity --extra hindsight --extra matrix"
 
 [deploy]
-  startCommand = "hermes"
+  startCommand = "python -m gateway.run"
   healthCheckPath = "/health"
   healthCheckTimeout = 300
