@@ -33,6 +33,7 @@ async def _start_early_api_server() -> None:
         await _API_ADAPTER.start()
         _API_STARTED = True
         logger.info("API server started early for health probe readiness on 0.0.0.0:%d", port)
+        print(f"HERMES_API_SERVER_STARTED:0.0.0.0:{port}", flush=True)
     except Exception as e:
         logger.warning("Early API server start failed: %s", e)
         _API_ADAPTER = None
