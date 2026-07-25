@@ -7,6 +7,9 @@ name = "hermes-gateway"
 version = "0.19.1"
 description = "Hermes messaging gateway with Railway startup health probe support"
 requires-python = ">=3.11"
+dependencies = [
+    "aiohttp>=3.9,<4",
+]
 
 [project.scripts]
 hermes = "gateway.run:start_gateway"
