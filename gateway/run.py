@@ -21,7 +21,7 @@ _API_STARTED: bool = False
 
 async def _start_early_api_server() -> None:
     global _API_ADAPTER, _API_STARTED
-    port = int(os.environ.get("API_SERVER_PORT") or os.environ.get("PORT") or "3006")
+    port = int(os.environ.get("PORT") or os.environ.get("API_SERVER_PORT") or "3006")
     try:
         from gateway.api_server import APIServerAdapter
         cfg = dataclasses.replace(
@@ -73,7 +73,7 @@ async def start_gateway() -> None:
     # Platform adapters (e.g. Telegram) may fail here — that is expected without credentials.
     # The health endpoint must remain reachable for Railway readiness probes.
     logger.info("Gateway running — API server on 0.0.0.0:%s serving /health",
-                int(os.environ.get("API_SERVER_PORT") or os.environ.get("PORT") or "3006"))
+                int(os.environ.get("PORT") or os.environ.get("API_SERVER_PORT") or "3006"))
     while True:
         await asyncio.sleep(60)
 

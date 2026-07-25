@@ -17,10 +17,11 @@ class APIServerAdapter:
     """aiohttp-based API server with /health endpoint."""
 
     def __init__(self, config):
-        self.port = (
-            getattr(config, "port", None)
-            or int(os.environ.get("API_SERVER_PORT") or os.environ.get("PORT") or "3006")
-        )
+        # Log port selection at WARNING level for Railway log visibility
+        port = int(os.environ.get("PORT") or os.environ.get("API_SERVER_PORT") or "3006")
+        logger.warning("HERMES_HEALTH_SERVER_BOUND host=%s port=%d path=/health", "0.0.0.0", port)
+        logger.warning("RAILWAY_PORT_SELECTION PORT=%s API_SERVER_PORT=%s selected=%d", os.environ.get("PORT",""), os.environ.get("API_SERVER_PORT",""), port)
+        self.port = port
         self.host = getattr(config, "host", None) or "0.0.0.0"
         self._app = None
         self._runner = None
