@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends gcc python3-dev
 COPY . .
 
 # Install Hermes from repo source so the Railway crash-loop fix (gateway/run.py early startup) is included
-RUN pip install --no-cache-dir .
+RUN pip install --no-cache-dir -e .
 
 # Expose the Hermes API server port
 EXPOSE 3006
