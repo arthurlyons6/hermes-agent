@@ -10,6 +10,7 @@ import concurrent.futures
 import dataclasses
 import logging
 import os
+from contextlib import suppress
 from typing import Any, Dict, Optional
 
 logger = logging.getLogger("gateway.run")
@@ -54,6 +55,12 @@ async def start_gateway() -> None:
         from gateway.platform_registry import get_platforms
     except ImportError:
         logger.warning("platform_registry not available, skipping platform init")
+        # Keep running — API server is already bound and /health is serving
+        # Block here so the process stays alive for health probes
+        if _API_STARTED and _API_ADAPTER is not None:
+            logger.info("Platform registry unavailable; keeping gateway alive for health probe")
+            while True:
+                await asyncio.sleep(60)
         return
     platforms = get_platforms()
     async with concurrent.futures.AsyncExecutor() as executor:
