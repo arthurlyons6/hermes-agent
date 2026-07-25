@@ -24,11 +24,7 @@ async def _start_early_api_server() -> None:
     port = int(os.environ.get("PORT") or os.environ.get("API_SERVER_PORT") or "3006")
     try:
         from gateway.api_server import APIServerAdapter
-        cfg = dataclasses.replace(
-            SimpleNamespace(value="api_server", extra=SimpleNamespace(port=port, host="0.0.0.0")),
-            port=port, host="0.0.0.0",
-        )
-        _API_ADAPTER = APIServerAdapter(cfg)
+        _API_ADAPTER = APIServerAdapter(dataclasses.make_dataclass("Config", [("port", int), ("host", str)])(port=port, host="0.0.0.0"))
         _API_ADAPTER.gateway_runner = _get_runner_reference()
         await _API_ADAPTER.start()
         _API_STARTED = True
