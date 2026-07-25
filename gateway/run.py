@@ -55,25 +55,26 @@ async def start_gateway() -> None:
         from gateway.platform_registry import get_platforms
     except ImportError:
         logger.warning("platform_registry not available, skipping platform init")
-        # Keep running — API server is already bound and /health is serving
-        # Block here so the process stays alive for health probes
-        if _API_STARTED and _API_ADAPTER is not None:
-            logger.info("Platform registry unavailable; keeping gateway alive for health probe")
-            while True:
-                await asyncio.sleep(60)
-        return
-    platforms = get_platforms()
-    async with concurrent.futures.AsyncExecutor() as executor:
-        tasks = []
-        for platform in platforms:
-            if getattr(platform, "value", None) == "api_server" and _API_STARTED:
-                continue
-            tasks.append(executor.submit(platform.initialize))
-        for task in tasks:
-            try:
-                await asyncio.wrap_future(task)
-            except Exception:
-                pass
+    else:
+        platforms = get_platforms()
+        async with concurrent.futures.AsyncExecutor() as executor:
+            tasks = []
+            for platform in platforms:
+                if getattr(platform, "value", None) == "api_server" and _API_STARTED:
+                    continue
+                tasks.append(executor.submit(platform.initialize))
+            for task in tasks:
+                try:
+                    await asyncio.wrap_future(task)
+                except Exception:
+                    pass
+    # Keep the process alive so /health remains served by the early-bound API server.
+    # Platform adapters (e.g. Telegram) may fail here — that is expected without credentials.
+    # The health endpoint must remain reachable for Railway readiness probes.
+    logger.info("Gateway running — API server on 0.0.0.0:%s serving /health",
+                int(os.environ.get("API_SERVER_PORT") or os.environ.get("PORT") or "3006"))
+    while True:
+        await asyncio.sleep(60)
 
 
 class GatewayRunner:
