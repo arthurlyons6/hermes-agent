@@ -52,11 +52,17 @@ class SimpleNamespace:
 
 async def start_gateway() -> None:
     await _start_early_api_server()
-    try:
-        from gateway.platform_registry import get_platforms
-    except ImportError:
-        logger.warning("platform_registry not available, skipping platform init")
-    else:
+    # Platform initialization runs in background so /health responds immediately.
+    # Railway readiness probes must succeed while Telegram and other adapters
+    # continue initializing asynchronously.
+    _platform_task: Optional[asyncio.Task] = None
+
+    async def _run_platforms() -> None:
+        try:
+            from gateway.platform_registry import get_platforms
+        except ImportError:
+            logger.warning("platform_registry not available, skipping platform init")
+            return
         platforms = get_platforms()
         async with concurrent.futures.AsyncExecutor() as executor:
             tasks = []
@@ -69,9 +75,11 @@ async def start_gateway() -> None:
                     await asyncio.wrap_future(task)
                 except Exception:
                     pass
+
+    _platform_task = asyncio.create_task(_run_platforms())
+
     # Keep the process alive so /health remains served by the early-bound API server.
-    # Platform adapters (e.g. Telegram) may fail here — that is expected without credentials.
-    # The health endpoint must remain reachable for Railway readiness probes.
+    # Platform adapters (e.g., Telegram) initialize in the background task above.
     logger.info("Gateway running — API server on 0.0.0.0:%s serving /health",
                 int(os.environ.get("PORT") or os.environ.get("API_SERVER_PORT") or "3006"))
     while True:
