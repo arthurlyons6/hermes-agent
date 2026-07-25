@@ -19,7 +19,7 @@ _API_ADAPTER: Optional[Any] = None
 _API_STARTED: bool = False
 
 
-def _start_early_api_server() -> None:
+async def _start_early_api_server() -> None:
     global _API_ADAPTER, _API_STARTED
     port = int(os.environ.get("API_SERVER_PORT") or os.environ.get("PORT") or "3006")
     try:
@@ -30,7 +30,7 @@ def _start_early_api_server() -> None:
         )
         _API_ADAPTER = APIServerAdapter(cfg)
         _API_ADAPTER.gateway_runner = _get_runner_reference()
-        _API_ADAPTER.start()
+        await _API_ADAPTER.start()
         _API_STARTED = True
         logger.info("API server started early for health probe readiness on 0.0.0.0:%d", port)
     except Exception as e:
@@ -50,7 +50,7 @@ class SimpleNamespace:
 
 
 async def start_gateway() -> None:
-    _start_early_api_server()
+    await _start_early_api_server()
     try:
         from gateway.platform_registry import get_platforms
     except ImportError:
