@@ -9,6 +9,7 @@ Railway's startup health probe succeeds while platform adapters
 import asyncio
 import logging
 import os
+from aiohttp import web
 
 logger = logging.getLogger("gateway.api_server")
 
