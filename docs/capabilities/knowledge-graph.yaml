@@ -1,0 +1,338 @@
+# ===========================================================================
+# LYONS COMMAND CENTER — INTERNAL KNOWLEDGE GRAPH
+# Generated: 2026-07-26
+# Purpose: Map all capabilities, dependencies, agents, tools, and workflows
+# ===========================================================================
+
+knowledge_graph_version: "1.0.0"
+generated: "2026-07-26T20:00:00Z"
+
+# ===========================================================================
+# REPOSITORY NODES
+# ===========================================================================
+repositories:
+  - id: repo-001
+    name: hermes-agent
+    fork_of: NousResearch/hermes-agent
+    type: core-platform
+    nodes_extracted:
+      - platform/marcus/marcus.py (persistence, provider chain, circuit breaker)
+      - platform/core/config.py
+      - platform/core/vault.py
+      - platform/automation/telegram_bridge.py (telegram handler)
+      - gateway/run.py (gateway orchestration)
+      - gateway/telegram_poller.py (telegram polling)
+
+  - id: repo-002
+    name: nexabaas-platform
+    type: original
+    owner: arthurlyons6
+    visibility: private
+    nodes_extracted:
+      - Banking automation patterns (accounts, cards, ACH, wire)
+      - Webhook-driven state management
+      - AML compliance workflows
+
+  - id: repo-003
+    name: ego-lite
+    fork_of: citrolabs/ego-lite
+    type: browser-automation
+    license: MIT
+    nodes_extracted:
+      - Logged-in browser session sharing pattern
+      - Zero-config browser-to-agent context transfer
+      - Pattern: share browser state without disturbing user
+
+  - id: repo-004
+    name: hatchet
+    fork_of: hatchet-dev/hatchet
+    type: orchestration-engine
+    language: Go
+    license: MIT
+    nodes_extracted:
+      - Durable workflow patterns (retry, scheduling, concurrency)
+      - Background task orchestration
+      - Worker dispatch model
+
+  - id: repo-005
+    name: codegraph
+    fork_of: colbymchenry/codegraph
+    type: code-intelligence
+    language: C
+    license: MIT
+    nodes_extracted:
+      - Pre-indexed knowledge graph patterns
+      - Auto-sync on code changes
+      - Token reduction for LLM contexts
+
+  - id: repo-006
+    name: docling
+    fork_of: docling-project/docling
+    type: document-intelligence
+    language: Python
+    license: MIT
+    nodes_extracted:
+      - Document-to-LLM format conversion
+      - Multi-format parsing (PDF, images, structured)
+
+  - id: repo-007
+    name: hermes-council
+    fork_of: magnus919/hermes-council
+    type: multi-agent
+    language: Python
+    license: MIT
+    nodes_extracted:
+      - Structured debate phases (INITIALIZED → POSITIONS → DEBATE → SYNTHESIS → VERIFICATION → COMPLETED)
+      - Contract-based agent coordination (Pydantic models)
+      - Claim basis tracking (EVIDENCE, INFERENCE, ASSUMPTION, UNKNOWN)
+      - Result status taxonomy (RECOMMEND, DEFER, SPLIT, FAILED)
+      - Pure SKILL.md architecture — zero infrastructure
+
+  - id: repo-008
+    name: hermes-acp-plugin
+    fork_of: agentic-control-plane/hermes-acp-plugin
+    type: governance
+    language: Python
+    license: MIT
+    nodes_extracted:
+      - Pre-call policy check pattern (POST /govern/tool-use)
+      - Post-call observation pattern (POST /govern/tool-output)
+      - Local metering (tokens, cache buckets, cost via pricing engine)
+      - Credentials management with chmod 600
+      - Fail-open design (ACP outage must never block Hermes)
+
+# ===========================================================================
+# CAPABILITY NODES
+# ===========================================================================
+capabilities:
+  - id: cap-multi-agent-debate
+    source: hermes-council
+    type: pattern
+    description: Structured multi-agent debate with contract-based coordination
+    maturity: PROTOTYPE (SKILL.md)
+    integrates_with: [Marcus]
+    used_by: [deal-analysis, PE-workflow, strategic-decision]
+    implementation: Create SKILL.md for Marcus to spawn expert agents for deal evaluation, PE analysis, and strategic questioning
+    estimated_effort: 2 hours
+    risk: LOW
+
+  - id: cap-governance-audit
+    source: hermes-acp-plugin
+    type: pattern
+    description: Tool call governance with pre-call policy checks and post-call observation
+    maturity: RESEARCH
+    integrates_with: [telegram_poller, gateway]
+    used_by: [compliance, financial-operations, tool-safety]
+    implementation: Add tool call validation middleware before telegram_poller dispatches commands
+    estimated_effort: 6 hours
+    risk: MEDIUM (requires hooks into Hermes core)
+
+  - id: cap-document-intelligence
+    source: docling
+    type: library
+    description: Document conversion to LLM-ready format
+    maturity: RESEARCH
+    integrates_with: [Marcus, research-workflow]
+    used_by: [due-diligence, financial-doc-extraction, research-doc-prep]
+    implementation: Install docling package; create Marcus skill module for document processing
+    estimated_effort: 4 hours
+    risk: MEDIUM (external dependency)
+
+  - id: cap-code-intelligence
+    source: codegraph
+    type: library
+    description: Pre-indexed code knowledge graph for token reduction
+    maturity: RESEARCH
+    integrates_with: [Marcus, hermes-agent]
+    used_by: [code-review, infrastructure-changes, open-source-extraction]
+    implementation: Build from C sources; integrate as Marcus context pre-processor
+    estimated_effort: 6 hours
+    risk: MEDIUM (C build required)
+
+  - id: cap-browser-state-sharing
+    source: ego-lite
+    type: pattern
+    description: Share logged-in browser sessions with AI agents non-disruptively
+    maturity: RESEARCH
+    integrates_with: [browser-harness]
+    used_by: [research, monitoring, OSINT]
+    implementation: Adopt the pattern (not full integration) for browser-harness module
+    estimated_effort: 10 hours
+    risk: MEDIUM (browser extension infrastructure)
+
+  - id: cap-durable-workflow
+    source: hatchet
+    type: pattern
+    description: Production-grade durable workflow engine with retry and scheduling
+    maturity: RESEARCH (considering hatchet vs current asyncio)
+    integrates_with: [telegram_poller, Marcus]
+    used_by: [long-running-automation, retry-aware-tasks, background-processing]
+    implementation: Evaluate hatchet patterns; if adopted, replace asyncio poller with durable workflow dispatch
+    estimated_effort: 20 hours
+    risk: HIGH (significant architecture change)
+
+  - id: cap-memory-provider
+    source: hyatlas-memory
+    type: plugin
+    description: Structured memory with dashboard visibility
+    maturity: RESEARCH
+    integrates_with: [Marcus]
+    used_by: [deal-tracking, meeting-context, session-continuity]
+    implementation: Integrate HyAtlas memory pattern into Marcus persistence layer
+    estimated_effort: 4 hours
+    risk: MEDIUM (dependency on HyAtlas project)
+
+  - id: cap-banking-automation
+    source: nexabaas-platform
+    type: domain-knowledge
+    description: Banking BaaS patterns — accounts, cards, ACH, wire, AML, webhooks
+    maturity: REFERENCE (private repo — read only)
+    integrates_with: [Marcus, financial-workflows]
+    used_by: [banking-automation, compliance, treasury]
+    implementation: Extract architectural patterns; do NOT import code (private repo)
+    estimated_effort: 10 hours (pattern analysis only)
+    risk: LOW (read-only reference, no code import)
+
+# ===========================================================================
+# AGENT NODES
+# ===========================================================================
+agents:
+  - id: agent-marcus
+    type: orchestrator
+    role: Chief Improvement Officer
+    capabilities: [persistence, provider-chain, circuit-breaker, task-routing, state-machine]
+    improvement-targets:
+      - capability-extraction (identify patterns from forks)
+      - repository-audit (systematic evaluation)
+      - integration-roadmap (sprint planning)
+      - quality-gates (enforce standards)
+
+  - id: agent-evelyn
+    type: executor
+    role: Task Execution
+    capabilities: [telegram-polling, command-dispatch, state-management]
+    improvement-targets:
+      - durable-workflow-retry (from hatchet patterns)
+      - governance-check (from ACP patterns)
+
+  - id: agent-miles
+    type: analyst
+    role: Financial Analysis
+    capabilities: [deal-analysis, market-research, PE-workflows]
+    improvement-targets:
+      - document-intelligence (from docling)
+      - multi-agent-debate (from hermes-council)
+      - banking-automation (from nexabaas patterns)
+
+  - id: agent-victor
+    type: engineer
+    role: Infrastructure Engineering
+    capabilities: [railway-deployment, config-management, monitoring]
+    improvement-targets:
+      - code-intelligence (from codegraph for deployment automation)
+
+  - id: agent-sophia
+    type: researcher
+    role: OSINT & Research
+    capabilities: [document-processing, web-research, knowledge-synthesis]
+    improvement-targets:
+      - browser-state-sharing (from ego-lite)
+      - document-intelligence (from docling)
+      - code-intelligence (from codegraph)
+
+# ===========================================================================
+# DEPENDENCY EDGES
+# ===========================================================================
+edges:
+  - from: hermes-council
+    to: [marcus, deal-analysis]
+    type: provides_pattern
+    description: Structured debate methodology for PE deal evaluation
+
+  - from: hermes-acp-plugin
+    to: [telegram_poller, gateway]
+    type: provides_governance
+    description: Tool call validation before dispatch
+
+  - from: docling
+    to: [marcus, research-workflow]
+    type: provides_capability
+    description: Document preprocessing for DD and research
+
+  - from: codegraph
+    to: [marcus, infra-changes]
+    type: provides_context
+    description: Code context reduction for token savings
+
+  - from: hatchet
+    to: [telegram_poller]
+    type: potential_replacement
+    description: Durable workflow as poller replacement — evaluate first
+
+  - from: ego-lite
+    to: [browser-harness]
+    type: informs_pattern
+    description: Browser session sharing pattern for harness module
+
+  - from: nexabaas-platform
+    to: [marcus, financial-workflows]
+    type: reference_only
+    description: Banking automation patterns — read-only reference
+
+# ===========================================================================
+# WORKFLOW NODES
+# ===========================================================================
+workflows:
+  - id: wf-telegram-polling
+    status: PRODUCTION
+    component: telegram_poller.py
+    nodes: [get_me, get_updates, authorize, handle_command, send_message]
+    last_improvement: "2026-07-26 timeout fix (TEAMGRAM_LONG_POLL=25, HTTP_READ=35)"
+
+  - id: wf-model-execution
+    status: PRODUCTION
+    component: provider-chain (marcus.py)
+    primary: openrouter/anthropic/claude-sonnet-4
+    fallback: nous/stepfun/step-3.7-flash:free
+    circuit_breaker: active
+
+  - id: wf-capability-extraction
+    status: ACTIVE
+    component: EO052 Marcus as CIO
+    phases: [audit, registry, extraction, skill-expansion, integration]
+
+# ===========================================================================
+# KNOWLEDGE VERTICES
+# ===========================================================================
+knowledge:
+  patterns:
+    - name: pure-skill-architecture
+      source: hermes-council
+      description: Zero-infrastructure capability via SKILL.md only
+      applies_to: [new-skills, Marcus-improvements]
+
+    - name: fail-open-governance
+      source: hermes-acp-plugin
+      description: Governance layer must never block execution on failure
+      applies_to: [telegram_poller, tool-dispatch]
+
+    - name: structured-contract-validation
+      source: hermes-council
+      description: Pydantic contracts for debate claims with evidence tracking
+      applies_to: [deal-analysis, PE-workflow]
+
+    - name: long-poll-timeout-separation
+      source: telegram_poller.py (self, EO049)
+      description: Telegram long-poll timeout must be shorter than HTTP read timeout
+      applies_to: [all long-polling integrations]
+
+    - name: circuit-breaker-provider-chain
+      source: platform/marcus/marcus.py (self)
+      description: Provider rotation with health checks, circuit breaker, cooldown
+      applies_to: [all inference providers]
+
+  anti-patterns:
+    - name: platform-module-shadowing
+      source: self (platform/ stdlib conflict)
+      description: Python stdlib platform module shadows local platform/ package
+      mitigation: Add __init__.py to platform/ package directory
