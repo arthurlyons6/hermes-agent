@@ -3,12 +3,12 @@
     {
       "provider": "nous",
       "model": "stepfun/step-3.7-flash:free",
-      "consecutive_failures": 6,
-      "cooldown_until": "2026-07-24T20:25:46.696736+00:00",
-      "last_failure": "2026-07-24T19:45:46.696736+00:00",
-      "last_success": "2026-07-24T19:45:19.398373+00:00",
-      "state": "open",
-      "is_open": true
+      "consecutive_failures": 1,
+      "cooldown_until": "",
+      "last_failure": "2026-07-26T20:23:40.789328+00:00",
+      "last_success": "2026-07-26T20:23:29.759614+00:00",
+      "state": "closed",
+      "is_open": false
     },
     {
       "provider": "openrouter",
@@ -16,7 +16,7 @@
       "consecutive_failures": 0,
       "cooldown_until": "",
       "last_failure": "",
-      "last_success": "2026-07-24T19:45:47.104444+00:00",
+      "last_success": "2026-07-26T20:23:41.860886+00:00",
       "state": "closed",
       "is_open": false
     }
@@ -25,9 +25,9 @@
     {
       "provider": "nous",
       "model": "poolside/laguna-s-2.1:free",
-      "consecutive_failures": 14,
-      "cooldown_until": "2026-07-24T20:45:45.540770+00:00",
-      "last_failure": "2026-07-24T19:45:45.540770+00:00",
+      "consecutive_failures": 23,
+      "cooldown_until": "2026-07-26T21:23:42.528249+00:00",
+      "last_failure": "2026-07-26T20:23:42.528249+00:00",
       "last_success": "",
       "state": "open",
       "is_open": true
@@ -39,8 +39,8 @@
       "model": "test-model",
       "consecutive_failures": 1,
       "cooldown_until": "",
-      "last_failure": "2026-07-24T19:45:19.174278+00:00",
-      "last_success": "2026-07-24T19:45:19.147471+00:00",
+      "last_failure": "2026-07-26T20:23:29.578429+00:00",
+      "last_success": "2026-07-26T20:23:29.556278+00:00",
       "state": "closed",
       "is_open": false
     }

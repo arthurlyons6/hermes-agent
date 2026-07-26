@@ -388,3 +388,267 @@
 2026-07-24T14:45:47-0500 | DEBUG    | persistence      | f74ef59f3601 | Atomically wrote provider-health.json
 2026-07-24T14:45:47-0500 | DEBUG    | persistence      | f74ef59f3601 | Atomically wrote last-known-good.json
 2026-07-24T14:45:47-0500 | INFO     | provider         | f74ef59f3601 | Provider check: openrouter/anthropic/claude-sonnet-4 = healthy
+2026-07-26T15:17:48-0500 | INFO     | persistence      | 60d83952b92b | Loaded last-known-good configuration
+2026-07-26T15:17:48-0500 | DEBUG    | persistence      | 60d83952b92b | Atomically wrote marcus-state.json
+2026-07-26T15:17:48-0500 | DEBUG    | persistence      | 60d83952b92b | Atomically wrote last-known-good.json
+2026-07-26T15:17:48-0500 | INFO     | persistence      | 9148271f8af9 | Loaded last-known-good configuration
+2026-07-26T15:17:48-0500 | DEBUG    | persistence      | 9148271f8af9 | Atomically wrote marcus-state.json
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | 9148271f8af9 | Atomically wrote last-known-good.json
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | a3e79e901b06 | Atomically wrote marcus-state.json
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | a3e79e901b06 | Atomically wrote last-known-good.json
+2026-07-26T15:17:49-0500 | INFO     | persistence      | a11211d8bfa0 | Loaded last-known-good configuration
+2026-07-26T15:17:49-0500 | WARNING  | persistence      | a11211d8bfa0 | State file corrupt (Expecting value: line 1 column 1 (char 0)), attempting recovery
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | a11211d8bfa0 | Atomically wrote marcus-state.json
+2026-07-26T15:17:49-0500 | INFO     | persistence      | a11211d8bfa0 | Recovered state from last-known-good
+2026-07-26T15:17:49-0500 | INFO     | persistence      | d6bb9cf325d9 | Loaded last-known-good configuration
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | d6bb9cf325d9 | Atomically wrote marcus-state.json
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | d6bb9cf325d9 | Atomically wrote last-known-good.json
+2026-07-26T15:17:49-0500 | INFO     | persistence      | d6bb9cf325d9 | Loaded last-known-good configuration
+2026-07-26T15:17:49-0500 | WARNING  | persistence      | d6bb9cf325d9 | State file corrupt (Expecting value: line 1 column 1 (char 0)), attempting recovery
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | d6bb9cf325d9 | Atomically wrote marcus-state.json
+2026-07-26T15:17:49-0500 | INFO     | persistence      | d6bb9cf325d9 | Recovered state from last-known-good
+2026-07-26T15:17:49-0500 | INFO     | lock             | c7ef9444f0e4 | Lock acquired (PID 39740)
+2026-07-26T15:17:49-0500 | INFO     | lock             | c7ef9444f0e4 | Lock released
+2026-07-26T15:17:49-0500 | INFO     | lock             | 333438e6e15b | Cleaned up stale lock files
+2026-07-26T15:17:49-0500 | INFO     | lock             | 333438e6e15b | Lock acquired (PID 39740)
+2026-07-26T15:17:49-0500 | INFO     | lock             | 333438e6e15b | Lock released
+2026-07-26T15:17:49-0500 | INFO     | persistence      | 333438e6e15b | Loaded last-known-good configuration
+2026-07-26T15:17:49-0500 | INFO     | persistence      | b8f791951fa0 | Loaded last-known-good configuration
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | b8f791951fa0 | Atomically wrote provider-health.json
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | b8f791951fa0 | Atomically wrote last-known-good.json
+2026-07-26T15:17:49-0500 | INFO     | persistence      | 649660a43beb | Loaded last-known-good configuration
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | 649660a43beb | Atomically wrote provider-health.json
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | 649660a43beb | Atomically wrote last-known-good.json
+2026-07-26T15:17:49-0500 | INFO     | persistence      | e53f91e50ccb | Loaded last-known-good configuration
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | e53f91e50ccb | Atomically wrote provider-health.json
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | e53f91e50ccb | Atomically wrote last-known-good.json
+2026-07-26T15:17:49-0500 | INFO     | persistence      | b8ae09fe12e5 | Loaded last-known-good configuration
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | b8ae09fe12e5 | Atomically wrote provider-health.json
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | b8ae09fe12e5 | Atomically wrote last-known-good.json
+2026-07-26T15:17:49-0500 | INFO     | persistence      | ae4059bff745 | Loaded last-known-good configuration
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | ae4059bff745 | Atomically wrote provider-health.json
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | ae4059bff745 | Atomically wrote last-known-good.json
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | ae4059bff745 | Atomically wrote provider-health.json
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | ae4059bff745 | Atomically wrote last-known-good.json
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | ae4059bff745 | Atomically wrote provider-health.json
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | ae4059bff745 | Atomically wrote last-known-good.json
+2026-07-26T15:17:49-0500 | INFO     | persistence      | b4b7f1f7f2f4 | Loaded last-known-good configuration
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | b4b7f1f7f2f4 | Atomically wrote provider-health.json
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | b4b7f1f7f2f4 | Atomically wrote last-known-good.json
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | b4b7f1f7f2f4 | Atomically wrote provider-health.json
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | b4b7f1f7f2f4 | Atomically wrote last-known-good.json
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | b4b7f1f7f2f4 | Atomically wrote provider-health.json
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | b4b7f1f7f2f4 | Atomically wrote last-known-good.json
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | b4b7f1f7f2f4 | Atomically wrote provider-health.json
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | b4b7f1f7f2f4 | Atomically wrote last-known-good.json
+2026-07-26T15:17:49-0500 | INFO     | ollama           | bd8fb5b31202 | Discovered 1 Ollama model(s)
+2026-07-26T15:17:49-0500 | INFO     | ollama           | 51f6ced51ab4 | Discovered 1 Ollama model(s)
+2026-07-26T15:17:49-0500 | INFO     | persistence      | fc7c397d6a38 | Loaded last-known-good configuration
+2026-07-26T15:17:49-0500 | INFO     | persistence      | fc7c397d6a38 | Loaded last-known-good configuration
+2026-07-26T15:17:49-0500 | INFO     | marcus           | fc7c397d6a38 | Initiating graceful shutdown
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | fc7c397d6a38 | Atomically wrote marcus-state.json
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | fc7c397d6a38 | Atomically wrote last-known-good.json
+2026-07-26T15:17:49-0500 | INFO     | lock             | fc7c397d6a38 | Lock released
+2026-07-26T15:17:49-0500 | INFO     | marcus           | fc7c397d6a38 | Graceful shutdown complete
+2026-07-26T15:17:49-0500 | INFO     | persistence      | b40412615853 | Loaded last-known-good configuration
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | b40412615853 | Atomically wrote marcus-state.json
+2026-07-26T15:17:49-0500 | DEBUG    | persistence      | b40412615853 | Atomically wrote last-known-good.json
+2026-07-26T15:17:49-0500 | INFO     | persistence      | be847358e0c7 | Loaded last-known-good configuration
+2026-07-26T15:17:49-0500 | INFO     | watchdog         | 61590c0ab676 | Watchdog started
+2026-07-26T15:17:54-0500 | INFO     | watchdog         | 61590c0ab676 | Watchdog stopped
+2026-07-26T15:17:54-0500 | INFO     | watchdog         | 8fffe7a73844 | Watchdog started
+2026-07-26T15:17:59-0500 | INFO     | watchdog         | 8fffe7a73844 | Watchdog stopped
+2026-07-26T15:17:59-0500 | INFO     | persistence      | 353a86c87888 | Loaded last-known-good configuration
+2026-07-26T15:17:59-0500 | DEBUG    | persistence      | 353a86c87888 | Atomically wrote marcus-state.json
+2026-07-26T15:17:59-0500 | DEBUG    | persistence      | 353a86c87888 | Atomically wrote last-known-good.json
+2026-07-26T15:18:00-0500 | DEBUG    | persistence      | 353a86c87888 | Atomically wrote provider-health.json
+2026-07-26T15:18:00-0500 | DEBUG    | persistence      | 353a86c87888 | Atomically wrote last-known-good.json
+2026-07-26T15:18:00-0500 | INFO     | provider         | 353a86c87888 | Provider check: nous/stepfun/step-3.7-flash:free = unhealthy (unexpected status 404)
+2026-07-26T15:18:01-0500 | DEBUG    | persistence      | 353a86c87888 | Atomically wrote provider-health.json
+2026-07-26T15:18:01-0500 | DEBUG    | persistence      | 353a86c87888 | Atomically wrote last-known-good.json
+2026-07-26T15:18:01-0500 | INFO     | provider         | 353a86c87888 | Provider check: openrouter/anthropic/claude-sonnet-4 = healthy
+2026-07-26T15:18:01-0500 | DEBUG    | persistence      | 353a86c87888 | Atomically wrote provider-health.json
+2026-07-26T15:18:01-0500 | DEBUG    | persistence      | 353a86c87888 | Atomically wrote last-known-good.json
+2026-07-26T15:18:01-0500 | INFO     | provider         | 353a86c87888 | Provider check: nous/poolside/laguna-s-2.1:free = unhealthy (unexpected status 404)
+2026-07-26T15:18:01-0500 | INFO     | ollama           | 353a86c87888 | Discovered 1 Ollama model(s)
+2026-07-26T15:18:02-0500 | INFO     | ollama           | 353a86c87888 | Ollama fallback model selected: qwen2.5:3b-instruct
+2026-07-26T15:18:02-0500 | DEBUG    | persistence      | 353a86c87888 | Atomically wrote marcus-state.json
+2026-07-26T15:18:02-0500 | DEBUG    | persistence      | 353a86c87888 | Atomically wrote last-known-good.json
+2026-07-26T15:18:02-0500 | INFO     | persistence      | eaeac64dcb52 | Loaded last-known-good configuration
+2026-07-26T15:18:02-0500 | DEBUG    | persistence      | eaeac64dcb52 | Atomically wrote marcus-state.json
+2026-07-26T15:18:02-0500 | DEBUG    | persistence      | eaeac64dcb52 | Atomically wrote last-known-good.json
+2026-07-26T15:18:02-0500 | DEBUG    | persistence      | eaeac64dcb52 | Atomically wrote provider-health.json
+2026-07-26T15:18:02-0500 | DEBUG    | persistence      | eaeac64dcb52 | Atomically wrote last-known-good.json
+2026-07-26T15:18:02-0500 | INFO     | provider         | eaeac64dcb52 | Provider check: nous/stepfun/step-3.7-flash:free = unhealthy (unexpected status 404)
+2026-07-26T15:18:03-0500 | DEBUG    | persistence      | eaeac64dcb52 | Atomically wrote provider-health.json
+2026-07-26T15:18:03-0500 | DEBUG    | persistence      | eaeac64dcb52 | Atomically wrote last-known-good.json
+2026-07-26T15:18:03-0500 | INFO     | provider         | eaeac64dcb52 | Provider check: openrouter/anthropic/claude-sonnet-4 = healthy
+2026-07-26T15:18:04-0500 | DEBUG    | persistence      | eaeac64dcb52 | Atomically wrote provider-health.json
+2026-07-26T15:18:04-0500 | DEBUG    | persistence      | eaeac64dcb52 | Atomically wrote last-known-good.json
+2026-07-26T15:18:04-0500 | INFO     | provider         | eaeac64dcb52 | Provider check: nous/poolside/laguna-s-2.1:free = unhealthy (unexpected status 404)
+2026-07-26T15:18:04-0500 | INFO     | ollama           | eaeac64dcb52 | Discovered 1 Ollama model(s)
+2026-07-26T15:18:04-0500 | INFO     | ollama           | eaeac64dcb52 | Ollama fallback model selected: qwen2.5:3b-instruct
+2026-07-26T15:18:04-0500 | DEBUG    | persistence      | eaeac64dcb52 | Atomically wrote marcus-state.json
+2026-07-26T15:18:04-0500 | DEBUG    | persistence      | eaeac64dcb52 | Atomically wrote last-known-good.json
+2026-07-26T15:18:04-0500 | INFO     | persistence      | dd58ec69aa77 | Loaded last-known-good configuration
+2026-07-26T15:18:04-0500 | DEBUG    | persistence      | dd58ec69aa77 | Atomically wrote marcus-state.json
+2026-07-26T15:18:04-0500 | DEBUG    | persistence      | dd58ec69aa77 | Atomically wrote last-known-good.json
+2026-07-26T15:18:05-0500 | DEBUG    | persistence      | dd58ec69aa77 | Atomically wrote provider-health.json
+2026-07-26T15:18:05-0500 | DEBUG    | persistence      | dd58ec69aa77 | Atomically wrote last-known-good.json
+2026-07-26T15:18:05-0500 | INFO     | provider         | dd58ec69aa77 | Provider check: nous/stepfun/step-3.7-flash:free = unhealthy (unexpected status 404)
+2026-07-26T15:18:05-0500 | DEBUG    | persistence      | dd58ec69aa77 | Atomically wrote provider-health.json
+2026-07-26T15:18:05-0500 | DEBUG    | persistence      | dd58ec69aa77 | Atomically wrote last-known-good.json
+2026-07-26T15:18:05-0500 | INFO     | provider         | dd58ec69aa77 | Provider check: openrouter/anthropic/claude-sonnet-4 = healthy
+2026-07-26T15:18:06-0500 | DEBUG    | persistence      | dd58ec69aa77 | Atomically wrote provider-health.json
+2026-07-26T15:18:06-0500 | DEBUG    | persistence      | dd58ec69aa77 | Atomically wrote last-known-good.json
+2026-07-26T15:18:06-0500 | INFO     | provider         | dd58ec69aa77 | Provider check: nous/poolside/laguna-s-2.1:free = unhealthy (unexpected status 404)
+2026-07-26T15:18:07-0500 | INFO     | ollama           | dd58ec69aa77 | Discovered 1 Ollama model(s)
+2026-07-26T15:18:07-0500 | INFO     | ollama           | dd58ec69aa77 | Ollama fallback model selected: qwen2.5:3b-instruct
+2026-07-26T15:18:07-0500 | DEBUG    | persistence      | dd58ec69aa77 | Atomically wrote marcus-state.json
+2026-07-26T15:18:07-0500 | DEBUG    | persistence      | dd58ec69aa77 | Atomically wrote last-known-good.json
+2026-07-26T15:18:07-0500 | INFO     | persistence      | 79d18f2b3b3e | Loaded last-known-good configuration
+2026-07-26T15:18:07-0500 | DEBUG    | persistence      | 79d18f2b3b3e | Atomically wrote marcus-state.json
+2026-07-26T15:18:07-0500 | DEBUG    | persistence      | 79d18f2b3b3e | Atomically wrote last-known-good.json
+2026-07-26T15:18:08-0500 | DEBUG    | persistence      | 79d18f2b3b3e | Atomically wrote provider-health.json
+2026-07-26T15:18:08-0500 | DEBUG    | persistence      | 79d18f2b3b3e | Atomically wrote last-known-good.json
+2026-07-26T15:18:08-0500 | INFO     | provider         | 79d18f2b3b3e | Provider check: nous/stepfun/step-3.7-flash:free = unhealthy (unexpected status 404)
+2026-07-26T15:18:08-0500 | DEBUG    | persistence      | 79d18f2b3b3e | Atomically wrote provider-health.json
+2026-07-26T15:18:08-0500 | DEBUG    | persistence      | 79d18f2b3b3e | Atomically wrote last-known-good.json
+2026-07-26T15:18:08-0500 | INFO     | provider         | 79d18f2b3b3e | Provider check: openrouter/anthropic/claude-sonnet-4 = healthy
+2026-07-26T15:18:09-0500 | DEBUG    | persistence      | 79d18f2b3b3e | Atomically wrote provider-health.json
+2026-07-26T15:18:09-0500 | DEBUG    | persistence      | 79d18f2b3b3e | Atomically wrote last-known-good.json
+2026-07-26T15:18:09-0500 | INFO     | provider         | 79d18f2b3b3e | Provider check: nous/poolside/laguna-s-2.1:free = unhealthy (unexpected status 404)
+2026-07-26T15:18:09-0500 | INFO     | ollama           | 79d18f2b3b3e | Discovered 1 Ollama model(s)
+2026-07-26T15:18:09-0500 | INFO     | ollama           | 79d18f2b3b3e | Ollama fallback model selected: qwen2.5:3b-instruct
+2026-07-26T15:18:09-0500 | DEBUG    | persistence      | 79d18f2b3b3e | Atomically wrote marcus-state.json
+2026-07-26T15:18:09-0500 | DEBUG    | persistence      | 79d18f2b3b3e | Atomically wrote last-known-good.json
+2026-07-26T15:18:09-0500 | INFO     | persistence      | 273f6da96aea | Loaded last-known-good configuration
+2026-07-26T15:18:09-0500 | DEBUG    | persistence      | 273f6da96aea | Atomically wrote marcus-state.json
+2026-07-26T15:18:09-0500 | DEBUG    | persistence      | 273f6da96aea | Atomically wrote last-known-good.json
+2026-07-26T15:18:10-0500 | DEBUG    | persistence      | 273f6da96aea | Atomically wrote provider-health.json
+2026-07-26T15:18:10-0500 | DEBUG    | persistence      | 273f6da96aea | Atomically wrote last-known-good.json
+2026-07-26T15:18:10-0500 | INFO     | provider         | 273f6da96aea | Provider check: nous/stepfun/step-3.7-flash:free = unhealthy (unexpected status 404)
+2026-07-26T15:18:11-0500 | DEBUG    | persistence      | 273f6da96aea | Atomically wrote provider-health.json
+2026-07-26T15:18:11-0500 | DEBUG    | persistence      | 273f6da96aea | Atomically wrote last-known-good.json
+2026-07-26T15:18:11-0500 | INFO     | provider         | 273f6da96aea | Provider check: openrouter/anthropic/claude-sonnet-4 = healthy
+2026-07-26T15:18:12-0500 | DEBUG    | persistence      | 273f6da96aea | Atomically wrote provider-health.json
+2026-07-26T15:18:12-0500 | DEBUG    | persistence      | 273f6da96aea | Atomically wrote last-known-good.json
+2026-07-26T15:18:12-0500 | INFO     | provider         | 273f6da96aea | Provider check: nous/poolside/laguna-s-2.1:free = unhealthy (unexpected status 404)
+2026-07-26T15:18:12-0500 | INFO     | ollama           | 273f6da96aea | Discovered 1 Ollama model(s)
+2026-07-26T15:18:12-0500 | INFO     | ollama           | 273f6da96aea | Ollama fallback model selected: qwen2.5:3b-instruct
+2026-07-26T15:18:12-0500 | DEBUG    | persistence      | 273f6da96aea | Atomically wrote marcus-state.json
+2026-07-26T15:18:12-0500 | DEBUG    | persistence      | 273f6da96aea | Atomically wrote last-known-good.json
+2026-07-26T15:18:12-0500 | INFO     | persistence      | 30973ca9e78c | Loaded last-known-good configuration
+2026-07-26T15:18:12-0500 | DEBUG    | persistence      | 30973ca9e78c | Atomically wrote marcus-state.json
+2026-07-26T15:18:12-0500 | DEBUG    | persistence      | 30973ca9e78c | Atomically wrote last-known-good.json
+2026-07-26T15:18:14-0500 | DEBUG    | persistence      | 30973ca9e78c | Atomically wrote provider-health.json
+2026-07-26T15:18:14-0500 | DEBUG    | persistence      | 30973ca9e78c | Atomically wrote last-known-good.json
+2026-07-26T15:18:14-0500 | INFO     | provider         | 30973ca9e78c | Provider check: nous/stepfun/step-3.7-flash:free = unhealthy (unexpected status 404)
+2026-07-26T15:18:14-0500 | DEBUG    | persistence      | 30973ca9e78c | Atomically wrote provider-health.json
+2026-07-26T15:18:14-0500 | DEBUG    | persistence      | 30973ca9e78c | Atomically wrote last-known-good.json
+2026-07-26T15:18:14-0500 | INFO     | provider         | 30973ca9e78c | Provider check: openrouter/anthropic/claude-sonnet-4 = healthy
+2026-07-26T15:18:15-0500 | DEBUG    | persistence      | 30973ca9e78c | Atomically wrote provider-health.json
+2026-07-26T15:18:15-0500 | DEBUG    | persistence      | 30973ca9e78c | Atomically wrote last-known-good.json
+2026-07-26T15:18:15-0500 | INFO     | provider         | 30973ca9e78c | Provider check: nous/poolside/laguna-s-2.1:free = unhealthy (unexpected status 404)
+2026-07-26T15:18:15-0500 | INFO     | ollama           | 30973ca9e78c | Discovered 1 Ollama model(s)
+2026-07-26T15:18:15-0500 | INFO     | ollama           | 30973ca9e78c | Ollama fallback model selected: qwen2.5:3b-instruct
+2026-07-26T15:18:15-0500 | DEBUG    | persistence      | 30973ca9e78c | Atomically wrote marcus-state.json
+2026-07-26T15:18:15-0500 | DEBUG    | persistence      | 30973ca9e78c | Atomically wrote last-known-good.json
+2026-07-26T15:18:15-0500 | INFO     | persistence      | 594b9d47a971 | Loaded last-known-good configuration
+2026-07-26T15:18:15-0500 | DEBUG    | persistence      | 594b9d47a971 | Atomically wrote marcus-state.json
+2026-07-26T15:18:15-0500 | DEBUG    | persistence      | 594b9d47a971 | Atomically wrote last-known-good.json
+2026-07-26T15:18:16-0500 | DEBUG    | persistence      | 594b9d47a971 | Atomically wrote provider-health.json
+2026-07-26T15:18:16-0500 | DEBUG    | persistence      | 594b9d47a971 | Atomically wrote last-known-good.json
+2026-07-26T15:18:16-0500 | INFO     | provider         | 594b9d47a971 | Provider check: nous/stepfun/step-3.7-flash:free = unhealthy (unexpected status 404)
+2026-07-26T15:18:17-0500 | DEBUG    | persistence      | 594b9d47a971 | Atomically wrote provider-health.json
+2026-07-26T15:18:17-0500 | DEBUG    | persistence      | 594b9d47a971 | Atomically wrote last-known-good.json
+2026-07-26T15:18:17-0500 | INFO     | provider         | 594b9d47a971 | Provider check: openrouter/anthropic/claude-sonnet-4 = healthy
+2026-07-26T15:23:29-0500 | INFO     | persistence      | 567f0148ca41 | Loaded last-known-good configuration
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | 567f0148ca41 | Atomically wrote marcus-state.json
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | 567f0148ca41 | Atomically wrote last-known-good.json
+2026-07-26T15:23:29-0500 | INFO     | persistence      | fd052b284d5f | Loaded last-known-good configuration
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | fd052b284d5f | Atomically wrote marcus-state.json
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | fd052b284d5f | Atomically wrote last-known-good.json
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | 8d159bc7f8b6 | Atomically wrote marcus-state.json
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | 8d159bc7f8b6 | Atomically wrote last-known-good.json
+2026-07-26T15:23:29-0500 | INFO     | persistence      | 3cf788c1f5ed | Loaded last-known-good configuration
+2026-07-26T15:23:29-0500 | WARNING  | persistence      | 3cf788c1f5ed | State file corrupt (Expecting value: line 1 column 1 (char 0)), attempting recovery
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | 3cf788c1f5ed | Atomically wrote marcus-state.json
+2026-07-26T15:23:29-0500 | INFO     | persistence      | 3cf788c1f5ed | Recovered state from last-known-good
+2026-07-26T15:23:29-0500 | INFO     | persistence      | 663b779d540d | Loaded last-known-good configuration
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | 663b779d540d | Atomically wrote marcus-state.json
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | 663b779d540d | Atomically wrote last-known-good.json
+2026-07-26T15:23:29-0500 | INFO     | persistence      | 721b74b8d947 | Loaded last-known-good configuration
+2026-07-26T15:23:29-0500 | WARNING  | persistence      | 721b74b8d947 | State file corrupt (Expecting value: line 1 column 1 (char 0)), attempting recovery
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | 721b74b8d947 | Atomically wrote marcus-state.json
+2026-07-26T15:23:29-0500 | INFO     | persistence      | 721b74b8d947 | Recovered state from last-known-good
+2026-07-26T15:23:29-0500 | INFO     | lock             | e26d1d834f36 | Lock acquired (PID 40032)
+2026-07-26T15:23:29-0500 | INFO     | lock             | e26d1d834f36 | Lock released
+2026-07-26T15:23:29-0500 | INFO     | lock             | e26d1d834f36 | Cleaned up stale lock files
+2026-07-26T15:23:29-0500 | INFO     | lock             | e26d1d834f36 | Lock acquired (PID 40032)
+2026-07-26T15:23:29-0500 | INFO     | lock             | e26d1d834f36 | Lock released
+2026-07-26T15:23:29-0500 | INFO     | persistence      | e26d1d834f36 | Loaded last-known-good configuration
+2026-07-26T15:23:29-0500 | INFO     | persistence      | 4b2457288252 | Loaded last-known-good configuration
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | 4b2457288252 | Atomically wrote provider-health.json
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | 4b2457288252 | Atomically wrote last-known-good.json
+2026-07-26T15:23:29-0500 | INFO     | persistence      | 18d8530f7d32 | Loaded last-known-good configuration
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | 18d8530f7d32 | Atomically wrote provider-health.json
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | 18d8530f7d32 | Atomically wrote last-known-good.json
+2026-07-26T15:23:29-0500 | INFO     | persistence      | 7fc1c22cebe6 | Loaded last-known-good configuration
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | 7fc1c22cebe6 | Atomically wrote provider-health.json
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | 7fc1c22cebe6 | Atomically wrote last-known-good.json
+2026-07-26T15:23:29-0500 | INFO     | persistence      | 199cc6784d40 | Loaded last-known-good configuration
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | 199cc6784d40 | Atomically wrote provider-health.json
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | 199cc6784d40 | Atomically wrote last-known-good.json
+2026-07-26T15:23:29-0500 | INFO     | persistence      | 34aedc4dc9c5 | Loaded last-known-good configuration
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | 34aedc4dc9c5 | Atomically wrote provider-health.json
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | 34aedc4dc9c5 | Atomically wrote last-known-good.json
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | 34aedc4dc9c5 | Atomically wrote provider-health.json
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | 34aedc4dc9c5 | Atomically wrote last-known-good.json
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | 34aedc4dc9c5 | Atomically wrote provider-health.json
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | 34aedc4dc9c5 | Atomically wrote last-known-good.json
+2026-07-26T15:23:29-0500 | INFO     | persistence      | d38ecfc0fa44 | Loaded last-known-good configuration
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | d38ecfc0fa44 | Atomically wrote provider-health.json
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | d38ecfc0fa44 | Atomically wrote last-known-good.json
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | d38ecfc0fa44 | Atomically wrote provider-health.json
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | d38ecfc0fa44 | Atomically wrote last-known-good.json
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | d38ecfc0fa44 | Atomically wrote provider-health.json
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | d38ecfc0fa44 | Atomically wrote last-known-good.json
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | d38ecfc0fa44 | Atomically wrote provider-health.json
+2026-07-26T15:23:29-0500 | DEBUG    | persistence      | d38ecfc0fa44 | Atomically wrote last-known-good.json
+2026-07-26T15:23:29-0500 | INFO     | ollama           | 0ff6fd0ab55d | Discovered 1 Ollama model(s)
+2026-07-26T15:23:30-0500 | INFO     | ollama           | bc3a884e828e | Discovered 1 Ollama model(s)
+2026-07-26T15:23:30-0500 | INFO     | persistence      | f424bd2cabef | Loaded last-known-good configuration
+2026-07-26T15:23:30-0500 | INFO     | persistence      | f424bd2cabef | Loaded last-known-good configuration
+2026-07-26T15:23:30-0500 | INFO     | marcus           | f424bd2cabef | Initiating graceful shutdown
+2026-07-26T15:23:30-0500 | DEBUG    | persistence      | f424bd2cabef | Atomically wrote marcus-state.json
+2026-07-26T15:23:30-0500 | DEBUG    | persistence      | f424bd2cabef | Atomically wrote last-known-good.json
+2026-07-26T15:23:30-0500 | INFO     | lock             | f424bd2cabef | Lock released
+2026-07-26T15:23:30-0500 | INFO     | marcus           | f424bd2cabef | Graceful shutdown complete
+2026-07-26T15:23:30-0500 | INFO     | persistence      | f9fec78cd6d5 | Loaded last-known-good configuration
+2026-07-26T15:23:30-0500 | DEBUG    | persistence      | f9fec78cd6d5 | Atomically wrote marcus-state.json
+2026-07-26T15:23:30-0500 | DEBUG    | persistence      | f9fec78cd6d5 | Atomically wrote last-known-good.json
+2026-07-26T15:23:30-0500 | INFO     | persistence      | c4631d47f288 | Loaded last-known-good configuration
+2026-07-26T15:23:30-0500 | INFO     | watchdog         | c4631d47f288 | Watchdog started
+2026-07-26T15:23:35-0500 | INFO     | watchdog         | c4631d47f288 | Watchdog stopped
+2026-07-26T15:23:35-0500 | INFO     | watchdog         | 45c290c784c8 | Watchdog started
+2026-07-26T15:23:40-0500 | INFO     | watchdog         | 45c290c784c8 | Watchdog stopped
+2026-07-26T15:23:40-0500 | INFO     | persistence      | 5c6458a7d798 | Loaded last-known-good configuration
+2026-07-26T15:23:40-0500 | DEBUG    | persistence      | 5c6458a7d798 | Atomically wrote marcus-state.json
+2026-07-26T15:23:40-0500 | DEBUG    | persistence      | 5c6458a7d798 | Atomically wrote last-known-good.json
+2026-07-26T15:23:40-0500 | DEBUG    | persistence      | 5c6458a7d798 | Atomically wrote provider-health.json
+2026-07-26T15:23:40-0500 | DEBUG    | persistence      | 5c6458a7d798 | Atomically wrote last-known-good.json
+2026-07-26T15:23:40-0500 | INFO     | provider         | 5c6458a7d798 | Provider check: nous/stepfun/step-3.7-flash:free = unhealthy (unexpected status 404)
+2026-07-26T15:23:41-0500 | DEBUG    | persistence      | 5c6458a7d798 | Atomically wrote provider-health.json
+2026-07-26T15:23:41-0500 | DEBUG    | persistence      | 5c6458a7d798 | Atomically wrote last-known-good.json
+2026-07-26T15:23:41-0500 | INFO     | provider         | 5c6458a7d798 | Provider check: openrouter/anthropic/claude-sonnet-4 = healthy
+2026-07-26T15:23:42-0500 | DEBUG    | persistence      | 5c6458a7d798 | Atomically wrote provider-health.json
+2026-07-26T15:23:42-0500 | DEBUG    | persistence      | 5c6458a7d798 | Atomically wrote last-known-good.json
+2026-07-26T15:23:42-0500 | INFO     | provider         | 5c6458a7d798 | Provider check: nous/poolside/laguna-s-2.1:free = unhealthy (unexpected status 404)
+2026-07-26T15:23:42-0500 | INFO     | ollama           | 5c6458a7d798 | Discovered 1 Ollama model(s)
+2026-07-26T15:23:42-0500 | INFO     | ollama           | 5c6458a7d798 | Ollama fallback model selected: qwen2.5:3b-instruct
+2026-07-26T15:23:42-0500 | DEBUG    | persistence      | 5c6458a7d798 | Atomically wrote marcus-state.json
+2026-07-26T15:23:42-0500 | DEBUG    | persistence      | 5c6458a7d798 | Atomically wrote last-known-good.json
+2026-07-26T15:23:42-0500 | INFO     | persistence      | 500a6a03f509 | Loaded last-known-good configuration
+2026-07-26T15:23:42-0500 | DEBUG    | persistence      | 500a6a03f509 | Atomically wrote marcus-state.json
+2026-07-26T15:23:42-0500 | DEBUG    | persistence      | 500a6a03f509 | Atomically wrote last-known-good.json
