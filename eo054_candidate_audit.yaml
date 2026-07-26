@@ -1,0 +1,147 @@
+# EO054 — GitHub Expansion: Candidate Audit Report
+# Generated: 2026-07-26T21:00:00Z
+# Status: SCORING AND AUDIT COMPLETE
+
+license_policy:
+  MIT: approved
+  Apache-2.0: approved
+  BSD: approved
+  LGPL: restricted
+  AGPL: rejected
+  NOASSERTION: requires_review
+  UNKNOWN: rejected
+
+candidates:
+  crewAI:
+    id: CAP-028
+    repo: crewAIInc/crewAI
+    license: MIT
+    stars: 56174
+    language: Python
+    score: 76
+    decision: EXTRACT_PATTERNS_ONLY
+    reason: "Overlap with Hermes Council, too large to integrate directly"
+    fork: false
+    audit: true
+
+  microsoft_agent_framework:
+    id: CAP-029
+    repo: microsoft/agent-framework
+    license: MIT
+    stars: 12416
+    language: Python
+    score: 82
+    decision: FORK_DEEP_AUDIT
+    reason: "Provider abstraction and lifecycle contracts highly relevant"
+    fork: true
+    audit: true
+
+  factor_agents:
+    id: CAP-030
+    repo: humanlayer/12-factor-agents
+    license: NOASSERTION
+    stars: 24792
+    language: TypeScript
+    score: 99
+    decision: FORK_IMMEDIATELY
+    reason: "Zero infra footprint, pure doctrine, directly applicable"
+    fork: true
+    audit: true
+
+  openlit:
+    id: CAP-031
+    repo: openlit/openlit
+    license: Apache-2.0
+    stars: 2646
+    language: TypeScript
+    score: 76
+    decision: FORK_OBSERVABILITY_AUDIT
+    reason: "Tracing patterns for lightweight Lyons observability"
+    fork: true
+    audit: true
+
+  langwatch:
+    id: CAP-032
+    repo: langwatch/langwatch
+    license: Apache-2.0
+    stars: 3419
+    language: TypeScript
+    score: 66
+    decision: FORK_EVALUATION_EXTRACTION
+    reason: "Evaluation standards for Lyons Agent Evaluation Suite"
+    fork: true
+    audit: true
+
+  ragaai:
+    id: CAP-033
+    repo: raga-ai-hub/RagaAI-Catalyst
+    license: Apache-2.0
+    stars: 16142
+    language: Python
+    score: 69
+    decision: FORK_TESTING_REVIEW
+    reason: "Evaluation methodology for certification process"
+    fork: true
+    audit: true
+
+  shannon:
+    id: CAP-034
+    repo: Kocoro-lab/Shannon
+    license: UNKNOWN
+    score: 30
+    decision: REJECT
+    reason: "Insufficient data for any integration decision"
+    fork: false
+    audit: false
+
+  openclaw:
+    id: CAP-035
+    repo: abhi1693/openclaw-mission-control
+    license: UNKNOWN
+    score: 37
+    decision: REJECT_REFERENCE_ONLY
+    reason: "UI-only focus, unknown license, limited production value"
+    fork: false
+    audit: false
+
+  sim:
+    id: CAP-036
+    repo: simstudioai/sim
+    license: UNKNOWN
+    score: 34
+    decision: REJECT
+    reason: "Large platform UI-first, diverges from Lyons CLI architecture"
+    fork: false
+    audit: false
+
+  swarms:
+    id: CAP-037
+    repo: kyegomez/swarms
+    license: UNKNOWN
+    score: 38
+    decision: REJECT
+    reason: "Significant overlap with Hermes Council and Marcus specialists"
+    fork: false
+    audit: false
+
+  archestra:
+    id: CAP-038
+    repo: archestra-ai/archestra
+    license: UNKNOWN
+    score: 38
+    decision: DEFER_SECURITY_AUDIT
+    reason: "MCP patterns valuable but license and security unverified"
+    fork: false
+    audit: pending
+
+  ralph:
+    id: CAP-039
+    repo: mikeyobrien/ralph-orchestrator
+    license: MIT
+    stars: 3075
+    language: Rust
+    score: 76
+    decision: FORK_ENGINEERING_LOOP_ANALYSIS
+    reason: "Task persistence and checkpoint patterns apply to Miles/Victor"
+    fork: true
+    audit: true
