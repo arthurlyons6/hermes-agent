@@ -1,0 +1,574 @@
+# ===========================================================================
+# LYONS COMMAND CENTER — CAPABILITY REGISTRY
+# Created: 2026-07-26
+# Updated: 2026-07-26
+# Purpose: Permanent tracking system for all GitHub capability integrations
+# ===========================================================================
+
+registry_version: "1.0.0"
+last_audit: "2026-07-26"
+total_repos_analyzed: 27
+total_active: 25
+
+# ===========================================================================
+# CAPABILITY ENTRIES
+# ===========================================================================
+capabilities:
+
+  # ---------------------------------------------------------------------------
+  # TIER 1 — IMMEDIATE PRODUCTION DEPLOYMENT
+  # ---------------------------------------------------------------------------
+  - id: CAP-001
+    repo: hermes-council
+    repo_id: arthurlyons6/hermes-council
+    category: Multi-Agent Orchestration
+    language: Python
+    license: MIT
+    status: READY
+    priority: TIER_1
+    implementation_stage: READY
+    description: >
+      Multi-agent debate system for Hermes Agent. Spawns custom-composed expert
+      agents to debate any question in structured rounds, producing visible
+      transcripts and synthesized recommendations. Pure SKILL.md — zero new
+      infrastructure required.
+    dependencies: []
+    integration_complexity: LOW
+    business_impact: HIGH
+    engineering_effort_hours: 2
+    testing_status: READY (local tests pass via SKILL.md pattern)
+    production_readiness: HIGH
+    duplicate_of: None — unique capability not present in Hermes
+    owner: Marcus (Chief Improvement Officer)
+    notes: >
+      The strongest immediate integration candidate. Pure SKILL.md architecture
+      means no code changes, no new dependencies, no deployment risk. Adds
+      structured multi-agent debate to Marcus workflow for PE analysis, deal
+      evaluation, and strategic decisions.
+
+  - id: CAP-002
+    repo: docling
+    repo_id: arthurlyons6/docling
+    category: Document Intelligence
+    language: Python
+    license: MIT
+    status: READY
+    priority: TIER_1
+    implementation_stage: READY
+    description: >
+      Document preparation for gen AI. Converts documents into LLM-ready format.
+      Supports PDF, images, and structured extraction.
+    dependencies: []
+    integration_complexity: MEDIUM
+    business_impact: HIGH
+    engineering_effort_hours: 4
+    testing_status: READY
+    production_readiness: MEDIUM (requires docling package installation)
+    duplicate_of: None — no existing document intelligence capability
+    owner: Marcus
+    notes: >
+      Fills gap in Lyons Command Center document processing. Integrates as
+      Marcus skill module for DD due diligence, financial doc extraction, and
+      research document prep.
+
+  - id: CAP-003
+    repo: hermes-acp-plugin
+    repo_id: arthurlyons6/hermes-acp-plugin
+    category: Governance / Tool Audit
+    language: Python
+    license: MIT
+    status: READY
+    priority: TIER_1
+    implementation_stage: READY
+    description: >
+      ACP governance plugin for Hermes Agent — audit and veto every tool call
+      via the Agentic Control Plane. Validates tool calls before execution.
+    dependencies: []
+    integration_complexity: MEDIUM
+    business_impact: HIGH
+    engineering_effort_hours: 6
+    testing_status: READY (tests exist)
+    production_readiness: MEDIUM (requires hooks integration into Hermes)
+    duplicate_of: None — no existing governance layer in Hermes
+    owner: Marcus
+    notes: >
+      Complements EO049 unknown tool hardening. Provides a production-grade
+      governance layer that validates tool calls before execution. Critical for
+      financial operations where tool misuse has compliance implications.
+
+  - id: CAP-004
+    repo: hyatlas-memory
+    repo_id: arthurlyons6/hyatlas-memory
+    category: Memory Provider
+    language: Python
+    license: Apache-2.0
+    status: READY
+    priority: TIER_1
+    implementation_stage: READY
+    description: >
+      Hy-Memory memory provider plugin for Hermes. Connects Hy-Memory as a
+      memory provider with a dashboard view.
+    dependencies: ["hyatlas-memory"]
+    integration_complexity: MEDIUM
+    business_impact: MEDIUM
+    engineering_effort_hours: 4
+    testing_status: READY
+    production_readiness: MEDIUM (depends on HyAtlas project availability)
+    duplicate_of: None — Hermes has no structured memory provider
+    owner: Marcus
+    notes: >
+      Adds persistent memory with dashboard visibility. Useful for deal tracking
+      and meeting context retention across sessions.
+
+  - id: CAP-005
+    repo: codegraph
+    repo_id: arthurlyons6/codegraph
+    category: Code Intelligence / Knowledge Graph
+    language: C (kernel) + Python bindings
+    license: MIT
+    status: READY
+    priority: TIER_1
+    implementation_stage: READY
+    description: >
+      Pre-indexed code knowledge graph. Auto-syncs on code changes. Reduces
+      token usage for Claude, Codex, Gemini, Cursor, OpenCode, Hermes Agent.
+    dependencies: []
+    integration_complexity: MEDIUM
+    business_impact: MEDIUM
+    engineering_effort_hours: 6
+    testing_status: READY
+    production_readiness: MEDIUM (requires build from C sources)
+    duplicate_of: None — no existing code intelligence in Hermes
+    owner: Marcus
+    notes: >
+      Reduces token consumption for all Hermès coding workflows. Directly
+      supports the open-source-extraction skill. Worth the build complexity.
+
+  # ---------------------------------------------------------------------------
+  # TIER 2 — OPERATIONAL ENHANCEMENT
+  # ---------------------------------------------------------------------------
+  - id: CAP-006
+    repo: hatchet
+    repo_id: arthurlyons6/hatchet
+    category: Durable Workflow Engine
+    language: Go
+    license: MIT
+    status: EVALUATING
+    priority: TIER_2
+    implementation_stage: RESEARCH
+    description: >
+      Orchestration engine for background tasks, AI agents, and durable
+      workflows. Production-grade with retry, scheduling, and concurrency.
+    dependencies: ["Go runtime"]
+    integration_complexity: HIGH
+    business_impact: HIGH for multi-step automation
+    engineering_effort_hours: 20
+    testing_status: NOT TESTED
+    production_readiness: HIGH (mature Go project)
+    duplicate_of: "Hatchet duplicates simple asyncio patterns in Hermes but adds
+      production durability features not present in current asyncio-based poll()"
+    owner: Marcus
+    notes: >
+      Strong candidate for replacing the simple telegram_poller asyncio loop with
+      a durable, retry-aware, production-grade workflow engine. Significant
+      complexity trade-off — evaluate against current poller stability first.
+
+  - id: CAP-007
+    repo: browser-harness
+    repo_id: arthurlyons6/browser-harness
+    category: Browser Automation
+    language: Python
+    license: MIT
+    status: EVALUATING
+    priority: TIER_2
+    implementation_stage: RESEARCH
+    description: >
+      Self-healing harness that enables LLMs to complete any browser task.
+      Replay-based automation with fault tolerance.
+    dependencies: ["browser automation tools"]
+    integration_complexity: HIGH
+    business_impact: HIGH for research and monitoring
+    engineering_effort_hours: 12
+    testing_status: NOT TESTED
+    production_readiness: MEDIUM
+    duplicate_of: "Overlaps with ego-lite browser automation but more robust"
+    owner: Marcus
+    notes: >
+      Fills gap for browser automation tasks in research and OSINT workflows.
+      Self-healing pattern is valuable for long-running tasks.
+
+  - id: CAP-008
+    repo: hermes-browser-extension
+    repo_id: arthurlyons6/hermes-browser-extension
+    category: UI / Browser Integration
+    language: JavaScript
+    license: MIT
+    status: EVALUATING
+    priority: TIER_2
+    implementation_stage: RESEARCH
+    description: >
+      Browser-native side panel for Hermes Agent — connects web context to
+      local Hermes runtime.
+    dependencies: ["browser extension infrastructure"]
+    integration_complexity: MEDIUM
+    business_impact: MEDIUM
+    engineering_effort_hours: 10
+    testing_status: NOT TESTED
+    production_readiness: MEDIUM
+    duplicate_of: "Overlaps with ego-lite; both provide browser-to-agent context
+      sharing"
+    owner: Marcus
+    notes: >
+      Browser panel for real-time context injection into Hermes. Complements
+      ego-lite with a Hermes-specific integration layer.
+
+  - id: CAP-009
+    repo: ego-lite
+    repo_id: arthurlyons6/ego-lite
+    category: Browser Automation
+    language: JavaScript
+    license: MIT
+    status: EVALUATING
+    priority: TIER_2
+    implementation_stage: RESEARCH
+    description: >
+      Fastest browser for AI agents. Share logged-in browser state with AI
+      agents without disturbance. Zero cost, zero config.
+    dependencies: ["browser extension infrastructure"]
+    integration_complexity: MEDIUM
+    business_impact: MEDIUM
+    engineering_effort_hours: 10
+    testing_status: NOT TESTED
+    production_readiness: MEDIUM
+    duplicate_of: "Overlaps with hermes-browser-extension; choose one"
+    owner: Marcus
+    notes: >
+      Zero-config browser sharing is compelling. Recommend adopting the pattern
+      (not the full integration) for the browser-harness module.
+
+  - id: CAP-010
+    repo: hermes-plugin-ollama-cloud-search
+    repo_id: arthurlyons6/hermes-plugin-ollama-cloud-search
+    category: Search / Plugin
+    language: Python
+    license: MIT
+    status: EVALUATING
+    priority: TIER_2
+    implementation_stage: RESEARCH
+    description: >
+      Search plugin for Hermes Agent using Ollama's web search API.
+    dependencies: ["Ollama"]
+    integration_complexity: LOW
+    business_impact: MEDIUM
+    engineering_effort_hours: 2
+    testing_status: NOT TESTED
+    production_readiness: LOW (depends on Ollama being available)
+    duplicate_of: "Overlaps with existing search capabilities"
+    owner: Marcus
+    notes: >
+      Low effort, low complexity. Worth evaluating if Ollama integration
+      becomes a priority.
+
+  - id: CAP-011
+    repo: hermes-fmsg
+    repo_id: arthurlyons6/hermes-fmsg
+    category: Messaging Integration
+    language: Python
+    license: MIT
+    status: EVALUATING
+    priority: TIER_2
+    implementation_stage: RESEARCH
+    description: >
+      Hermes fmsg (forward message) integration.
+    dependencies: []
+    integration_complexity: LOW
+    business_impact: LOW
+    engineering_effort_hours: 2
+    testing_status: NOT TESTED
+    production_readiness: LOW
+    duplicate_of: "No equivalent in current Hermes — but low business value"
+    owner: Marcus
+    notes: >
+      Messaging integration with limited business value. Defer unless fmsg
+      becomes a required channel.
+
+  - id: CAP-012
+    repo: nbd
+    repo_id: arthurlyons6/nbd
+    category: Node System Plugin
+    language: Python
+    license: unknown
+    status: EVALUATING
+    priority: TIER_2
+    implementation_stage: RESEARCH
+    description: Hermes node system plugin for NBD integration.
+    dependencies: []
+    integration_complexity: LOW
+    business_impact: LOW
+    engineering_effort_hours: 2
+    testing_status: NOT TESTED
+    production_readiness: LOW (no license)
+    duplicate_of: None unique
+    owner: Marcus
+    notes: >
+      No license found. Cannot integrate without license clarification. Low
+      priority until resolved.
+
+  - id: CAP-013
+    repo: hermes-plugin-minimax-video
+    repo_id: arthurlyons6/hermes-plugin-minimax-video
+    category: Media Generation
+    language: Python
+    license: MIT
+    status: EVALUATING
+    priority: TIER_2
+    implementation_stage: RESEARCH
+    description: Minimax video generation plugin for Hermes Agent.
+    dependencies: ["Minimax API"]
+    integration_complexity: LOW
+    business_impact: LOW-MEDIUM
+    engineering_effort_hours: 3
+    testing_status: NOT TESTED
+    production_readiness: MEDIUM (requires Minimax API access)
+    duplicate_of: "No video generation in current Hermes — this fills a gap"
+    owner: Marcus
+    notes: >
+      Video generation is a new capability not present in current Hermes. Low
+      complexity but requires Minimax API access. Nice-to-have for presentations.
+
+  # ---------------------------------------------------------------------------
+  # TIER 3 — RESEARCH
+  # ---------------------------------------------------------------------------
+  - id: CAP-014
+    repo: paperclip
+    repo_id: arthurlyons6/paperclip
+    category: Orchestration (Zero-Human Companies)
+    language: TypeScript
+    license: MIT
+    status: RESEARCH
+    priority: TIER_3
+    implementation_stage: RESEARCH
+    description: >
+      Open-source orchestration for zero-human companies. Agentic orchestration
+      engine with workflow automation.
+    dependencies: ["Node.js runtime"]
+    integration_complexity: HIGH
+    business_impact: HIGH conceptually, but too heavy for current needs
+    engineering_effort_hours: 25
+    testing_status: NOT TESTED
+    production_readiness: MEDIUM (mature project, but TypeScript/Node dependency)
+    duplicate_of: "Paperclip orchestration overlaps with hatchet but at a larger
+      scale. Hatchet is the lighter-weight starting point."
+    owner: Marcus
+    notes: >
+      Zero-human orchestration is a long-term vision. Not recommended for
+      immediate implementation. Paperclip concepts inform hatchet evaluation.
+
+  - id: CAP-015
+    repo: hermes-agent-railway
+    repo_id: arthurlyons6/hermes-agent-railway
+    category: Deployment
+    language: Python
+    license: unknown
+    status: RESEARCH
+    priority: TIER_3
+    implementation_stage: ARCHIVED
+    description: Hermes Agent Railway deployment helper (archived).
+    dependencies: []
+    integration_complexity: N/A
+    business_impact: N/A
+    engineering_effort_hours: 0
+    testing_status: OBSOLETE
+    production_readiness: N/A (archived)
+    duplicate_of: "Railway deployment is already handled by existing nixpacks.toml
+      and Railway config"
+    owner: Marcus
+    notes: >
+      Archived deployment helper. No action needed — Railway deployment is
+      already managed via existing pipeline.
+
+  - id: CAP-016
+    repo: odysseus
+    repo_id: arthurlyons6/odysseus
+    category: AI Workspace
+    language: Python
+    license: AGPL-3.0
+    status: RESEARCH
+    priority: TIER_4
+    implementation_stage: RESEARCH
+    description: Self-hosted AI workspace.
+    dependencies: ["Docker", "Python"]
+    integration_complexity: VERY HIGH
+    business_impact: LOW (too heavyweight)
+    engineering_effort_hours: 50+
+    testing_status: NOT TESTED
+    production_readiness: LOW (AGPL license incompatible with production)
+    duplicate_of: "Partially duplicates existing capabilities but at much larger
+      scale"
+    owner: Marcus
+    notes: >
+      AGPL-3.0 license is incompatible with production deployment. Architecture
+      is interesting for reference but cannot be integrated.
+
+  # ---------------------------------------------------------------------------
+  # TIER 4 — REFERENCE ONLY
+  # ---------------------------------------------------------------------------
+  - id: CAP-017
+    repo: gci-n8n
+    repo_id: arthurlyons6/gci-n8n
+    category: Workflow Automation (Platform)
+    language: TypeScript
+    license: Other ( restrictive)
+    status: REFERENCE
+    priority: TIER_4
+    implementation_stage: REFERENCE
+    description: n8n workflow automation — self-hosted integration platform.
+    dependencies: ["Node.js", "Docker", "PostgreSQL"]
+    integration_complexity: VERY HIGH
+    business_impact: LOW (too heavy for command center)
+    engineering_effort_hours: 50+
+    testing_status: NOT TESTED
+    production_readiness: LOW (heavy platform dependency)
+    duplicate_of: "Workflow automation overlaps with hatchet/asyncio but at
+      platform scale"
+    owner: Marcus
+    notes: >
+      n8n is a full integration platform — too heavy for the command center.
+      Concepts from n8n error handling and retry patterns may inform hatchet
+      evaluation. Not recommended for integration.
+
+  - id: CAP-018
+    repo: gci-appsmith
+    repo_id: arthurlyons6/gci-appsmith
+    category: Low-Code Platform
+    language: TypeScript
+    license: Apache-2.0
+    status: REFERENCE
+    priority: TIER_4
+    implementation_stage: REFERENCE
+    description: Appsmith — low-code application builder.
+    dependencies: ["Docker", "Node.js", "MongoDB/PostgreSQL"]
+    integration_complexity: VERY HIGH
+    business_impact: LOW
+    engineering_effort_hours: 50+
+    testing_status: NOT TESTED
+    production_readiness: LOW
+    duplicate_of: "Low-code platform duplicates simple dashboards; not needed"
+    owner: Marcus
+    notes: >
+      Appsmith is a full low-code platform — out of scope for command center.
+      Its dashboard concepts may inform Hermes admin interface design.
+
+  - id: CAP-019
+    repo: gci-dify
+    repo_id: arthurlyons6/gci-dify
+    category: AI Application Platform
+    language: TypeScript
+    license: Other (restrictive)
+    status: REFERENCE
+    priority: TIER_4
+    implementation_stage: REFERENCE
+    description: Dify — AI application development platform.
+    dependencies: ["Docker", "Node.js", "Python"]
+    integration_complexity: VERY HIGH
+    business_impact: LOW
+    engineering_effort_hours: 50+
+    testing_status: NOT TESTED
+    production_readiness: LOW
+    duplicate_of: "Dify is a comprehensive AI app platform — far beyond command
+      center needs"
+    owner: Marcus
+    notes: >
+      Dify is a full AI platform. Concepts from its prompt management and
+      workflow builder may inform future Hermes skill design but not at
+      integration level.
+
+  - id: CAP-020
+    repo: gci-windmill
+    repo_id: arthurlyons6/gci-windmill
+    category: Infrastructure Automation
+    language: Rust
+    license: Other (restrictive)
+    status: REFERENCE
+    priority: TIER_4
+    implementation_stage: REFERENCE
+    description: Windmill — infrastructure automation platform.
+    dependencies: ["Rust toolchain", "Docker"]
+    integration_complexity: VERY HIGH
+    business_impact: LOW
+    engineering_effort_hours: 50+
+    testing_status: NOT TESTED
+    production_readiness: LOW
+    duplicate_of: "Infrastructure automation overlaps with existing Marcus
+      operations but at platform scale"
+    owner: Marcus
+    notes: >
+      Windmill infrastructure automation is too heavy for current needs. Its
+      error handling patterns may inform future Marcus hardening.
+
+  - id: CAP-021
+    repo: gci-nocodb
+    repo_id: arthurlyons6/gci-nocodb
+    category: Database Platform
+    language: TypeScript
+    license: Other (restrictive)
+    status: REFERENCE
+    priority: TIER_4
+    implementation_stage: REFERENCE
+    description: NocoDB — open-source Airtable alternative.
+    dependencies: ["Docker", "Node.js", "Database"]
+    integration_complexity: VERY HIGH
+    business_impact: LOW
+    engineering_effort_hours: 50+
+    testing_status: NOT TESTED
+    production_readiness: LOW
+    duplicate_of: "NocoDB is a full database platform — no need for this"
+    owner: Marcus
+    notes: >
+      Out of scope. Lyons Command Center uses existing file-based vault and
+      JSON state management. NocoDB would add unnecessary complexity.
+
+  - id: CAP-022
+    repo: hermes-plugin-ollama-cloud-search
+    repo_id: arthurlyons6/hermes-plugin-ollama-cloud-search
+    category: Search (duplicate)
+    language: Python
+    license: MIT
+    status: EVALUATED
+    priority: TIER_2
+    implementation_stage: DUPLICATE_ELIMINATED
+    description: Already listed as CAP-010 above.
+    notes: Duplicate entry consolidated.
+
+  # ---------------------------------------------------------------------------
+  # NON-INTEGRATABLE (archived, private, or incompatible)
+  # ---------------------------------------------------------------------------
+  - id: CAP-023
+    repo: peg-fullstack-app
+    repo_id: arthurlyons6/peg-fullstack-app
+    status: EXCLUDED_ARCHIVED_PRIVATE
+    reason: Archived and private — no extractable value
+
+  - id: CAP-024
+    repo: gci-n8n
+    repo_id: arthurlyons6/gci-n8n
+    status: EXCLUDED_REFERENCE
+    reason: Full platform, not a reusable component
+
+  - id: CAP-025
+    repo: gci-appsmith
+    repo_id: arthurlyons6/gci-appsmith
+    status: EXCLUDED_REFERENCE
+    reason: Full platform, not a reusable component
+
+  - id: CAP-026
+    repo: odysseus
+    repo_id: arthurlyons6/odysseus
+    status: EXCLUDED_LICENSE
+    reason: AGPL-3.0 incompatible with production use
+
+  - id: CAP-027
+    repo: gci-windmill
+    repo_id: arthurlyons6/gci-windmill
+    status: EXCLUDED_LICENSE
+    reason: License incompatible; platform-scale project
