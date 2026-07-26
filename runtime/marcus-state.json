@@ -1,0 +1,11 @@
+{
+  "agent_id": "marcus",
+  "name": "Marcus",
+  "role": "Commander, Chief of Staff, Chief Improvement Officer",
+  "health_status": "initialized",
+  "started_at": "2026-01-01T00:00:00+00:00",
+  "last_checkpoint": "",
+  "responsibilities_count": 8,
+  "specialists_count": 15,
+  "execution_history_count": 0
+}

@@ -48,36 +48,30 @@ class SimpleNamespace:
 
 async def start_gateway() -> None:
     await _start_early_api_server()
+
     # Platform initialization runs in background so /health responds immediately.
     # Railway readiness probes must succeed while Telegram and other adapters
     # continue initializing asynchronously.
-    _platform_task: Optional[asyncio.Task] = None
+    from gateway.telegram_poller import poll as _telegram_poll
 
-    async def _run_platforms() -> None:
-        try:
-            from gateway.platform_registry import get_platforms
-        except ImportError:
-            logger.warning("platform_registry not available, skipping platform init")
-            return
-        platforms = get_platforms()
-        async with concurrent.futures.AsyncExecutor() as executor:
-            tasks = []
-            for platform in platforms:
-                if getattr(platform, "value", None) == "api_server" and _API_STARTED:
-                    continue
-                tasks.append(executor.submit(platform.initialize))
-            for task in tasks:
-                try:
-                    await asyncio.wrap_future(task)
-                except Exception:
-                    pass
+    _telegram_task: Optional[asyncio.Task] = None
+    _telegram_token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+    if _telegram_token:
+        allowed_users = os.environ.get("TELEGRAM_ALLOWED_USERS", "")
 
-    _platform_task = asyncio.create_task(_run_platforms())
+        async def _run_telegram() -> None:
+            await _telegram_poll(_telegram_token, allowed_users)
+
+        _telegram_task = asyncio.create_task(_run_telegram())
+    else:
+        logger.warning("TELEGRAM_BOT_TOKEN not set, Telegram polling disabled")
 
     # Keep the process alive so /health remains served by the early-bound API server.
     # Platform adapters (e.g., Telegram) initialize in the background task above.
-    logger.info("Gateway running — API server on 0.0.0.0:%s serving /health",
-                int(os.environ.get("PORT") or os.environ.get("API_SERVER_PORT") or "3006"))
+    logger.info(
+        "Gateway running — API server on 0.0.0.0:%s serving /health",
+        int(os.environ.get("PORT") or os.environ.get("API_SERVER_PORT") or "3006"),
+    )
     while True:
         await asyncio.sleep(60)
 

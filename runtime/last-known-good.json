@@ -1,0 +1,62 @@
+{
+  "state": {
+    "agent_id": "marcus",
+    "name": "Marcus",
+    "role": "Commander, Chief of Staff, Chief Improvement Officer",
+    "health_status": "initialized",
+    "started_at": "2026-01-01T00:00:00+00:00",
+    "last_checkpoint": "",
+    "responsibilities_count": 8,
+    "specialists_count": 15,
+    "execution_history_count": 0
+  },
+  "saved_at": "2026-07-24T19:45:47.115535+00:00",
+  "provider_health": {
+    "preferred": [
+      {
+        "provider": "nous",
+        "model": "stepfun/step-3.7-flash:free",
+        "consecutive_failures": 6,
+        "cooldown_until": "2026-07-24T20:25:46.696736+00:00",
+        "last_failure": "2026-07-24T19:45:46.696736+00:00",
+        "last_success": "2026-07-24T19:45:19.398373+00:00",
+        "state": "open",
+        "is_open": true
+      },
+      {
+        "provider": "openrouter",
+        "model": "anthropic/claude-sonnet-4",
+        "consecutive_failures": 0,
+        "cooldown_until": "",
+        "last_failure": "",
+        "last_success": "2026-07-24T19:45:47.104444+00:00",
+        "state": "closed",
+        "is_open": false
+      }
+    ],
+    "secondary": [
+      {
+        "provider": "nous",
+        "model": "poolside/laguna-s-2.1:free",
+        "consecutive_failures": 14,
+        "cooldown_until": "2026-07-24T20:45:45.540770+00:00",
+        "last_failure": "2026-07-24T19:45:45.540770+00:00",
+        "last_success": "",
+        "state": "open",
+        "is_open": true
+      }
+    ],
+    "ollama": [
+      {
+        "provider": "test",
+        "model": "test-model",
+        "consecutive_failures": 1,
+        "cooldown_until": "",
+        "last_failure": "2026-07-24T19:45:19.174278+00:00",
+        "last_success": "2026-07-24T19:45:19.147471+00:00",
+        "state": "closed",
+        "is_open": false
+      }
+    ]
+  }
+}

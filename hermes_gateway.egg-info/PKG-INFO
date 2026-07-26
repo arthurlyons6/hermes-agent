@@ -1,0 +1,8 @@
+Metadata-Version: 2.4
+Name: hermes-gateway
+Version: 0.19.1
+Summary: Hermes messaging gateway with Railway startup health probe support
+Requires-Python: >=3.11
+Requires-Dist: aiohttp<4,>=3.9
+Provides-Extra: gateway
+Requires-Dist: aiohttp; extra == "gateway"
