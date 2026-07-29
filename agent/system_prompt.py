@@ -32,6 +32,7 @@ from agent.prompt_builder import (
     GOOGLE_MODEL_OPERATIONAL_GUIDANCE,
     HERMES_AGENT_HELP_GUIDANCE,
     KANBAN_GUIDANCE,
+    MARCUS_SELF_IDENTITY_RULE,
     MEMORY_GUIDANCE,
     OPENAI_MODEL_EXECUTION_GUIDANCE,
     PARALLEL_TOOL_CALL_GUIDANCE,
@@ -194,6 +195,12 @@ def build_system_prompt_parts(agent: Any, system_message: Optional[str] = None) 
     if not _soul_loaded:
         # Fallback to hardcoded identity
         stable_parts.append(DEFAULT_AGENT_IDENTITY)
+
+    # Lyons Command Center — inject the [PERSON_NAME] self-identity rule
+    # as the highest-priority system layer. This ensures the active assistant
+    # recognizes itself as [PERSON_NAME] (Commander / Chief of Staff) and
+    # does NOT attempt to delegate to [PERSON_NAME] as a separate agent.
+    stable_parts.append(MARCUS_SELF_IDENTITY_RULE)
 
     # Pointer to the hermes-agent skill + docs for user questions about Hermes itself.
     stable_parts.append(HERMES_AGENT_HELP_GUIDANCE)
