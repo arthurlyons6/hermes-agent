@@ -124,6 +124,9 @@ docs/superpowers/*
 # logs, and per-session caches are never artifacts of the codebase.
 .hermes/
 
+# Lyons Command Center private runtime context (contains executive details)
+HOT_CONTEXT.md
+
 # Desktop/bootstrap install marker written into the managed checkout root by the
 # bootstrap installer. It is Hermes-managed runtime state, never a code change —
 # ignore it so `hermes update`'s `git stash push --include-untracked` does not

@@ -4433,19 +4433,53 @@ def cmd_import(args):
 
 
 def _print_version_info(*, check_updates: bool = True) -> None:
-    from hermes_cli.config import detect_install_method
+    from hermes_cli.config import detect_install_method, load_config
     from hermes_cli.banner import format_banner_version_label
+    from hermes_cli.executive_version import (
+        get_git_identity,
+        get_runtime_environment,
+        get_database_status,
+        get_gateway_status,
+        get_telegram_status,
+        get_model_configuration,
+        get_active_session_count,
+        get_memory_health,
+    )
 
+    # Print enhanced executive version report
     print(format_banner_version_label())
-    print(f"Install directory: {PROJECT_ROOT}")
-    print(f"Install method: {detect_install_method(PROJECT_ROOT)}")
-
-    # Show Python version
+    
+    # Repository identity
+    git_info = get_git_identity()
+    print(f"Repository: {git_info['repo']}")
+    print(f"Branch: {git_info['branch']}")
+    print(f"Commit: {git_info['commit']} ({git_info['short_commit']})")
+    
+    # Runtime environment
+    env = get_runtime_environment()
+    print(f"Environment: {env}")
+    
+    # Database and memory
+    db_status = get_database_status()
+    print(f"Database: {db_status['path']}")
+    print(f"Memory Health: {db_status['health']}")
+    
+    # Gateway and Telegram
+    print(f"Gateway: {get_gateway_status()}")
+    print(f"Telegram: {get_telegram_status()}")
+    
+    # Models
+    model_info = get_model_configuration()
+    print(f"Models: Primary ({model_info['primary']}), Fallback ({model_info['fallback']})")
+    
+    # Active sessions
+    session_count = get_active_session_count()
+    print(f"Active Sessions: {session_count}")
+    
+    # Python version
     print(f"Python: {sys.version.split()[0]}")
-
-    # Check for key dependencies.  Use importlib.metadata rather than
-    # ``import openai`` — the SDK drags in ~800ms of pydantic-backed type
-    # modules just to expose ``__version__``.  Metadata lookup is ~2ms.
+    
+    # Check for key dependencies
     try:
         from importlib.metadata import version as _pkg_version, PackageNotFoundError
 
