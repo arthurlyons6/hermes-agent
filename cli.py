@@ -56,6 +56,11 @@ from hermes_cli.fallback_config import get_fallback_chain
 from hermes_cli.cli_agent_setup_mixin import CLIAgentSetupMixin
 from hermes_cli.cli_commands_mixin import CLICommandsMixin
 from hermes_cli.cli_billing_mixin import CLIBillingMixin
+from hermes_cli.response_sanitizer import (
+    sanitize_person_name,
+    contains_person_name_placeholder,
+    resolve_authorized_user_name,
+)
 
 # prompt_toolkit for fixed input area TUI
 from prompt_toolkit.history import FileHistory
@@ -15820,7 +15825,50 @@ def main(
                             and cli.agent.session_id != cli.session_id
                         ):
                             cli.session_id = cli.agent.session_id
-                        response = result.get("final_response", "") if isinstance(result, dict) else str(result)
+                        raw_response = result.get("final_response", "") if isinstance(result, dict) else str(result)
+                        
+                        # Preserve raw response for diagnostics
+                        # Apply identity sanitization to user-facing response
+                        response = raw_response
+                        
+                        # Resolve authorized identity from SOUL/HOT_CONTEXT
+                        # Check common locations for identity files
+                        soul_paths = [
+                            Path(__file__).parent.parent / "HOT_CONTEXT.md",
+                            Path.cwd() / "HOT_CONTEXT.md",
+                            Path.home() / ".hermes" / "HOT_CONTEXT.md",
+                        ]
+                        
+                        authorized_name = None
+                        for soul_path in soul_paths:
+                            if soul_path.exists():
+                                authorized_name = resolve_authorized_user_name(soul_path)
+                                if authorized_name:
+                                    break
+                        
+                        # Apply identity sanitization
+                        if response and authorized_name:
+                            response = sanitize_person_name(response, authorized_name=authorized_name)
+                            
+                            # Log sanitization event (without exposing content)
+                            if contains_person_name_placeholder(raw_response):
+                                logger.info(
+                                    "IDENTITY_PLACEHOLDER_SANITIZED "
+                                    "transport=cli authorized_name=%s",
+                                    authorized_name
+                                )
+                        
+                        # Final validation: block unresolved placeholders
+                        if response and contains_person_name_placeholder(response):
+                            logger.error(
+                                "Unresolved identity placeholder blocked from CLI output"
+                            )
+                            response = (
+                                "I encountered an identity-context formatting issue and "
+                                "prevented an incomplete response from being displayed. "
+                                "Please retry."
+                            )
+                        
                         # Surface backend errors that produced no visible output
                         # (e.g. invalid model slug → provider 4xx). Mirrors the
                         # interactive CLI path. Write to stderr so piped stdout
