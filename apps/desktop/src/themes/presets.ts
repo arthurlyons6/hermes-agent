@@ -20,8 +20,8 @@ const SYSTEM_MONO =
 
 export const DEFAULT_TYPOGRAPHY: DesktopThemeTypography = { fontSans: SYSTEM_SANS, fontMono: SYSTEM_MONO }
 
-/** 
- * Nous — canonical Hermes desktop identity. 
+/**
+ * Nous — canonical Hermes desktop identity.
  * Lyons Command Center brand: navy #05060A, gold #C9A844, gold-light #E8C96A
  */
 export const nousTheme: DesktopTheme = {
