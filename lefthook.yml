@@ -1,5 +1,12 @@
 pre-commit:
   jobs:
+    - name: gitleaks secret scan
+      run: gitleaks protect --staged --no-banner --redact=50 --verbose
+
+    - name: bandit python security
+      glob: "*.py"
+      run: ./.venv/Scripts/python.exe -m bandit -r --severity-level medium {staged_files} || true
+
     - name: lint python
       glob: "*.py" # glob filter
       run: ruff check --config ./ruff.pre-commit.toml {staged_files}
