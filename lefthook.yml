@@ -9,7 +9,7 @@ pre-commit:
 
     - name: lint python
       glob: "*.py" # glob filter
-      run: ruff check --config ./ruff.pre-commit.toml {staged_files}
+      run: ./.venv/Scripts/python.exe -m ruff check --config ./ruff.pre-commit.toml {staged_files}
 
     - name: lint web
       root: web/
