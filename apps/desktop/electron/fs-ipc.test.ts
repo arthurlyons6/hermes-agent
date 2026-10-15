@@ -47,7 +47,16 @@ registerFsIpc({
   resolveGitBinary: () => 'git'
 })
 
-const reveal = (target: string) => electron.handlers.get('hermes:fs:reveal')!({}, target)
+// R-4 sender-trust hardening: every handler asserts the message came from the
+// app's own main frame (`senderFrame === sender.mainFrame`). A bare `{}` event
+// is untrusted by construction, so the harness builds a trusted one.
+const trustedEvent = () => {
+  const mainFrame = { url: 'hermes://app/index.html' }
+
+  return { senderFrame: mainFrame, sender: { mainFrame } }
+}
+
+const reveal = (target: string) => electron.handlers.get('hermes:fs:reveal')!(trustedEvent(), target)
 
 afterEach(() => {
   electron.showItemInFolder.mockClear()
@@ -85,7 +94,7 @@ describe('hermes:fs:reveal', () => {
 // is the LAUNCH one, so the error card names the profile owning the failing
 // session and the root resolves under THAT home (#119080).
 describe('hermes:fs:logsRoot', () => {
-  const logsRoot = (profile?: string) => electron.handlers.get('hermes:fs:logsRoot')!({}, profile)
+  const logsRoot = (profile?: string) => electron.handlers.get('hermes:fs:logsRoot')!(trustedEvent(), profile)
 
   it('resolves the logs dir of the profile that owns the session', async () => {
     await expect(logsRoot('finex')).resolves.toBe(path.join(scratch, 'profiles', 'finex', 'logs'))
@@ -106,5 +115,76 @@ describe('hermes:fs:logsRoot', () => {
       expect(path.relative(scratch, root).startsWith('..')).toBe(false)
       expect(root).toBe(path.join(scratch, 'profiles', 'launch-profile', 'logs'))
     }
+  })
+})
+
+// SF-7: the read chain blocked sensitive files; the write chain did not, so a
+// compromised trusted renderer could overwrite .env / .ssh / .aws credentials
+// through `hermes:fs:writeText`. The block is now applied to the write too.
+describe('hermes:fs:writeText sensitive-file block (SF-7)', () => {
+  const writeText = (filePath: string, content: string) =>
+    electron.handlers.get('hermes:fs:writeText')!(trustedEvent(), filePath, content)
+
+  it('writes an ordinary text file', async () => {
+    const target = path.join(scratch, 'ordinary.md')
+
+    await expect(writeText(target, 'hello')).resolves.toEqual({ path: target })
+    expect(fs.readFileSync(target, 'utf8')).toBe('hello')
+  })
+
+  // The block fires on the resolved path, before the parent-exists check, so
+  // the error names the block — not a missing directory — and nothing is
+  // written even when the parent does exist.
+  it('refuses to overwrite a credential file', async () => {
+    const env = path.join(scratch, '.env')
+
+    fs.writeFileSync(env, 'SECRET=keep-me')
+
+    await expect(writeText(env, 'SECRET=clobbered')).rejects.toThrow(/sensitive file/)
+    expect(fs.readFileSync(env, 'utf8')).toBe('SECRET=keep-me')
+  })
+
+  // A tilde path is expanded before the check, so `~/.ssh/id_rsa` from the
+  // renderer is blocked the same as an absolute path.
+  it('blocks a tilde-expanded credential path', async () => {
+    await expect(writeText('~/.ssh/id_rsa', 'PRIVATE KEY')).rejects.toThrow(/sensitive file/)
+    expect(fs.existsSync(path.join(scratch, '.ssh', 'id_rsa'))).toBe(false)
+  })
+
+  // The blocklist's other shapes: .aws/credentials needs its directory
+  // component, .npmrc and .pem match by basename/extension, and .env.<suffix>
+  // is blocked unless the suffix is a known-safe template name.
+  it('blocks every credential shape the read chain blocks', async () => {
+    const cases: Array<[string, string]> = [
+      [path.join('.aws', 'credentials'), '.aws/credentials'],
+      ['.npmrc', '.npmrc'],
+      ['client.pem', 'client.pem'],
+      ['.env.production', '.env.production'],
+      ['id_ed25519', 'id_ed25519']
+    ]
+
+    for (const [relative, label] of cases) {
+      const target = path.join(scratch, relative)
+
+      await expect(writeText(target, 'x'), label).rejects.toThrow(/sensitive file/)
+      expect(fs.existsSync(target), label).toBe(false)
+    }
+  })
+
+  // A public key is NOT credential material — but note the .ssh DIRECTORY
+  // rule fires first, so the exception only holds outside credential dirs.
+  it('allows an ssh public key outside credential directories', async () => {
+    const target = path.join(scratch, 'id_ed25519.pub')
+
+    await expect(writeText(target, 'ssh-ed25519 AAAA')).resolves.toEqual({ path: target })
+    expect(fs.readFileSync(target, 'utf8')).toBe('ssh-ed25519 AAAA')
+  })
+
+  // .env.example is a safe template name (SAFE_ENV_SUFFIXES) — blocking it
+  // would break committing example env files.
+  it('allows a safe .env template through', async () => {
+    const target = path.join(scratch, '.env.example')
+
+    await expect(writeText(target, 'SECRET=')).resolves.toEqual({ path: target })
   })
 })

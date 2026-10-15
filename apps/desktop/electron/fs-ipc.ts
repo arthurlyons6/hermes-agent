@@ -18,6 +18,7 @@ import {
 import { DESKTOP_PROFILE_NAME_RE } from './desktop-profile'
 import { readDirForIpc } from './fs-read-dir'
 import { gitRootForIpc } from './git-root'
+import { assertTrustedIpcSender, sensitiveFileBlockReason } from './hardening'
 
 export interface FsIpcDeps {
   hermesHome: string
@@ -36,15 +37,24 @@ export function registerFsIpc({
   directoryExists,
   resolveGitBinary
 }: FsIpcDeps) {
-  ipcMain.handle('hermes:fs:readDir', async (_event, dirPath) => readDirForIpc(dirPath))
+  ipcMain.handle('hermes:fs:readDir', async (_event, dirPath) => {
+    assertTrustedIpcSender(_event, 'hermes:fs:readDir')
 
-  ipcMain.handle('hermes:fs:gitRoot', async (_event, startPath) => gitRootForIpc(startPath))
+    return readDirForIpc(dirPath)
+  })
+
+  ipcMain.handle('hermes:fs:gitRoot', async (_event, startPath) => {
+    assertTrustedIpcSender(_event, 'hermes:fs:gitRoot')
+
+    return gitRootForIpc(startPath)
+  })
 
   // Reveal a path in the OS file manager (Finder / Explorer / Files).
   // `showItemInFolder` silently no-ops on a missing item, and a remote
   // backend's paths are missing here by construction — answer `false` so
   // the renderer can say so instead of reporting a click that showed nothing.
   ipcMain.handle('hermes:fs:reveal', async (_event, targetPath) => {
+    assertTrustedIpcSender(_event, 'hermes:fs:reveal')
     const target = String(targetPath || '').trim()
 
     if (!target) {
@@ -74,6 +84,7 @@ export function registerFsIpc({
   // which often doesn't exist on first use. `shell.openPath` returns '' on
   // success or an error string; both mkdir + openPath failures are surfaced.
   ipcMain.handle('hermes:fs:openDir', async (_event, dirPath) => {
+    assertTrustedIpcSender(_event, 'hermes:fs:openDir')
     const dir = String(dirPath || '').trim()
 
     if (!dir) {
@@ -126,12 +137,17 @@ export function registerFsIpc({
     return root
   }
 
-  ipcMain.handle('hermes:fs:desktopPluginsRoot', async () => desktopPluginsRoot())
+  ipcMain.handle('hermes:fs:desktopPluginsRoot', async (event) => {
+    assertTrustedIpcSender(event, 'hermes:fs:desktopPluginsRoot')
+
+    return desktopPluginsRoot()
+  })
 
   // Re-run the unified-half reconcile on demand (after an agent-plugin install /
   // update / uninstall through the gateway) so the app-level copy tracks the
   // package without waiting for the next root resolution.
-  ipcMain.handle('hermes:fs:reconcileDesktopPlugins', async () => {
+  ipcMain.handle('hermes:fs:reconcileDesktopPlugins', async (event) => {
+    assertTrustedIpcSender(event, 'hermes:fs:reconcileDesktopPlugins')
     const root = await ensureDir(path.join(hermesHome, DESKTOP_PLUGINS_DIR))
 
     return reconcileUnifiedDesktopHalves(hermesHome, root)
@@ -144,9 +160,14 @@ export function registerFsIpc({
   // caller names the profile that OWNS the failing session: a pooled backend
   // serves many profile homes, and the active Desktop profile is the launch
   // one, not the one whose agent.log holds the failure (#119080).
-  ipcMain.handle('hermes:fs:logsRoot', async (_event, profile) => localPluginsRoot('logs', profile))
+  ipcMain.handle('hermes:fs:logsRoot', async (_event, profile) => {
+    assertTrustedIpcSender(_event, 'hermes:fs:logsRoot')
+
+    return localPluginsRoot('logs', profile)
+  })
 
   ipcMain.handle('hermes:plugin:probe', async (_event, payload) => {
+    assertTrustedIpcSender(_event, 'hermes:plugin:probe')
     const identifier = String(payload?.identifier || payload?.repo || '').trim()
 
     if (!identifier) {
@@ -157,6 +178,7 @@ export function registerFsIpc({
   })
 
   ipcMain.handle('hermes:plugin:installDesktop', async (_event, payload) => {
+    assertTrustedIpcSender(_event, 'hermes:plugin:installDesktop')
     const identifier = String(payload?.identifier || payload?.repo || '').trim()
 
     if (!identifier) {
@@ -173,14 +195,17 @@ export function registerFsIpc({
 
   // Uninstall a standalone desktop plugin by FOLDER NAME under the app-level
   // root. The renderer never passes a path; containment is re-checked inside.
-  ipcMain.handle('hermes:plugin:removeDesktop', async (_event, payload) =>
-    removeDesktopPlugin(path.join(hermesHome, DESKTOP_PLUGINS_DIR), payload?.name)
-  )
+  ipcMain.handle('hermes:plugin:removeDesktop', async (_event, payload) => {
+    assertTrustedIpcSender(_event, 'hermes:plugin:removeDesktop')
+
+    return removeDesktopPlugin(path.join(hermesHome, DESKTOP_PLUGINS_DIR), payload?.name)
+  })
 
   // Rename a file/folder in place. The renderer passes the existing path + a new
   // base name; the destination is resolved in the SAME parent dir so a rename can
   // never move the item elsewhere or traverse out. Rejects on a name collision.
   ipcMain.handle('hermes:fs:rename', async (_event, targetPath, newName) => {
+    assertTrustedIpcSender(_event, 'hermes:fs:rename')
     const src = String(targetPath || '').trim()
     const name = String(newName || '').trim()
 
@@ -208,6 +233,7 @@ export function registerFsIpc({
   // this never creates directory trees or escapes the allowed roots, and content
   // is size-capped so it can't be abused as a bulk-write primitive.
   ipcMain.handle('hermes:fs:writeText', async (_event, filePath, content) => {
+    assertTrustedIpcSender(_event, 'hermes:fs:writeText')
     const raw = String(filePath || '').trim()
 
     if (!raw) {
@@ -222,6 +248,15 @@ export function registerFsIpc({
 
     const resolved = resolveRequestedPathForIpc(expandUserPath(raw), { purpose: 'Write text file' })
 
+    // Same sensitive-file block the read chain applies (SF-7): a write that can
+    // overwrite .env / .ssh / .aws / .gnupg credentials is rejected before the
+    // parent-exists check, so the error names the block, not the directory.
+    const blockReason = sensitiveFileBlockReason(resolved)
+
+    if (blockReason) {
+      throw new Error(`Write text file blocked for sensitive file: ${blockReason}`)
+    }
+
     if (!directoryExists(path.dirname(resolved))) {
       throw new Error('Parent directory does not exist')
     }
@@ -234,6 +269,7 @@ export function registerFsIpc({
   // Move a file/folder to the OS trash (recoverable) — the VS Code "Delete"
   // default. `shell.trashItem` routes to Finder/Explorer/Files trash per platform.
   ipcMain.handle('hermes:fs:trash', async (_event, targetPath) => {
+    assertTrustedIpcSender(_event, 'hermes:fs:trash')
     const target = String(targetPath || '').trim()
 
     if (!target) {

@@ -626,8 +626,21 @@ function missingFileResult(requestedPath: unknown, error: unknown) {
   }
 }
 
+/** R-4 sender-trust hardening (ported 2026-10-14 from the audited install tree,
+ *  Phase 7 finding SF-2): an IPC handler must only run for a message sent by the
+ *  app's own main frame. `event.senderFrame` is null for main-world probes and
+ *  differs from `event.sender.mainFrame` once any subframe is involved — either
+ *  way the message did not come from the app's own top-level window, so it must
+ *  never reach filesystem/git/terminal handlers. */
+function assertTrustedIpcSender(event: any, purpose: string): void {
+  if (!event.senderFrame || event.senderFrame !== event.sender.mainFrame) {
+    throw ipcPathError('ERR_IPC_UNTRUSTED_SENDER', `${purpose} rejected: untrusted IPC sender.`)
+  }
+}
+
 export {
   assertExistingPathForOpen,
+  assertTrustedIpcSender,
   ATTACHMENT_UPLOAD_DEFAULT_MAX_BYTES,
   clampDataUrlReadMaxMb,
   DATA_URL_READ_DEFAULT_MAX_MB,

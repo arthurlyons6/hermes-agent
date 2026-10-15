@@ -11,6 +11,7 @@ import { app, ipcMain } from 'electron'
 import nodePty from 'node-pty'
 
 import { resolveTerminalConnectionForSender } from './connection-apply'
+import { assertTrustedIpcSender } from './hardening'
 import { ensureSpawnHelperExecutable } from './spawn-helper-perms'
 import { buildInteractiveSshArgs } from './ssh-connection'
 import { createTerminalOutputGate } from './terminal-output-gate'
@@ -304,6 +305,7 @@ export function registerTerminalIpc({
   }
 
   ipcMain.handle('hermes:terminal:start', async (event, payload = {}) => {
+    assertTrustedIpcSender(event, 'hermes:terminal:start')
     ensureNodePtySpawnHelper()
 
     const id = crypto.randomUUID()
@@ -372,6 +374,7 @@ export function registerTerminalIpc({
   })
 
   ipcMain.handle('hermes:terminal:attach', (event, id) => {
+    assertTrustedIpcSender(event, 'hermes:terminal:attach')
     const sessionInfo = terminalSessions.get(String(id || ''))
 
     if (!sessionInfo || sessionInfo.webContentsId !== event.sender.id) {
@@ -384,6 +387,7 @@ export function registerTerminalIpc({
   })
 
   ipcMain.handle('hermes:terminal:write', (_event, id, data) => {
+    assertTrustedIpcSender(_event, 'hermes:terminal:write')
     const sessionInfo = terminalSessions.get(String(id || ''))
 
     if (!sessionInfo) {
@@ -396,6 +400,7 @@ export function registerTerminalIpc({
   })
 
   ipcMain.handle('hermes:terminal:resize', (_event, id, size = {}) => {
+    assertTrustedIpcSender(_event, 'hermes:terminal:resize')
     const sessionInfo = terminalSessions.get(String(id || ''))
 
     if (!sessionInfo) {
@@ -410,6 +415,7 @@ export function registerTerminalIpc({
     return true
   })
   ipcMain.handle('hermes:terminal:cwd', async (_event, id) => {
+    assertTrustedIpcSender(_event, 'hermes:terminal:cwd')
     const sessionInfo = terminalSessions.get(String(id || ''))
 
     if (!sessionInfo) {
@@ -419,7 +425,11 @@ export function registerTerminalIpc({
     return sessionInfo.sshScope !== undefined ? null : readProcessCwd(sessionInfo.pty.pid)
   })
 
-  ipcMain.handle('hermes:terminal:dispose', (_event, id) => disposeTerminalSession(String(id || '')))
+  ipcMain.handle('hermes:terminal:dispose', (_event, id) => {
+    assertTrustedIpcSender(_event, 'hermes:terminal:dispose')
+
+    return disposeTerminalSession(String(id || ''))
+  })
 
   return { disposeTerminalSession, disposeTerminalSessionsForSshScope, disposeAllTerminalSessions }
 }
