@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { $artifactRegistry, $artifactVersionSelection, artifactPreviewTarget, upsertArtifact } from '@/store/artifacts'
 
-import { ArtifactPreview } from './preview-artifact'
+import { ArtifactPreview, truncatedHtmlReason } from './preview-artifact'
 
 function register(title: string, kind: 'code' | 'html' | 'svg', content: string) {
   const result = upsertArtifact('session-1', { kind, language: kind === 'code' ? 'python' : kind, title }, content)
@@ -125,5 +125,32 @@ describe('ArtifactPreview', () => {
     expect(screen.getByText('Artifact unavailable')).toBeTruthy()
     fireEvent.click(screen.getByRole('button', { name: 'Close' }))
     expect(onClose).toHaveBeenCalledOnce()
+  })
+
+  it('refuses the live frame for a gateway-truncated document and shows source instead (F-4)', async () => {
+    // The gateway truncates large artifacts mid-stream. The fragment still
+    // parses as HTML until an inline script's closing tag is missing, and
+    // srcDoc then throws "Unexpected token ')'" — crashing the live view.
+    const { artifactId } = register(
+      'Chart',
+      'html',
+      '<html><body><script>(function(){for(let i=0;;i++){}'
+    )
+
+    await renderArtifact(artifactId)
+
+    expect(truncatedHtmlReason('<html><body><script>(function(){}')).toBe('<script> element left open')
+    expect(truncatedHtmlReason('<h1>fine</h1>')).toBeNull()
+    expect(screen.queryByTitle('Chart')).toBeNull()
+    // The source fallback renders the truncated text (windowed per-line rows,
+    // so match on document text rather than a single text node).
+    expect(document.body.textContent).toContain('(function(){for(let i=0;;i++){}')
+  })
+
+  it('refuses the live frame for an unclosed HTML comment (F-4)', async () => {
+    const { artifactId } = register('Notes', 'html', '<h1>title</h1><!-- unterminated')
+    await renderArtifact(artifactId)
+
+    expect(screen.queryByTitle('Notes')).toBeNull()
   })
 })

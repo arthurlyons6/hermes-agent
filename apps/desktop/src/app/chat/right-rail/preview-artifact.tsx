@@ -43,6 +43,31 @@ function composeArtifactHtml(content: string): string {
   ].join('\n')
 }
 
+/** R-3 truncation guard (ported 2026-10-14 from the audited install tree,
+ *  Phase 7 finding F-4): a gateway-truncated artifact still parses as valid
+ *  HTML until an inline script's closing tag is missing — `srcDoc` then throws
+ *  "Unexpected token ')'" and the whole live view crashes. Detect the two
+ *  truncation signatures that break the sandbox (an unclosed script/style
+ *  element, an unclosed HTML comment) and refuse to go live. Returns the
+ *  reason when the document must not go live, else null. Exported for the
+ *  regression test. */
+export function truncatedHtmlReason(html: string): string | null {
+  const openCount = (tag: string) => (html.match(new RegExp(`<${tag}(\\s|>|/)`, 'gi')) ?? []).length
+  const closeCount = (tag: string) => (html.match(new RegExp(`</${tag}\\s*>`, 'gi')) ?? []).length
+
+  for (const tag of ['script', 'style'] as const) {
+    if (openCount(tag) > closeCount(tag)) {
+      return `<${tag}> element left open`
+    }
+  }
+
+  if (html.includes('<!--') && !html.includes('-->')) {
+    return 'HTML comment left open'
+  }
+
+  return null
+}
+
 /** Write the composed document to a real temp file through the existing
  *  buffer-save IPC, then hand it to the OS browser. A blob/data URL can't
  *  cross into the OS default browser, so a file on disk is the honest path. */
@@ -93,11 +118,17 @@ function ArtifactLiveView({ content, kind, title }: { content: string; kind: Art
     )
   }
 
+  const doc = composeArtifactHtml(content)
+
+  if (truncatedHtmlReason(doc)) {
+    return <SourceView language="html" text={content} />
+  }
+
   return (
     <iframe
       className="block size-full border-0 bg-white"
       sandbox="allow-scripts"
-      srcDoc={composeArtifactHtml(content)}
+      srcDoc={doc}
       // Deliberately raw white + forced light scheme: the frame hosts foreign
       // generated HTML that assumes a light canvas, so it renders deterministically
       // light in both app themes instead of inheriting theme tokens it can't see.

@@ -34,13 +34,45 @@ interface ModelControlsOptions {
   cacheOwnerConnectionId?: string
   cacheProfile?: string
   queryClient: QueryClient
-  requestGateway: <T = unknown>(method: string, params?: Record<string, unknown>) => Promise<T>
+  requestGateway: <T = unknown>(method: string, params?: Record<string, unknown>, timeoutMs?: number) => Promise<T>
 }
 
 interface ModelSwitchResponse {
   confirm_message?: string
   confirm_required?: boolean
   deferred?: boolean
+}
+
+/** R-2 (ported 2026-10-14 from the audited install tree, Phase 7 finding F-1):
+ *  config.set can sit 30 s behind an open handshake while the gateway is
+ *  mid-upgrade, which the 30 s default request timeout never survives — the
+ *  switch then reports failure although the gateway eventually applied it.
+ *  Raise the timeout for the switch call only (never the global default,
+ *  which stays the deliberate liveness budget) and retry once when the
+ *  failure is exactly a timeout. */
+const MODEL_SWITCH_REQUEST_TIMEOUT_MS = 90_000
+
+function isRequestTimeout(error: unknown): boolean {
+  const message = error instanceof Error ? error.message : String(error ?? '')
+
+  return /timed?\s?out|timeout/i.test(message)
+}
+
+async function sendSwitchWithRetry<T>(
+  requestSwitch: () => Promise<T>
+): Promise<T> {
+  try {
+    return await requestSwitch()
+  } catch (error) {
+    if (!isRequestTimeout(error)) {
+      throw error
+    }
+
+    // One retry: the first attempt only failed because the gateway never
+    // answered inside the (now raised) budget. Do not mask a second,
+    // genuine failure — it propagates to the existing confirm/rollback flow.
+    return requestSwitch()
+  }
 }
 
 export function useModelControls({
@@ -336,12 +368,16 @@ export function useModelControls({
       const scope = touchesPrimary && !isSessionOnlyPreset ? '' : ' --session'
 
       const requestSwitch = (confirmExpensiveModel = false) =>
-        requestGateway<ModelSwitchResponse>('config.set', {
-          session_id: liveSessionId,
-          key: 'model',
-          value: `${selection.model} --provider ${selection.provider}${scope}`,
-          ...(confirmExpensiveModel ? { confirm_expensive_model: true } : {})
-        })
+        requestGateway<ModelSwitchResponse>(
+          'config.set',
+          {
+            session_id: liveSessionId,
+            key: 'model',
+            value: `${selection.model} --provider ${selection.provider}${scope}`,
+            ...(confirmExpensiveModel ? { confirm_expensive_model: true } : {})
+          },
+          MODEL_SWITCH_REQUEST_TIMEOUT_MS
+        )
 
       const finishSwitch = (result: ModelSwitchResponse | undefined) => {
         // A pick made DURING a turn is queued by the gateway and applied at the
@@ -357,7 +393,7 @@ export function useModelControls({
       }
 
       try {
-        const result = await requestSwitch()
+        const result = await sendSwitchWithRetry(requestSwitch)
 
         if (result?.confirm_required) {
           rollbackSelection()

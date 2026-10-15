@@ -29,6 +29,12 @@ const notify = vi.fn()
 const notifyError = vi.fn()
 const dismissNotification = vi.fn()
 
+// R-2 (Phase 7 F-1): the model-switch `config.set` call carries an explicit
+// 90 s timeout — mid-upgrade the gateway can sit 30 s behind an open
+// handshake and the 30 s default request budget never survives it. The global
+// liveness budget is untouched, so switch assertions pin the third argument.
+const MODEL_SWITCH_TIMEOUT_MS = 90_000
+
 vi.mock('@/hermes', () => ({
   getGlobalModelInfo: vi.fn(),
   setApiRequestProfile: vi.fn(),
@@ -282,11 +288,15 @@ describe('useModelControls', () => {
     // No hardcoded --global (#90235): resolve_persist_behavior on the gateway
     // owns the policy — session-only unless model.persist_switch_by_default
     // is set or no default has ever been configured (#86414's first pick).
-    expect(requestGateway).toHaveBeenCalledWith('config.set', {
-      session_id: 'session-1',
-      key: 'model',
-      value: 'claude-sonnet-4.6 --provider anthropic'
-    })
+    expect(requestGateway).toHaveBeenCalledWith(
+      'config.set',
+      {
+        session_id: 'session-1',
+        key: 'model',
+        value: 'claude-sonnet-4.6 --provider anthropic'
+      },
+      MODEL_SWITCH_TIMEOUT_MS
+    )
     expect(requestGateway).not.toHaveBeenCalledWith('slash.exec', expect.anything())
   })
 
@@ -320,6 +330,45 @@ describe('useModelControls', () => {
     await controls.selectModel({ model: 'grok-4.5', provider: 'xai' })
 
     expect(invalidate).toHaveBeenCalled()
+  })
+
+  it('retries the switch once when the raised budget times out (R-2)', async () => {
+    $activeSessionId.set('session-1')
+
+    // First attempt: the 90 s budget expires because the gateway sits behind
+    // an open handshake mid-upgrade. The single retry lands, the pick applies.
+    const requestGateway = vi
+      .fn()
+      .mockRejectedValueOnce(new Error('Request timed out after 90000ms'))
+      .mockResolvedValueOnce({ key: 'model', scope: 'session', value: 'grok-4.5' })
+
+    let controls!: Controls
+
+    render(<Harness onReady={value => (controls = value)} requestGateway={requestGateway} />)
+
+    await expect(controls.selectModel({ model: 'grok-4.5', provider: 'xai' })).resolves.toBe(true)
+
+    expect(requestGateway).toHaveBeenCalledTimes(2)
+    expect($currentModel.get()).toBe('grok-4.5')
+    expect($currentProvider.get()).toBe('xai')
+    expect(notifyError).not.toHaveBeenCalled()
+  })
+
+  it('does not retry a genuine switch failure — it surfaces once (R-2)', async () => {
+    $activeSessionId.set('session-1')
+
+    const requestGateway = vi.fn().mockRejectedValueOnce(new Error('gateway: boom'))
+
+    let controls!: Controls
+
+    render(<Harness onReady={value => (controls = value)} requestGateway={requestGateway} />)
+
+    await expect(controls.selectModel({ model: 'grok-4.5', provider: 'xai' })).resolves.toBe(false)
+
+    // No retry storm: a second, genuine failure must not be masked, and the
+    // rollback/notice flow runs exactly once.
+    expect(requestGateway).toHaveBeenCalledTimes(1)
+    expect(notifyError).toHaveBeenCalledTimes(1)
   })
 
   it('asks in a dialog before retrying a guarded model switch, then applies the confirmed one', async () => {
@@ -366,12 +415,16 @@ describe('useModelControls', () => {
     })
 
     await waitFor(() => expect(requestGateway).toHaveBeenCalledTimes(2))
-    expect(requestGateway).toHaveBeenLastCalledWith('config.set', {
-      confirm_expensive_model: true,
-      key: 'model',
-      session_id: 'session-1',
-      value: 'muse-spark-1.2-contributor --provider opencode-go'
-    })
+    expect(requestGateway).toHaveBeenLastCalledWith(
+      'config.set',
+      {
+        confirm_expensive_model: true,
+        key: 'model',
+        session_id: 'session-1',
+        value: 'muse-spark-1.2-contributor --provider opencode-go'
+      },
+      MODEL_SWITCH_TIMEOUT_MS
+    )
     expect($currentModel.get()).toBe('muse-spark-1.2-contributor')
     expect($currentProvider.get()).toBe('opencode-go')
   })
@@ -467,11 +520,15 @@ describe('useModelControls', () => {
       })
     ).resolves.toBe(true)
 
-    expect(requestGateway).toHaveBeenCalledWith('config.set', {
-      session_id: 'session-1',
-      key: 'model',
-      value: 'BeastMode --provider moa --session'
-    })
+    expect(requestGateway).toHaveBeenCalledWith(
+      'config.set',
+      {
+        session_id: 'session-1',
+        key: 'model',
+        value: 'BeastMode --provider moa --session'
+      },
+      MODEL_SWITCH_TIMEOUT_MS
+    )
   })
 
   it('stores a no-session pick as UI state with no gateway or global write', async () => {
@@ -701,11 +758,15 @@ describe('useModelControls', () => {
       })
     ).resolves.toBe(true)
 
-    expect(requestGateway).toHaveBeenCalledWith('config.set', {
-      session_id: 'runtime-b',
-      key: 'model',
-      value: 'tile-model --provider anthropic --session'
-    })
+    expect(requestGateway).toHaveBeenCalledWith(
+      'config.set',
+      {
+        session_id: 'runtime-b',
+        key: 'model',
+        value: 'tile-model --provider anthropic --session'
+      },
+      MODEL_SWITCH_TIMEOUT_MS
+    )
     // Primary footer untouched — the busy primary must not absorb a tile pick.
     expect($currentModel.get()).toBe('primary/model')
     expect($currentProvider.get()).toBe('openai')
