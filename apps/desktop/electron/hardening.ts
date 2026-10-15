@@ -506,6 +506,29 @@ function rejectSensitiveFilePath(filePath, purpose) {
   }
 }
 
+// SF-7b: the file blocklist covers sensitive FILES, but nothing stopped a
+// directory listing of the credential directories themselves — the names
+// alone (which keys, which hosts) leak. Listing `.ssh` / `.gnupg` / `.aws`
+// is refused, mirroring the file blocklist's coverage. Matching is on the
+// basename, so a legitimate dir merely named similarly (`ssh-keys`, `.awsx`)
+// is unaffected.
+const SENSITIVE_DIRECTORIES = new Set(['.ssh', '.gnupg', '.aws'])
+
+function sensitiveDirectoryBlockReason(dirPath) {
+  const normalized = String(dirPath).replace(/\\/g, '/').toLowerCase()
+  const basename = normalized.slice(normalized.lastIndexOf('/') + 1)
+
+  return SENSITIVE_DIRECTORIES.has(basename) ? `credential directory (${basename})` : null
+}
+
+function rejectSensitiveDirectoryPath(dirPath, purpose) {
+  const blockReason = sensitiveDirectoryBlockReason(dirPath)
+
+  if (blockReason) {
+    throw ipcPathError('sensitive-directory', `${purpose} blocked for ${blockReason}`)
+  }
+}
+
 async function resolveDirectoryForIpc(
   dirPath,
   options: {
@@ -517,6 +540,7 @@ async function resolveDirectoryForIpc(
   const purpose = String(options.purpose || 'Directory read')
   const fsImpl = options.fs || fs
   const resolvedPath = resolveRequestedPathForIpc(dirPath, { baseDir: options.baseDir, purpose })
+  rejectSensitiveDirectoryPath(resolvedPath, purpose)
   const stat = await statForIpc(fsImpl, resolvedPath, purpose, 'directory')
 
   if (!stat.isDirectory()) {
@@ -524,6 +548,7 @@ async function resolveDirectoryForIpc(
   }
 
   const realPath = await realpathForIpc(fsImpl, resolvedPath, purpose)
+  rejectSensitiveDirectoryPath(realPath, purpose)
 
   return { realPath, resolvedPath, stat }
 }
@@ -654,6 +679,7 @@ export {
   isMissingFileError,
   missingFileResult,
   readFileDataUrlForIpc,
+  rejectSensitiveDirectoryPath,
   rejectUnsafePathSyntax,
   resolveDirectoryForIpc,
   resolvePersistedRemoteToken,

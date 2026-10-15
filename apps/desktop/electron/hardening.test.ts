@@ -996,6 +996,72 @@ test('resolveDirectoryForIpc accepts directory symlinks or junctions', async () 
 })
 
 // ---------------------------------------------------------------------------
+// resolveDirectoryForIpc credential-directory block (SF-7b)
+// ---------------------------------------------------------------------------
+
+test('resolveDirectoryForIpc refuses to list credential directories (.ssh/.gnupg/.aws)', async () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'hermes-desktop-dir-cred-'))
+
+  try {
+    for (const name of ['.ssh', '.gnupg', '.aws']) {
+      const dir = path.join(tempDir, name)
+      fs.mkdirSync(dir)
+
+      await rejectsWithCode(resolveDirectoryForIpc(dir), 'sensitive-directory')
+    }
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true })
+  }
+})
+
+test('resolveDirectoryForIpc allows dirs merely named like credential dirs', async () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'hermes-desktop-dir-like-'))
+
+  try {
+    for (const name of ['ssh-keys', '.awsx', 'ssh', '.ssh.bak']) {
+      const dir = path.join(tempDir, name)
+      fs.mkdirSync(dir)
+
+      const resolved = await resolveDirectoryForIpc(dir)
+      assert.equal(resolved.stat.isDirectory(), true)
+    }
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true })
+  }
+})
+
+test('resolveDirectoryForIpc refuses a symlink pointing into a credential directory', async () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'hermes-desktop-dir-credlink-'))
+  const target = path.join(tempDir, '.ssh')
+  const link = path.join(tempDir, 'innocent-link')
+
+  try {
+    fs.mkdirSync(target)
+    fs.writeFileSync(path.join(target, 'id_rsa'), 'key material', 'utf8')
+    fs.symlinkSync(target, link, 'junction')
+
+    await rejectsWithCode(resolveDirectoryForIpc(link), 'sensitive-directory')
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true })
+  }
+})
+
+test('resolveDirectoryForIpc still accepts ordinary directories and symlinks', async () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'hermes-desktop-dir-ok-'))
+
+  try {
+    const directory = path.join(tempDir, 'project')
+    fs.mkdirSync(directory)
+
+    const resolved = await resolveDirectoryForIpc(directory)
+    assert.equal(resolved.resolvedPath, directory)
+    assert.equal(resolved.stat.isDirectory(), true)
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true })
+  }
+})
+
+// ---------------------------------------------------------------------------
 // homeRelativeAttachmentCandidates (#115609)
 // ---------------------------------------------------------------------------
 
